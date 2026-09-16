@@ -186,16 +186,18 @@
   padding: 64px 24px 72px;
 
   &__inner {
-    max-width: 1180px;
+    max-width: 1500px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 56px;
     align-items: center;
+    z-index: 2;
   }
 
   &__content {
     animation: fade-slide-up 700ms ease both;
+    z-index: 2;
   }
 
   &__title {
@@ -204,6 +206,7 @@
     font-weight: 800;
     letter-spacing: -0.01em;
     margin: 0 0 18px;
+    z-index: 2;
   }
 
   &__subtitle {
@@ -212,12 +215,14 @@
     line-height: 1.6;
     max-width: 46ch;
     margin: 0 0 28px;
+    z-index: 2;
   }
 
   &__cta {
     display: flex;
     gap: 14px;
     margin-bottom: 32px;
+    z-index: 2;
   }
 
   &__trust {
@@ -227,27 +232,32 @@
     display: flex;
     gap: 28px;
     flex-wrap: wrap;
+    z-index: 2;
 
     li {
       display: flex;
       align-items: center;
       gap: 8px;
       color: var(--color-primary);
+      z-index: 2;
 
       div {
         display: flex;
         flex-direction: column;
         line-height: 1.25;
+        z-index: 2;
       }
 
       strong {
         font-size: 0.85rem;
         color: var(--color-text);
+        z-index: 2;
       }
 
       span {
         font-size: 0.78rem;
         color: var(--color-text-muted);
+        z-index: 2;
       }
     }
   }
@@ -255,11 +265,15 @@
   &__visual {
     position: relative;
     min-height: 380px;
+    width: 100%;
   }
 
   &__image-frame {
-    position: relative;
-    height: 380px;
+    position: absolute;
+    height: 480px;
+    width: 1700px;
+    right: -80px;
+    top: -40px;
     border-radius: var(--radius-lg);
     background: linear-gradient(160deg, #dbeafe 0%, #eff6ff 100%);
     display: flex;
@@ -267,11 +281,15 @@
     justify-content: center;
     overflow: hidden;
     animation: fade-in 900ms ease both;
+    z-index: 1;
 
     img {
-      width: 200%;
-      height: 100%;
+      width: 100%;
+      height: 150%;
       object-fit: cover;
+
+      mask-image: linear-gradient(to right, transparent 0%, black 50%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 50%);
     }
   }
 
@@ -296,20 +314,21 @@
   box-shadow: var(--shadow-card);
   padding: 16px;
   transition: transform var(--transition-base);
+  z-index: 2;
 
   &:hover {
     transform: translateY(-4px);
   }
 
   &--top {
-    top: -24px;
-    right: -12px;
+    top: 30px;
+    right: -18px;
     animation: float-in 800ms 200ms ease both;
   }
 
   &--bottom {
-    bottom: -20px;
-    left: -16px;
+    bottom: 60px;
+    right: -10px;
     width: 200px;
     animation: float-in 800ms 400ms ease both;
   }
@@ -390,7 +409,7 @@
     transition: gap var(--transition-base);
 
     &:hover {
-      gap: 8px;
+      gap: 12px;
     }
   }
 }
