@@ -10,14 +10,15 @@
     </a>
 
     <nav class="navbar__links" aria-label="Navegación principal">
-      <a *ngFor="let link of navLinks; let i = index"
-         href="#"
-         class="navbar__link"
-         [class.navbar__link--active]="i === 0">
+      <a
+        *ngFor="let link of navLinks; let i = index"
+        [href]="navIds[i]"
+        class="navbar__link"
+        (click)="scrollToSection($event, navIds[i])"
+      >
         {{ link }}
       </a>
     </nav>
-
     <div class="navbar__actions">
       <button type="button" class="btn btn--ghost" (click)="onIniciarSesion()">Iniciar sesión</button>
       <button type="button" class="btn btn--primary" (click)="onRegistrarse()">Registrarse</button>
@@ -29,7 +30,7 @@
   <!-- ============================================================ -->
   <!--  HERO                                                         -->
   <!-- ============================================================ -->
-  <section class="hero">
+  <section id="inicio" class="hero scroll-section">
     <div class="hero__inner">
 
       <div class="hero__content">
@@ -155,7 +156,7 @@
   <!-- ============================================================ -->
   <!--  FEATURES                                                     -->
   <!-- ============================================================ -->
-  <section class="features">
+  <section id="features" class="features scroll-section">
     <h2 class="section-title">Todo lo que necesitás en un solo lugar</h2>
 
     <div class="features__grid">
@@ -187,7 +188,7 @@
   <!-- ============================================================ -->
   <!--  CÓMO FUNCIONA                                                -->
   <!-- ============================================================ -->
-  <section class="how-it-works">
+  <section id="como-funciona" class="how-it-works scroll-section">
     <h2 class="section-title">¿Cómo funciona CliniTurnos?</h2>
 
     <div class="how-it-works__grid">
@@ -225,9 +226,717 @@
     </div>
   </section>
 
+<!-- ============================================================ -->
+<!-- QUIÉNES SOMOS -->
+<!-- ============================================================ -->
+
+<section id="nosotros" class="about scroll-section">
+
+  <div class="about__content">
+
+    <div class="about__text">
+
+      <h2>¿Quiénes somos?</h2>
+
+      <div class="about__line"></div>
+
+      <p>
+        CliniTurnos nació con la idea de simplificar
+        la experiencia de atención médica, conectando
+        pacientes y profesionales en un entorno digital
+        seguro, ágil y confiable.
+      </p>
+
+      <p>
+        Trabajamos cada día para brindar una herramienta
+        que mejore el acceso a la salud y facilite la gestión
+        de tus turnos e información médica para todos.
+      </p>
+
+    </div>
+
+    <div class="about__image">
+      <img
+        src="clinica.jpg"
+        alt="Recepción de una clínica"
+      >
+    </div>
+
+  </div>
+
+
+  <div class="about__cards">
+
+    <article class="about-card">
+      <div class="about-card__icon">
+        ♧
+      </div>
+
+      <h3>Nuestra misión</h3>
+
+      <p>
+        Facilitar el acceso a la salud mediante tecnología
+        innovadora y fácil de usar.
+      </p>
+    </article>
+
+
+    <article class="about-card">
+      <div class="about-card__icon about-card__icon--green">
+        ♡
+      </div>
+
+      <h3>Nuestra visión</h3>
+
+      <p>
+        Ser la plataforma líder en gestión de turnos
+        e información médica en Latinoamérica.
+      </p>
+    </article>
+
+
+    <article class="about-card">
+      <div class="about-card__icon about-card__icon--purple">
+        ☆
+      </div>
+
+      <h3>Nuestros valores</h3>
+
+      <p>
+        Compromiso, confianza, empatía, innovación
+        y mejora continua.
+      </p>
+    </article>
+
+
+    <article class="about-card">
+      <div class="about-card__icon">
+        ♢
+      </div>
+
+      <h3>Tu salud, nuestro compromiso</h3>
+
+      <p>
+        Cuidamos tus datos y te acompañamos
+        en cada paso.
+      </p>
+    </article>
+
+  </div>
+
+
+  <div class="about__security">
+
+    <div class="about__security-icon">
+      ♢
+    </div>
+
+    <div>
+      <strong>Seguridad y privacidad</strong>
+
+      <p>
+        Cumplimos con los más altos estándares para
+        proteger tu información personal y médica.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- ESPECIALIDADES -->
+<!-- ============================================================ -->
+
+<section id="especialidades" class="specialties scroll-section">
+
+  <div class="specialties__header">
+
+    <h2>Especialidades</h2>
+
+    <div class="specialties__line"></div>
+
+    <p>
+      Contamos con un amplio staff de profesionales
+      en distintas áreas para cuidar tu salud.
+    </p>
+
+  </div>
+
+
+  <div class="specialties__grid">
+
+    <article class="specialty-card">
+      <span>♡</span>
+      <h3>Cardiología</h3>
+      <p>
+        Prevención, diagnóstico y tratamiento
+        de enfermedades del corazón.
+      </p>
+    </article>
+
+
+    <article class="specialty-card">
+      <span>♢</span>
+      <h3>Dermatología</h3>
+      <p>
+        Cuidado de la piel, cabello y uñas.
+      </p>
+    </article>
+
+
+    <article class="specialty-card">
+      <span>♙</span>
+      <h3>Pediatría</h3>
+      <p>
+        Atención médica integral desde el nacimiento
+        hasta la adolescencia.
+      </p>
+    </article>
+
+
+    <article class="specialty-card">
+      <span>♧</span>
+      <h3>Clínica médica</h3>
+      <p>
+        Evaluación y tratamiento de enfermedades
+        en adultos en general.
+      </p>
+    </article>
+
+
+    <article class="specialty-card">
+      <span>⌁</span>
+      <h3>Traumatología</h3>
+      <p>
+        Diagnóstico y tratamiento de lesiones
+        del sistema musculoesquelético.
+      </p>
+    </article>
+
+
+    <article class="specialty-card">
+      <span>♀</span>
+      <h3>Ginecología</h3>
+      <p>
+        Salud integral de la mujer
+        en todas las etapas de su vida.
+      </p>
+    </article>
+
+
+    <article class="specialty-card">
+      <span>◉</span>
+      <h3>Oftalmología</h3>
+      <p>
+        Diagnóstico y tratamiento de
+        enfermedades oftalmológicas.
+      </p>
+    </article>
+
+
+    <article class="specialty-card">
+      <span>♧</span>
+      <h3>Otorrinolaringología</h3>
+      <p>
+        Tratamiento de afecciones de oído,
+        nariz, garganta y cuello.
+      </p>
+    </article>
+
+
+    <article class="specialty-card">
+      <span>•••</span>
+      <h3>Y más especialidades</h3>
+      <p>
+        Descubrí todas las especialidades
+        disponibles en nuestra plataforma.
+      </p>
+    </article>
+
+  </div>
+
+
+  <div class="specialties__info">
+
+    <div class="specialties__info-icon">
+      ♙
+    </div>
+
+    <div>
+      <strong>¿No encontrás lo que buscás?</strong>
+
+      <p>
+        Sumamos nuevas especialidades constantemente.
+        Escribinos y te ayudamos.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- PARA PROFESIONALES -->
+<!-- ============================================================ -->
+
+<section id="profesionales" class="professionals scroll-section">
+
+  <div class="professionals__text">
+
+    <h2>Para profesionales</h2>
+
+    <div class="professionals__line"></div>
+
+    <p>
+      CliniTurnos es la herramienta ideal para que
+      médicos y profesionales de la salud gestionen
+      su agenda, pacientes e información de manera
+      simple y segura.
+    </p>
+
+
+    <div class="professionals__list">
+
+      <div class="professional-item">
+
+        <div class="professional-item__icon">
+          📅
+        </div>
+
+        <div>
+          <strong>Agenda inteligente</strong>
+
+          <p>
+            Administrá tus turnos de forma ágil
+            y evitá superposiciones.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="professional-item">
+
+        <div class="professional-item__icon">
+          ♙
+        </div>
+
+        <div>
+          <strong>Gestión de pacientes</strong>
+
+          <p>
+            Accedé al historial, informes y estudios
+            de tus pacientes.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="professional-item">
+
+        <div class="professional-item__icon">
+          ▣
+        </div>
+
+        <div>
+          <strong>Informes digitales</strong>
+
+          <p>
+            Generá y compartí informes médicos
+            de manera segura.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="professional-item">
+
+        <div class="professional-item__icon">
+          ◷
+        </div>
+
+        <div>
+          <strong>Disponible 24/7</strong>
+
+          <p>
+            Accedé a tu agenda e información
+            desde cualquier dispositivo.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="professionals__image">
+
+    <img
+      src="doctor-profesional.jpg"
+      alt="Profesional médico"
+    >
+
+  </div>
+
+
+  <div class="professionals__join">
+
+    <div class="professionals__join-icon">
+      ♙+
+    </div>
+
+    <div>
+      <strong>¡Sumate a CliniTurnos!</strong>
+
+      <p>
+        Unite a nuestra comunidad de profesionales
+        y simplificá tu día a día.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="btn btn--primary"
+      (click)="onRegistrarse()"
+    >
+      Quiero registrarme
+    </button>
+
+  </div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- PLANES -->
+<!-- ============================================================ -->
+
+<section id="planes" class="plans scroll-section">
+
+  <div class="plans__intro">
+
+    <h2>Sobre nosotros</h2>
+
+    <div class="plans__line"></div>
+
+    <p>
+      En CliniTurnos creemos en la transparencia.
+      Conocé cómo funcionan nuestros planes y elegí
+      la opción que mejor se adapte a tus necesidades.
+    </p>
+
+
+    <div class="plans__benefit">
+
+      <span>♙</span>
+
+      <div>
+        <strong>Sin permanencia</strong>
+
+        <p>
+          Cancelá cuando quieras,
+          sin cargos adicionales.
+        </p>
+      </div>
+
+    </div>
+
+
+    <div class="plans__benefit">
+
+      <span>▱</span>
+
+      <div>
+        <strong>Pago seguro</strong>
+
+        <p>
+          Tus pagos están protegidos
+          con los más altos estándares.
+        </p>
+      </div>
+
+    </div>
+
+
+    <div class="plans__benefit">
+
+      <span>▣</span>
+
+      <div>
+        <strong>Facturación</strong>
+
+        <p>
+          Emitimos factura A y B.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="plans__cards">
+
+    <article class="plan-card">
+
+      <h3>Plan Básico</h3>
+
+      <p>
+        Ideal para profesionales
+        que están comenzando.
+      </p>
+
+      <strong class="plan-card__price">
+        Sin costo
+      </strong>
+
+      <ul>
+        <li>✓ Agenda de turnos</li>
+        <li>✓ Gestión de pacientes</li>
+        <li>✓ Informes básicos</li>
+      </ul>
+
+      <button type="button">
+        Comenzar gratis
+      </button>
+
+    </article>
+
+
+    <article class="plan-card plan-card--featured">
+
+      <div class="plan-card__badge">
+        Más elegido
+      </div>
+
+      <h3>Plan Profesional</h3>
+
+      <p>
+        Para profesionales que buscan
+        más herramientas.
+      </p>
+
+      <strong class="plan-card__price">
+        $ 4.900 <small>/mes</small>
+      </strong>
+
+      <ul>
+        <li>✓ Todo lo del plan Básico</li>
+        <li>✓ Recordatorios automáticos</li>
+        <li>✓ Informes avanzados</li>
+        <li>✓ Estadísticas y reportes</li>
+      </ul>
+
+      <button type="button">
+        Comenzar ahora
+      </button>
+
+    </article>
+
+
+    <article class="plan-card">
+
+      <h3>Plan Premium</h3>
+
+      <p>
+        Para clínicas y consultorios
+        que quieren más.
+      </p>
+
+      <strong class="plan-card__price">
+        $ 9.900 <small>/mes</small>
+      </strong>
+
+      <ul>
+        <li>✓ Todo lo del plan Profesional</li>
+        <li>✓ Múltiples profesionales</li>
+        <li>✓ Personalización de marca</li>
+        <li>✓ Soporte prioritario</li>
+      </ul>
+
+      <button type="button">
+        Comenzar ahora
+      </button>
+
+    </article>
+
+  </div>
+
+
+  <div class="plans__info">
+
+    <strong>
+      Descuentos disponibles para instituciones y convenios.
+    </strong>
+
+    <p>
+      Escribinos para conocer nuestras opciones especiales.
+    </p>
+
+  </div>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- CONTACTO -->
+<!-- ============================================================ -->
+
+<section id="contacto" class="contact scroll-section">
+
+  <div class="contact__info">
+
+    <h2>Contacto</h2>
+
+    <div class="contact__line"></div>
+
+    <p>
+      Estamos para ayudarte. Escribinos
+      y te responderemos a la brevedad.
+    </p>
+
+
+    <div class="contact__data">
+      <span>◉</span>
+      <div>
+        <strong>WhatsApp</strong>
+        <p>+54 11 1234 5678</p>
+      </div>
+    </div>
+
+
+    <div class="contact__data">
+      <span>✉</span>
+      <div>
+        <strong>Email</strong>
+        <p>hola@cliniturnos.com</p>
+      </div>
+    </div>
+
+
+    <div class="contact__data">
+      <span>☎</span>
+      <div>
+        <strong>Teléfono</strong>
+        <p>+54 11 1234 5678</p>
+      </div>
+    </div>
+
+
+    <div class="contact__data">
+      <span>◷</span>
+      <div>
+        <strong>Horario de atención</strong>
+        <p>
+          Lunes a viernes de 8 a 20 hs.<br>
+          Sábados de 9 a 13 hs.
+        </p>
+      </div>
+    </div>
+
+
+    <div class="contact__data">
+      <span>⌖</span>
+      <div>
+        <strong>Ubicación</strong>
+        <p>
+          Av. Siempre Viva 1234,<br>
+          Córdoba, Argentina.
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+
+  <form class="contact__form">
+
+    <label>Nombre y apellido</label>
+
+    <input
+      type="text"
+      placeholder="Ej: Juan Pérez"
+    >
+
+
+    <label>Email</label>
+
+    <input
+      type="email"
+      placeholder="Ej: juan@email.com"
+    >
+
+
+    <label>Asunto</label>
+
+    <select>
+      <option>Seleccioná un asunto</option>
+      <option>Consulta general</option>
+      <option>Turnos</option>
+      <option>Profesionales</option>
+    </select>
+
+
+    <label>Mensaje</label>
+
+    <textarea
+      placeholder="Escribí tu mensaje..."
+    ></textarea>
+
+
+    <button
+      type="button"
+      class="btn btn--primary"
+    >
+      Enviar mensaje
+    </button>
+
+  </form>
+
+
+  <div class="contact__extra">
+
+    <div class="contact__extra-card">
+
+      <h3>Otras consultas</h3>
+
+      <p>
+        Visitá nuestras preguntas frecuentes
+        para resolver dudas comunes.
+      </p>
+
+      <button type="button" class="btn btn--outline">
+        Ver preguntas frecuentes
+      </button>
+
+    </div>
+
+
+    <div class="contact__extra-card contact__extra-card--green">
+
+      <h3>Seguinos</h3>
+
+      <p>
+        Enterate de novedades y consejos de salud.
+      </p>
+
+      <div class="contact__social">
+        ◎　●　in
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
   <!-- ============================================================ -->
   <!--  COMPLIANCE BAR                                               -->
   <!-- ============================================================ -->
+
   <section class="compliance">
     <div class="compliance__inner">
       <div class="compliance__text">

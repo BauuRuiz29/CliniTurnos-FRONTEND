@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import {
+  AfterViewInit,
+  Component
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface Feature {
@@ -21,7 +24,7 @@ interface Step {
   templateUrl: './home.html',
   styleUrls: ['./home.scss']
 })
-export class HomeComponent {
+export class HomeComponent implements AfterViewInit {
 
   // Links de navegación. Se recorren con *ngFor en el header.
   navLinks: string[] = [
@@ -32,6 +35,32 @@ export class HomeComponent {
     'Sobre nosotros',
     'Contacto'
   ];
+
+    navIds: string[] = [
+    '#inicio',
+    '#como-funciona',
+    '#especialidades',
+    '#profesionales',
+    '#nosotros',
+    '#contacto'
+  ];
+
+  scrollToSection(event: Event, id: string): void {
+
+  event.preventDefault();
+
+  const section = document.querySelector(id);
+
+  if (section) {
+
+    section.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+
+  }
+
+}
 
   // Tarjetas de la sección "Todo lo que necesitás en un solo lugar"
   features: Feature[] = [
@@ -105,5 +134,37 @@ export class HomeComponent {
   onRegistrarse(): void {
     // this.router.navigate(['/registro']);
     console.log('Ir a Registrarse');
+  }
+
+  ngAfterViewInit(): void {
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+
+        entries.forEach((entry) => {
+
+          if (entry.isIntersecting) {
+
+            entry.target.classList.add('is-visible');
+
+          }
+
+        });
+
+      },
+      {
+        threshold: 0.15
+      }
+    );
+
+    const sections =
+      document.querySelectorAll('.scroll-section');
+
+    sections.forEach((section) => {
+
+      observer.observe(section);
+
+    });
+
   }
 }
