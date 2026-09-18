@@ -1,0 +1,1453 @@
+<main class="patient-page">
+
+  <!-- =====================================================
+       SIDEBAR
+  ====================================================== -->
+
+  <aside class="sidebar">
+
+    <div class="sidebar__logo">
+
+      <img
+        src="logo_horizontal.png"
+        alt="CliniTurnos"
+      >
+
+    </div>
+
+
+    <nav class="sidebar__nav">
+
+      <button
+        type="button"
+        class="sidebar__item"
+        [class.active]="pantallaActual === 'inicio'"
+        (click)="cambiarPantalla('inicio')"
+      >
+        <span>⌂</span>
+        Inicio
+      </button>
+
+
+      <button
+        type="button"
+        class="sidebar__item"
+        [class.active]="pantallaActual === 'mis-turnos'"
+        (click)="cambiarPantalla('mis-turnos')"
+      >
+        <span>▣</span>
+        Mis turnos
+      </button>
+
+
+      <button
+        type="button"
+        class="sidebar__item"
+        [class.active]="pantallaActual === 'mis-datos'"
+        (click)="cambiarPantalla('mis-datos')"
+      >
+        <span>♙</span>
+        Mis datos
+      </button>
+
+
+      <button
+        type="button"
+        class="sidebar__item"
+        [class.active]="pantallaActual === 'profesionales'"
+        (click)="cambiarPantalla('profesionales')"
+      >
+        <span>♧</span>
+        Profesionales
+      </button>
+
+
+      <button
+        type="button"
+        class="sidebar__item"
+        [class.active]="pantallaActual === 'especialidades'"
+        (click)="cambiarPantalla('especialidades')"
+      >
+        <span>♡</span>
+        Especialidades
+      </button>
+
+
+      <button
+        type="button"
+        class="sidebar__item"
+        [class.active]="pantallaActual === 'informes'"
+        (click)="cambiarPantalla('informes')"
+      >
+        <span>▤</span>
+        Informes médicos
+      </button>
+
+
+      <button
+        type="button"
+        class="sidebar__item"
+      >
+        <span>♧</span>
+        Notificaciones
+        <small>1</small>
+      </button>
+
+
+      <button
+        type="button"
+        class="sidebar__item"
+      >
+        <span>?</span>
+        Ayuda
+      </button>
+
+    </nav>
+
+
+    <button
+      type="button"
+      class="sidebar__logout"
+      (click)="cerrarSesion()"
+    >
+      ↪
+      Cerrar sesión
+    </button>
+
+  </aside>
+
+
+  <!-- =====================================================
+       CONTENIDO
+  ====================================================== -->
+
+  <section class="patient-content">
+
+
+    <!-- ===================================================
+         HEADER
+    ==================================================== -->
+
+    <header class="patient-header">
+
+      <div>
+
+        <h1>
+          Hola, Juan 👋
+        </h1>
+
+        <p>
+          Gestioná tus turnos de manera simple
+        </p>
+
+      </div>
+
+
+      <div class="patient-user">
+
+        <span class="patient-user__bell">
+          ♧
+        </span>
+
+        <div class="patient-avatar">
+          JP
+        </div>
+
+        <div>
+
+          <strong>
+            Juan Pérez
+          </strong>
+
+          <span>
+            Paciente
+          </span>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- ===================================================
+         INICIO
+    ==================================================== -->
+
+    @if (pantallaActual === 'inicio') {
+
+      <section class="screen">
+
+        <div class="stats-grid">
+
+          <article class="stat-card stat-card--blue">
+
+            <span>Próximo turno</span>
+
+            <strong>24</strong>
+
+            <small>MAY.</small>
+
+            <div>
+              10:30 hs.<br>
+              Dr. Juan García<br>
+              Cardiología
+            </div>
+
+          </article>
+
+
+          <article class="stat-card stat-card--green">
+
+            <span>Turnos confirmados</span>
+
+            <strong>2</strong>
+
+            <button
+              type="button"
+              (click)="cambiarPantalla('mis-turnos')"
+            >
+              Ver mis turnos
+            </button>
+
+          </article>
+
+
+          <article class="stat-card stat-card--purple">
+
+            <span>Informes disponibles</span>
+
+            <strong>3</strong>
+
+            <button
+              type="button"
+              (click)="cambiarPantalla('informes')"
+            >
+              Ver informes
+            </button>
+
+          </article>
+
+        </div>
+
+
+        <div class="section-heading">
+
+          <div>
+
+            <h2>
+              Próximos turnos
+            </h2>
+
+          </div>
+
+          <button
+            type="button"
+            class="btn btn--primary"
+            (click)="reservarTurno()"
+          >
+            + Reservar turno
+          </button>
+
+        </div>
+
+
+        <div class="appointments">
+
+          <article class="appointment">
+
+            <div class="appointment__date">
+              <strong>24</strong>
+              <span>MAY.</span>
+            </div>
+
+            <div>
+              <strong>10:30 hs.</strong>
+              <span>Dr. Juan García</span>
+            </div>
+
+            <div>
+              <span>Cardiología</span>
+              <small>Clínica Centro</small>
+            </div>
+
+            <em>Confirmado</em>
+
+            <span>›</span>
+
+          </article>
+
+
+          <article class="appointment">
+
+            <div class="appointment__date">
+              <strong>07</strong>
+              <span>JUN.</span>
+            </div>
+
+            <div>
+              <strong>09:00 hs.</strong>
+              <span>Dra. María López</span>
+            </div>
+
+            <div>
+              <span>Dermatología</span>
+              <small>Clínica Norte</small>
+            </div>
+
+            <em>Confirmado</em>
+
+            <span>›</span>
+
+          </article>
+
+
+          <article class="appointment">
+
+            <div class="appointment__date">
+              <strong>21</strong>
+              <span>JUN.</span>
+            </div>
+
+            <div>
+              <strong>11:15 hs.</strong>
+              <span>Dr. Pablo Sánchez</span>
+            </div>
+
+            <div>
+              <span>Traumatología</span>
+              <small>Clínica Centro</small>
+            </div>
+
+            <em class="pending">Pendiente</em>
+
+            <span>›</span>
+
+          </article>
+
+        </div>
+
+      </section>
+
+    }
+
+
+    <!-- ===================================================
+         PROFESIONALES
+    ==================================================== -->
+
+    @if (pantallaActual === 'profesionales') {
+
+      <section class="screen">
+
+        <div class="section-heading">
+
+          <div>
+
+            <h2>Profesionales</h2>
+
+            <p>
+              Elegí el profesional que necesitás
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="search-bar">
+
+          <input
+            type="text"
+            placeholder="Buscar profesional o especialidad..."
+          >
+
+          <button type="button">
+            Filtros
+          </button>
+
+        </div>
+
+
+        <div class="professionals-grid">
+
+          <article class="professional-card">
+
+            <div class="doctor-avatar">
+              JG
+            </div>
+
+            <div>
+
+              <h3>
+                Dr. Juan García
+              </h3>
+
+              <p>
+                Cardiología
+              </p>
+
+              <span>
+                ⭐ 4.9
+              </span>
+
+            </div>
+
+            <button
+              type="button"
+              class="btn btn--outline"
+              (click)="reservarTurno()"
+            >
+              Ver horarios
+            </button>
+
+          </article>
+
+
+          <article class="professional-card">
+
+            <div class="doctor-avatar">
+              ML
+            </div>
+
+            <div>
+
+              <h3>
+                Dra. María López
+              </h3>
+
+              <p>
+                Dermatología
+              </p>
+
+              <span>
+                ⭐ 4.8
+              </span>
+
+            </div>
+
+            <button
+              type="button"
+              class="btn btn--outline"
+              (click)="reservarTurno()"
+            >
+              Ver horarios
+            </button>
+
+          </article>
+
+
+          <article class="professional-card">
+
+            <div class="doctor-avatar">
+              PS
+            </div>
+
+            <div>
+
+              <h3>
+                Dr. Pablo Sánchez
+              </h3>
+
+              <p>
+                Traumatología
+              </p>
+
+              <span>
+                ⭐ 4.7
+              </span>
+
+            </div>
+
+            <button
+              type="button"
+              class="btn btn--outline"
+              (click)="reservarTurno()"
+            >
+              Ver horarios
+            </button>
+
+          </article>
+
+        </div>
+
+      </section>
+
+    }
+
+
+    <!-- ===================================================
+         ESPECIALIDADES
+    ==================================================== -->
+
+    @if (pantallaActual === 'especialidades') {
+
+      <section class="screen">
+
+        <div class="section-heading">
+
+          <div>
+
+            <h2>Especialidades</h2>
+
+            <p>
+              Explorá las especialidades disponibles
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="specialties-grid">
+
+          <article class="specialty-card">
+            <span>♡</span>
+            <h3>Cardiología</h3>
+            <p>
+              Diagnóstico y tratamiento de enfermedades del corazón.
+            </p>
+            <button
+              type="button"
+              (click)="reservarTurno()"
+            >
+              Ver profesionales
+            </button>
+          </article>
+
+
+          <article class="specialty-card">
+            <span>♧</span>
+            <h3>Dermatología</h3>
+            <p>
+              Tratamiento de enfermedades de la piel.
+            </p>
+            <button
+              type="button"
+              (click)="reservarTurno()"
+            >
+              Ver profesionales
+            </button>
+          </article>
+
+
+          <article class="specialty-card">
+            <span>♙</span>
+            <h3>Ginecología</h3>
+            <p>
+              Salud femenina durante todas las etapas.
+            </p>
+            <button
+              type="button"
+              (click)="reservarTurno()"
+            >
+              Ver profesionales
+            </button>
+          </article>
+
+
+          <article class="specialty-card">
+            <span>♢</span>
+            <h3>Neurología</h3>
+            <p>
+              Evaluación y tratamiento de enfermedades neurológicas.
+            </p>
+            <button
+              type="button"
+              (click)="reservarTurno()"
+            >
+              Ver profesionales
+            </button>
+          </article>
+
+
+          <article class="specialty-card">
+            <span>♢</span>
+            <h3>Traumatología</h3>
+            <p>
+              Lesiones y enfermedades del sistema musculoesquelético.
+            </p>
+            <button
+              type="button"
+              (click)="reservarTurno()"
+            >
+              Ver profesionales
+            </button>
+          </article>
+
+
+          <article class="specialty-card">
+            <span>♙</span>
+            <h3>Pediatría</h3>
+            <p>
+              Atención médica integral de niños y adolescentes.
+            </p>
+            <button
+              type="button"
+              (click)="reservarTurno()"
+            >
+              Ver profesionales
+            </button>
+          </article>
+
+        </div>
+
+      </section>
+
+    }
+
+
+    <!-- ===================================================
+         RESERVAR TURNO
+    ==================================================== -->
+
+    @if (pantallaActual === 'reservar') {
+
+      <section class="screen booking">
+
+        <div class="section-heading">
+
+          <div>
+
+            <h2>
+              Reservar turno
+            </h2>
+
+            <p>
+              Completá los pasos para reservar tu turno
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- PASOS -->
+
+        <div class="booking-steps">
+
+          <div
+            class="booking-step"
+            [class.active]="pasoReserva >= 1"
+          >
+            <span>1</span>
+            Profesional
+          </div>
+
+          <div class="booking-line"></div>
+
+          <div
+            class="booking-step"
+            [class.active]="pasoReserva >= 2"
+          >
+            <span>2</span>
+            Fecha y hora
+          </div>
+
+          <div class="booking-line"></div>
+
+          <div
+            class="booking-step"
+            [class.active]="pasoReserva >= 3"
+          >
+            <span>3</span>
+            Confirmación
+          </div>
+
+        </div>
+
+
+        <!-- ================================================
+             PASO 1
+        ================================================= -->
+
+        @if (pasoReserva === 1) {
+
+          <div class="booking-panel">
+
+            <h3>
+              Seleccioná el profesional
+            </h3>
+
+            <input
+              class="booking-search"
+              type="text"
+              placeholder="Buscar profesional o especialidad..."
+            >
+
+
+            <button
+              type="button"
+              class="booking-doctor"
+              [class.selected]="profesionalSeleccionado === 'Dr. Juan García'"
+              (click)="seleccionarProfesional('Dr. Juan García')"
+            >
+
+              <div class="doctor-avatar">
+                JG
+              </div>
+
+              <div>
+                <strong>
+                  Dr. Juan García
+                </strong>
+
+                <span>
+                  Cardiología
+                </span>
+              </div>
+
+              <span>
+                ⭐ 4.9
+              </span>
+
+              <span class="doctor-action">
+                Seleccionar
+              </span>
+
+            </button>
+
+
+            <button
+              type="button"
+              class="booking-doctor"
+              [class.selected]="profesionalSeleccionado === 'Dra. María López'"
+              (click)="seleccionarProfesional('Dra. María López')"
+            >
+
+              <div class="doctor-avatar">
+                ML
+              </div>
+
+              <div>
+                <strong>
+                  Dra. María López
+                </strong>
+
+                <span>
+                  Dermatología
+                </span>
+              </div>
+
+              <span>
+                ⭐ 4.8
+              </span>
+
+              <span class="doctor-action">
+                Seleccionar
+              </span>
+
+            </button>
+
+
+            <div class="booking-actions">
+
+              <span></span>
+
+              <button
+                type="button"
+                class="btn btn--primary"
+                (click)="siguientePaso()"
+              >
+                Continuar
+              </button>
+
+            </div>
+
+          </div>
+
+        }
+
+
+        <!-- ================================================
+             PASO 2
+        ================================================= -->
+
+        @if (pasoReserva === 2) {
+
+          <div class="booking-panel">
+
+            <h3>
+              Seleccioná la fecha y el horario
+            </h3>
+
+
+            <div class="booking-date-time">
+
+              <div class="calendar">
+
+                <div class="calendar__header">
+
+                  <button type="button">
+                    ‹
+                  </button>
+
+                  <strong>
+                    Mayo 2024
+                  </strong>
+
+                  <button type="button">
+                    ›
+                  </button>
+
+                </div>
+
+
+                <div class="calendar__week">
+
+                  <span>LUN</span>
+                  <span>MAR</span>
+                  <span>MIÉ</span>
+                  <span>JUE</span>
+                  <span>VIE</span>
+                  <span>SÁB</span>
+                  <span>DOM</span>
+
+                </div>
+
+
+                <div class="calendar__days">
+
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                  <span>6</span>
+                  <span>7</span>
+
+                  <span>8</span>
+                  <span>9</span>
+                  <span>10</span>
+                  <span>11</span>
+                  <span>12</span>
+                  <span>13</span>
+                  <span>14</span>
+
+                  <span>15</span>
+                  <span>16</span>
+                  <span>17</span>
+                  <span>18</span>
+                  <span>19</span>
+                  <span>20</span>
+                  <span>21</span>
+
+                  <span>22</span>
+                  <span>23</span>
+
+                  <button type="button">
+                    24
+                  </button>
+
+                  <span>25</span>
+                  <span>26</span>
+                  <span>27</span>
+                  <span>28</span>
+
+                </div>
+
+              </div>
+
+
+              <div class="time-selection">
+
+                <h4>
+                  Seleccioná el horario
+                </h4>
+
+                <div class="time-grid">
+
+                  <button
+                    type="button"
+                    (click)="seleccionarHora('08:00 hs.')"
+                  >
+                    08:00
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="seleccionarHora('08:30 hs.')"
+                  >
+                    08:30
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="seleccionarHora('09:00 hs.')"
+                  >
+                    09:00
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="seleccionarHora('09:30 hs.')"
+                  >
+                    09:30
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="seleccionarHora('10:00 hs.')"
+                  >
+                    10:00
+                  </button>
+
+                  <button
+                    type="button"
+                    class="selected"
+                    (click)="seleccionarHora('10:30 hs.')"
+                  >
+                    10:30
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="seleccionarHora('11:00 hs.')"
+                  >
+                    11:00
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="seleccionarHora('11:30 hs.')"
+                  >
+                    11:30
+                  </button>
+
+                  <button
+                    type="button"
+                    (click)="seleccionarHora('12:00 hs.')"
+                  >
+                    12:00
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="booking-actions">
+
+              <button
+                type="button"
+                class="btn btn--outline"
+                (click)="pasoAnterior()"
+              >
+                Volver
+              </button>
+
+              <button
+                type="button"
+                class="btn btn--primary"
+                (click)="siguientePaso()"
+              >
+                Continuar
+              </button>
+
+            </div>
+
+          </div>
+
+        }
+
+
+        <!-- ================================================
+             PASO 3
+        ================================================= -->
+
+        @if (pasoReserva === 3) {
+
+          <div class="booking-panel">
+
+            <h3>
+              Confirmá los datos de tu turno
+            </h3>
+
+
+            <div class="confirmation-grid">
+
+              <div class="confirmation-card">
+
+                <h4>
+                  Resumen del turno
+                </h4>
+
+                <div class="confirmation-row">
+
+                  <span>Profesional</span>
+
+                  <strong>
+                    {{ profesionalSeleccionado }}
+                  </strong>
+
+                </div>
+
+                <div class="confirmation-row">
+
+                  <span>Especialidad</span>
+
+                  <strong>
+                    {{ especialidadSeleccionada }}
+                  </strong>
+
+                </div>
+
+                <div class="confirmation-row">
+
+                  <span>Fecha</span>
+
+                  <strong>
+                    {{ fechaSeleccionada }}
+                  </strong>
+
+                </div>
+
+                <div class="confirmation-row">
+
+                  <span>Horario</span>
+
+                  <strong>
+                    {{ horaSeleccionada }}
+                  </strong>
+
+                </div>
+
+                <div class="confirmation-row">
+
+                  <span>Lugar</span>
+
+                  <strong>
+                    Clínica Centro
+                  </strong>
+
+                </div>
+
+              </div>
+
+
+              <div class="confirmation-card">
+
+                <h4>
+                  Información adicional
+                </h4>
+
+                <label>
+                  Obra social
+                </label>
+
+                <select>
+                  <option>OSDE 210</option>
+                  <option>Swiss Medical</option>
+                  <option>Particular</option>
+                </select>
+
+
+                <label>
+                  Comentario (opcional)
+                </label>
+
+                <textarea
+                  placeholder="Contanos brevemente el motivo de la consulta..."
+                ></textarea>
+
+              </div>
+
+            </div>
+
+
+            <div class="booking-actions">
+
+              <button
+                type="button"
+                class="btn btn--outline"
+                (click)="pasoAnterior()"
+              >
+                Volver
+              </button>
+
+              <button
+                type="button"
+                class="btn btn--primary"
+                (click)="confirmarTurno()"
+              >
+                Confirmar turno
+              </button>
+
+            </div>
+
+          </div>
+
+        }
+
+      </section>
+
+    }
+
+
+    <!-- ===================================================
+         MIS TURNOS
+    ==================================================== -->
+
+    @if (pantallaActual === 'mis-turnos') {
+
+      <section class="screen">
+
+        <div class="section-heading">
+
+          <div>
+
+            <h2>
+              Mis turnos
+            </h2>
+
+            <p>
+              Consultá tus próximos turnos
+            </p>
+
+          </div>
+
+          <button
+            type="button"
+            class="btn btn--primary"
+            (click)="reservarTurno()"
+          >
+            + Reservar turno
+          </button>
+
+        </div>
+
+
+        <div class="appointments">
+
+          <article class="appointment">
+
+            <div class="appointment__date">
+              <strong>24</strong>
+              <span>MAY.</span>
+            </div>
+
+            <div>
+              <strong>10:30 hs.</strong>
+              <span>Dr. Juan García</span>
+            </div>
+
+            <div>
+              <span>Cardiología</span>
+              <small>Clínica Centro</small>
+            </div>
+
+            <em>Confirmado</em>
+
+            <button
+              type="button"
+              class="cancel-button"
+            >
+              Cancelar
+            </button>
+
+          </article>
+
+
+          <article class="appointment">
+
+            <div class="appointment__date">
+              <strong>07</strong>
+              <span>JUN.</span>
+            </div>
+
+            <div>
+              <strong>09:00 hs.</strong>
+              <span>Dra. María López</span>
+            </div>
+
+            <div>
+              <span>Dermatología</span>
+              <small>Clínica Norte</small>
+            </div>
+
+            <em>Confirmado</em>
+
+            <button
+              type="button"
+              class="cancel-button"
+            >
+              Cancelar
+            </button>
+
+          </article>
+
+
+          <article class="appointment">
+
+            <div class="appointment__date">
+              <strong>21</strong>
+              <span>JUN.</span>
+            </div>
+
+            <div>
+              <strong>11:15 hs.</strong>
+              <span>Dr. Pablo Sánchez</span>
+            </div>
+
+            <div>
+              <span>Traumatología</span>
+              <small>Clínica Centro</small>
+            </div>
+
+            <em class="pending">
+              Pendiente
+            </em>
+
+            <button
+              type="button"
+              class="cancel-button"
+            >
+              Cancelar
+            </button>
+
+          </article>
+
+        </div>
+
+      </section>
+
+    }
+
+
+    <!-- ===================================================
+         INFORMES
+    ==================================================== -->
+
+    @if (pantallaActual === 'informes') {
+
+      <section class="screen">
+
+        <div class="section-heading">
+
+          <div>
+
+            <h2>
+              Informes médicos
+            </h2>
+
+            <p>
+              Accedé a tus informes médicos
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="reports">
+
+          <article class="report">
+
+            <div class="report-icon">
+              ▤
+            </div>
+
+            <div>
+
+              <strong>
+                Informe - 10/05/2024
+              </strong>
+
+              <span>
+                Dr. Juan García - Cardiología
+              </span>
+
+              <small>
+                Clínica Centro
+              </small>
+
+            </div>
+
+            <button
+              type="button"
+              class="btn btn--outline"
+            >
+              Ver detalles
+            </button>
+
+            <button
+              type="button"
+              class="btn btn--outline"
+            >
+              Descargar
+            </button>
+
+          </article>
+
+
+          <article class="report">
+
+            <div class="report-icon">
+              ▤
+            </div>
+
+            <div>
+
+              <strong>
+                Informe - 16/04/2024
+              </strong>
+
+              <span>
+                Dra. María López - Dermatología
+              </span>
+
+              <small>
+                Clínica Norte
+              </small>
+
+            </div>
+
+            <button
+              type="button"
+              class="btn btn--outline"
+            >
+              Ver detalles
+            </button>
+
+            <button
+              type="button"
+              class="btn btn--outline"
+            >
+              Descargar
+            </button>
+
+          </article>
+
+
+          <article class="report">
+
+            <div class="report-icon">
+              ▤
+            </div>
+
+            <div>
+
+              <strong>
+                Informe - 20/03/2024
+              </strong>
+
+              <span>
+                Dr. Pablo Sánchez - Traumatología
+              </span>
+
+              <small>
+                Clínica Centro
+              </small>
+
+            </div>
+
+            <button
+              type="button"
+              class="btn btn--outline"
+            >
+              Ver detalles
+            </button>
+
+            <button
+              type="button"
+              class="btn btn--outline"
+            >
+              Descargar
+            </button>
+
+          </article>
+
+        </div>
+
+      </section>
+
+    }
+
+
+    <!-- ===================================================
+         MIS DATOS
+    ==================================================== -->
+
+    @if (pantallaActual === 'mis-datos') {
+
+      <section class="screen">
+
+        <div class="section-heading">
+
+          <div>
+
+            <h2>
+              Mis datos
+            </h2>
+
+            <p>
+              Consultá y actualizá tu información personal
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="data-card">
+
+          <div class="data-field">
+
+            <label>
+              Nombre y apellido
+            </label>
+
+            <input
+              type="text"
+              value="Juan Pérez"
+            >
+
+          </div>
+
+
+          <div class="data-field">
+
+            <label>
+              Correo electrónico
+            </label>
+
+            <input
+              type="email"
+              value="juan@cliniturnos.com"
+            >
+
+          </div>
+
+
+          <div class="data-field">
+
+            <label>
+              Teléfono
+            </label>
+
+            <input
+              type="text"
+              value="+54 11 1234 5678"
+            >
+
+          </div>
+
+
+          <button
+            type="button"
+            class="btn btn--primary"
+          >
+            Guardar cambios
+          </button>
+
+        </div>
+
+      </section>
+
+    }
+
+  </section>
+
+</main>

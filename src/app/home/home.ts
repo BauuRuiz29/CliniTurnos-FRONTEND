@@ -3,6 +3,7 @@ import {
   Component
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 interface Feature {
   icon: string;
@@ -25,6 +26,8 @@ interface Step {
   styleUrls: ['./home.scss']
 })
 export class HomeComponent implements AfterViewInit {
+
+  constructor(private router: Router) {}
 
   // Links de navegación. Se recorren con *ngFor en el header.
   navLinks: string[] = [
@@ -127,8 +130,7 @@ export class HomeComponent implements AfterViewInit {
   }
 
   onIniciarSesion(): void {
-    // this.router.navigate(['/login']);
-    console.log('Ir a Iniciar sesión');
+    this.router.navigate(['/login']);
   }
 
   onRegistrarse(): void {

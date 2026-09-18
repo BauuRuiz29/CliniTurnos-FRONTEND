@@ -1,0 +1,1357 @@
+:host {
+  display: block;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.patient-page {
+  min-height: 100vh;
+
+  display: flex;
+
+  background: #f8fafc;
+
+  color: #101a35;
+
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.sidebar {
+  position: fixed;
+
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  width: 225px;
+
+  background: white;
+
+  border-right: 1px solid #e2e8f0;
+
+  padding: 25px 14px;
+
+  display: flex;
+  flex-direction: column;
+
+  z-index: 10;
+}
+
+.sidebar__logo {
+  padding: 0 12px 28px;
+
+  border-bottom: 1px solid #edf1f6;
+}
+
+.sidebar__logo img {
+  width: 135px;
+
+  display: block;
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+
+  gap: 5px;
+
+  margin-top: 22px;
+}
+
+.sidebar__item {
+  width: 100%;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #56647d;
+
+  padding: 11px 12px;
+
+  border-radius: 7px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.sidebar__item:hover {
+  background: #f2f6ff;
+
+  color: #2563eb;
+}
+
+.sidebar__item.active {
+  background: #edf4ff;
+
+  color: #2563eb;
+
+  font-weight: 600;
+}
+
+.sidebar__item span {
+  width: 18px;
+
+  text-align: center;
+
+  font-size: 15px;
+}
+
+.sidebar__item small {
+  margin-left: auto;
+
+  width: 17px;
+  height: 17px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #ef4444;
+
+  color: white;
+
+  font-size: 9px;
+}
+
+.sidebar__logout {
+  margin-top: auto;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #56647d;
+
+  padding: 12px;
+
+  text-align: left;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   CONTENIDO
+===================================================== */
+
+.patient-content {
+  width: calc(100% - 225px);
+
+  margin-left: 225px;
+
+  min-height: 100vh;
+
+  padding: 0 35px 50px;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.patient-header {
+  min-height: 95px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid #e8edf4;
+
+  margin-bottom: 30px;
+}
+
+.patient-header h1 {
+  margin: 0 0 5px;
+
+  font-size: 23px;
+}
+
+.patient-header p {
+  margin: 0;
+
+  color: #718096;
+
+  font-size: 12px;
+}
+
+.patient-user {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.patient-user__bell {
+  margin-right: 12px;
+
+  color: #66728b;
+}
+
+.patient-avatar {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #5269d9;
+
+  color: white;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.patient-user strong {
+  display: block;
+
+  font-size: 11px;
+}
+
+.patient-user span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #718096;
+
+  font-size: 10px;
+}
+
+
+/* =====================================================
+   SCREEN
+===================================================== */
+
+.screen {
+  max-width: 1150px;
+
+  margin: 0 auto;
+
+  animation: screenAppear 0.35s ease;
+}
+
+@keyframes screenAppear {
+
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =====================================================
+   BOTONES
+===================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 7px;
+
+  padding: 10px 18px;
+
+  font-family: inherit;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 6px 14px rgba(37, 99, 235, 0.15);
+}
+
+.btn--primary {
+  border: 1px solid #2563eb;
+
+  background: #2563eb;
+
+  color: white;
+}
+
+.btn--outline {
+  border: 1px solid #bcd0f5;
+
+  background: white;
+
+  color: #2563eb;
+}
+
+
+/* =====================================================
+   ENCABEZADOS
+===================================================== */
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 22px;
+}
+
+.section-heading h2 {
+  margin: 0 0 6px;
+
+  font-size: 21px;
+}
+
+.section-heading p {
+  margin: 0;
+
+  color: #718096;
+
+  font-size: 12px;
+}
+
+
+/* =====================================================
+   ESTADÍSTICAS
+===================================================== */
+
+.stats-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 16px;
+
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  min-height: 135px;
+
+  padding: 20px;
+
+  border-radius: 10px;
+
+  color: white;
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+.stat-card--blue {
+  background: #2563eb;
+}
+
+.stat-card--green {
+  background: #18b5a5;
+}
+
+.stat-card--purple {
+  background: #6366dc;
+}
+
+.stat-card > span {
+  display: block;
+
+  font-size: 11px;
+
+  opacity: 0.9;
+}
+
+.stat-card strong {
+  display: inline-block;
+
+  margin-top: 15px;
+
+  font-size: 30px;
+}
+
+.stat-card small {
+  font-size: 9px;
+
+  margin-left: 3px;
+}
+
+.stat-card div {
+  position: absolute;
+
+  right: 18px;
+  bottom: 18px;
+
+  font-size: 9px;
+
+  line-height: 1.5;
+}
+
+.stat-card button {
+  position: absolute;
+
+  left: 20px;
+  bottom: 18px;
+
+  border: 0;
+
+  background: transparent;
+
+  color: white;
+
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   TURNOS
+===================================================== */
+
+.appointments {
+  background: white;
+
+  border: 1px solid #e1e7f0;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+}
+
+.appointment {
+  min-height: 75px;
+
+  padding: 12px 20px;
+
+  display: grid;
+
+  grid-template-columns: 80px 1fr 1fr 100px 25px;
+
+  align-items: center;
+
+  gap: 20px;
+
+  border-bottom: 1px solid #edf1f6;
+}
+
+.appointment:last-child {
+  border-bottom: 0;
+}
+
+.appointment__date strong {
+  display: block;
+
+  font-size: 21px;
+}
+
+.appointment__date span {
+  font-size: 9px;
+
+  color: #718096;
+}
+
+.appointment > div:not(.appointment__date) strong,
+.appointment > div:not(.appointment__date) span,
+.appointment > div:not(.appointment__date) small {
+  display: block;
+}
+
+.appointment > div:not(.appointment__date) strong {
+  font-size: 11px;
+}
+
+.appointment > div:not(.appointment__date) span {
+  margin-top: 4px;
+
+  font-size: 10px;
+}
+
+.appointment > div:not(.appointment__date) small {
+  margin-top: 3px;
+
+  color: #718096;
+
+  font-size: 9px;
+}
+
+.appointment em {
+  padding: 5px 8px;
+
+  border-radius: 5px;
+
+  background: #e7f7f0;
+
+  color: #15946c;
+
+  font-size: 9px;
+
+  font-style: normal;
+
+  text-align: center;
+}
+
+.appointment em.pending {
+  background: #fff4df;
+
+  color: #d18a17;
+}
+
+.cancel-button {
+  border: 1px solid #f1b6b6;
+
+  background: white;
+
+  color: #dc2626;
+
+  border-radius: 5px;
+
+  padding: 6px;
+
+  font-size: 9px;
+
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   PROFESIONALES
+===================================================== */
+
+.search-bar {
+  display: flex;
+
+  gap: 10px;
+
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  flex: 1;
+
+  border: 1px solid #dce4ef;
+
+  border-radius: 7px;
+
+  padding: 11px;
+
+  outline: none;
+}
+
+.search-bar button {
+  border: 1px solid #dce4ef;
+
+  background: white;
+
+  border-radius: 7px;
+
+  padding: 0 20px;
+
+  color: #56647d;
+
+  cursor: pointer;
+}
+
+.professionals-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 15px;
+}
+
+.professional-card {
+  background: white;
+
+  border: 1px solid #e1e7f0;
+
+  border-radius: 10px;
+
+  padding: 20px;
+
+  display: grid;
+
+  grid-template-columns: auto 1fr;
+
+  gap: 15px;
+
+  align-items: center;
+}
+
+.professional-card h3 {
+  margin: 0 0 5px;
+
+  font-size: 13px;
+}
+
+.professional-card p {
+  margin: 0 0 7px;
+
+  color: #718096;
+
+  font-size: 10px;
+}
+
+.professional-card span {
+  color: #e09a22;
+
+  font-size: 10px;
+}
+
+.professional-card .btn {
+  grid-column: 1 / -1;
+
+  width: 100%;
+}
+
+
+/* =====================================================
+   AVATAR DOCTOR
+===================================================== */
+
+.doctor-avatar {
+  width: 43px;
+  height: 43px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #e9f0ff;
+
+  color: #2563eb;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   ESPECIALIDADES
+===================================================== */
+
+.specialties-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 15px;
+}
+
+.specialty-card {
+  background: white;
+
+  border: 1px solid #e1e7f0;
+
+  border-radius: 10px;
+
+  padding: 25px;
+
+  min-height: 175px;
+}
+
+.specialty-card > span {
+  color: #2563eb;
+
+  font-size: 24px;
+}
+
+.specialty-card h3 {
+  margin: 15px 0 8px;
+
+  font-size: 13px;
+}
+
+.specialty-card p {
+  margin: 0;
+
+  color: #718096;
+
+  font-size: 10px;
+
+  line-height: 1.6;
+}
+
+.specialty-card button {
+  border: 0;
+
+  background: transparent;
+
+  padding: 0;
+
+  margin-top: 15px;
+
+  color: #2563eb;
+
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+
+/* =====================================================
+   RESERVAR TURNO
+===================================================== */
+
+.booking-steps {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 25px;
+}
+
+.booking-step {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color: #8b96aa;
+
+  font-size: 11px;
+
+  white-space: nowrap;
+}
+
+.booking-step span {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #dce4ef;
+
+  border-radius: 50%;
+
+  background: white;
+
+  color: #718096;
+}
+
+.booking-step.active {
+  color: #2563eb;
+
+  font-weight: 600;
+}
+
+.booking-step.active span {
+  background: #2563eb;
+
+  border-color: #2563eb;
+
+  color: white;
+}
+
+.booking-line {
+  flex: 0 1 100px;
+
+  height: 1px;
+
+  background: #dce4ef;
+
+  margin: 0 12px;
+}
+
+.booking-panel {
+  background: white;
+
+  border: 1px solid #e1e7f0;
+
+  border-radius: 10px;
+
+  padding: 25px;
+
+  animation: bookingFade 0.3s ease;
+}
+
+@keyframes bookingFade {
+
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+}
+
+.booking-panel > h3 {
+  margin: 0 0 18px;
+
+  font-size: 14px;
+}
+
+.booking-search {
+  width: 100%;
+
+  padding: 11px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #dce4ef;
+
+  border-radius: 7px;
+
+  margin-bottom: 15px;
+}
+
+.booking-doctor {
+  width: 100%;
+
+  border: 1px solid #e1e7f0;
+
+  background: white;
+
+  border-radius: 8px;
+
+  padding: 13px;
+
+  display: grid;
+
+  grid-template-columns: auto 1fr auto auto;
+
+  align-items: center;
+
+  gap: 14px;
+
+  margin-bottom: 10px;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.booking-doctor:hover,
+.booking-doctor.selected {
+  border-color: #2563eb;
+
+  background: #f7faff;
+}
+
+.booking-doctor strong,
+.booking-doctor span {
+  display: block;
+}
+
+.booking-doctor strong {
+  font-size: 11px;
+}
+
+.booking-doctor div:nth-child(2) span {
+  margin-top: 4px;
+
+  color: #718096;
+
+  font-size: 9px;
+}
+
+.booking-doctor > span:nth-child(3) {
+  color: #e09a22;
+
+  font-size: 10px;
+}
+
+.booking-doctor .doctor-action {
+  color: #2563eb;
+
+  font-size: 9px;
+}
+
+
+/* =====================================================
+   FECHA Y HORA
+===================================================== */
+
+.booking-date-time {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 30px;
+}
+
+.calendar,
+.time-selection {
+  border: 1px solid #e1e7f0;
+
+  border-radius: 8px;
+
+  padding: 20px;
+}
+
+.calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+}
+
+.calendar__header button {
+  border: 0;
+
+  background: transparent;
+
+  color: #2563eb;
+
+  font-size: 20px;
+
+  cursor: pointer;
+}
+
+.calendar__header strong {
+  font-size: 12px;
+}
+
+.calendar__week,
+.calendar__days {
+  display: grid;
+
+  grid-template-columns: repeat(7, 1fr);
+
+  text-align: center;
+
+  gap: 8px;
+}
+
+.calendar__week span {
+  color: #8b96aa;
+
+  font-size: 8px;
+}
+
+.calendar__days {
+  margin-top: 12px;
+}
+
+.calendar__days span,
+.calendar__days button {
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: auto;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #56647d;
+
+  border-radius: 6px;
+
+  font-size: 9px;
+}
+
+.calendar__days button {
+  background: #2563eb;
+
+  color: white;
+
+  cursor: pointer;
+}
+
+.time-selection h4 {
+  margin: 0 0 15px;
+
+  font-size: 11px;
+}
+
+.time-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 8px;
+}
+
+.time-grid button {
+  border: 1px solid #dce4ef;
+
+  background: white;
+
+  color: #56647d;
+
+  padding: 9px 5px;
+
+  border-radius: 6px;
+
+  font-size: 9px;
+
+  cursor: pointer;
+}
+
+.time-grid button:hover,
+.time-grid button.selected {
+  border-color: #2563eb;
+
+  background: #2563eb;
+
+  color: white;
+}
+
+
+/* =====================================================
+   CONFIRMACIÓN
+===================================================== */
+
+.confirmation-grid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 20px;
+}
+
+.confirmation-card {
+  border: 1px solid #e1e7f0;
+
+  border-radius: 8px;
+
+  padding: 20px;
+}
+
+.confirmation-card h4 {
+  margin: 0 0 20px;
+
+  font-size: 12px;
+}
+
+.confirmation-row {
+  padding: 12px 0;
+
+  border-bottom: 1px solid #edf1f6;
+}
+
+.confirmation-row:last-child {
+  border-bottom: 0;
+}
+
+.confirmation-row span {
+  display: block;
+
+  color: #718096;
+
+  font-size: 9px;
+
+  margin-bottom: 4px;
+}
+
+.confirmation-row strong {
+  font-size: 10px;
+}
+
+.confirmation-card label {
+  display: block;
+
+  margin: 15px 0 7px;
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+.confirmation-card select,
+.confirmation-card textarea {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  border: 1px solid #dce4ef;
+
+  border-radius: 6px;
+
+  padding: 10px;
+
+  font-family: inherit;
+
+  font-size: 10px;
+}
+
+.confirmation-card textarea {
+  height: 90px;
+
+  resize: none;
+}
+
+
+/* =====================================================
+   ACCIONES
+===================================================== */
+
+.booking-actions {
+  display: flex;
+  justify-content: space-between;
+
+  margin-top: 25px;
+}
+
+
+/* =====================================================
+   INFORMES
+===================================================== */
+
+.reports {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.report {
+  background: white;
+
+  border: 1px solid #e1e7f0;
+
+  border-radius: 8px;
+
+  padding: 16px;
+
+  display: grid;
+
+  grid-template-columns: auto 1fr auto auto;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+.report-icon {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #edf4ff;
+
+  color: #2563eb;
+}
+
+.report strong,
+.report span,
+.report small {
+  display: block;
+}
+
+.report strong {
+  font-size: 11px;
+}
+
+.report span {
+  margin-top: 4px;
+
+  color: #56647d;
+
+  font-size: 9px;
+}
+
+.report small {
+  margin-top: 3px;
+
+  color: #8b96aa;
+
+  font-size: 8px;
+}
+
+
+/* =====================================================
+   MIS DATOS
+===================================================== */
+
+.data-card {
+  background: white;
+
+  border: 1px solid #e1e7f0;
+
+  border-radius: 10px;
+
+  padding: 25px;
+
+  max-width: 700px;
+}
+
+.data-field {
+  margin-bottom: 18px;
+}
+
+.data-field label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+.data-field input {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  border: 1px solid #dce4ef;
+
+  border-radius: 6px;
+
+  padding: 11px;
+
+  font-family: inherit;
+
+  font-size: 10px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1000px) {
+
+  .sidebar {
+    width: 190px;
+  }
+
+  .patient-content {
+    width: calc(100% - 190px);
+
+    margin-left: 190px;
+
+    padding: 0 20px 40px;
+  }
+
+  .stats-grid,
+  .professionals-grid,
+  .specialties-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+}
+
+@media (max-width: 750px) {
+
+  .sidebar {
+    position: relative;
+
+    width: 100%;
+
+    height: auto;
+
+    border-right: 0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .patient-page {
+    display: block;
+  }
+
+  .sidebar__nav {
+    flex-direction: row;
+
+    overflow-x: auto;
+  }
+
+  .sidebar__item {
+    white-space: nowrap;
+  }
+
+  .sidebar__logout {
+    display: none;
+  }
+
+  .patient-content {
+    width: 100%;
+
+    margin-left: 0;
+
+    padding: 0 15px 30px;
+  }
+
+  .stats-grid,
+  .professionals-grid,
+  .specialties-grid,
+  .booking-date-time,
+  .confirmation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .appointment {
+    grid-template-columns: 60px 1fr;
+
+    gap: 10px;
+  }
+
+  .appointment > div:nth-child(3),
+  .appointment em,
+  .appointment > span {
+    display: none;
+  }
+
+  .report {
+    grid-template-columns: auto 1fr;
+
+  }
+
+  .report .btn {
+    grid-column: 2;
+  }
+
+}

@@ -1,0 +1,150 @@
+<main class="login-page">
+
+  <div class="login-background-shape login-background-shape--one"></div>
+  <div class="login-background-shape login-background-shape--two"></div>
+
+  <section class="login-container">
+
+    <!-- IZQUIERDA -->
+
+    <div class="login-brand">
+
+      <button
+        type="button"
+        class="login-logo"
+        (click)="volverHome()"
+      >
+        <img
+          src="logo_horizontal.png"
+          alt="CliniTurnos"
+        >
+      </button>
+
+      <h1>Turnos simples.<br>Atención inteligente.</h1>
+
+      <p>
+        Gestioná tus turnos médicos, consultá tus
+        informes y organizá tu salud de manera
+        rápida y segura.
+      </p>
+
+      <div class="login-benefits">
+
+        <div class="login-benefit">
+          <div class="login-benefit__icon">
+            ✓
+          </div>
+
+          <div>
+            <strong>Fácil y rápido</strong>
+            <span>Gestioná todo desde un solo lugar.</span>
+          </div>
+        </div>
+
+        <div class="login-benefit">
+          <div class="login-benefit__icon">
+            ✓
+          </div>
+
+          <div>
+            <strong>Seguro</strong>
+            <span>Tus datos están protegidos.</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- DERECHA -->
+
+    <form
+      class="login-card"
+      (ngSubmit)="ingresar()"
+    >
+
+      <div class="login-card__header">
+
+        <h2>Iniciar sesión</h2>
+
+        <p>
+          Bienvenido de nuevo
+        </p>
+
+      </div>
+
+
+      <div class="login-field">
+
+        <label for="email">
+          Correo electrónico
+        </label>
+
+        <input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="ejemplo@cliniturnos.com"
+          required
+        >
+
+      </div>
+
+
+      <div class="login-field">
+
+        <label for="password">
+          Contraseña
+        </label>
+
+        <input
+          id="password"
+          name="password"
+          type="password"
+          placeholder="••••••••"
+          required
+        >
+
+      </div>
+
+
+      <div class="login-forgot">
+
+        <a href="#">
+          ¿Olvidaste tu contraseña?
+        </a>
+
+      </div>
+
+
+      <button
+        type="submit"
+        class="login-button"
+      >
+        Ingresar
+      </button>
+
+
+      <div class="login-divider">
+        <span></span>
+        <p>o</p>
+        <span></span>
+      </div>
+
+
+      <p class="login-register">
+
+        ¿No tenés una cuenta?
+
+        <a href="#">
+          Registrate
+        </a>
+
+      </p>
+
+    </form>
+
+  </section>
+
+</main>
