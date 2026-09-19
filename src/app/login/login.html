@@ -77,16 +77,17 @@
 
       <div class="login-field">
 
-        <label for="email">
-          Correo electrónico
+        <label for="login">
+          Usuario
         </label>
 
         <input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="ejemplo@cliniturnos.com"
+          id="login"
+          name="login"
+          type="text"
+          placeholder="Tu usuario"
           required
+          [(ngModel)]="login"
         >
 
       </div>
@@ -104,6 +105,7 @@
           type="password"
           placeholder="••••••••"
           required
+          [(ngModel)]="password"
         >
 
       </div>
@@ -118,12 +120,13 @@
       </div>
 
 
-      <button
-        type="submit"
-        class="login-button"
-      >
+      <button type="button" (click)="ingresar()" class="login-button">
         Ingresar
       </button>
+
+      @if (errorMessage) {
+        <p class="login-error">{{ errorMessage }}</p>
+      }
 
 
       <div class="login-divider">
