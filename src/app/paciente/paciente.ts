@@ -55,6 +55,29 @@ export class PacienteComponent {
 
   }
 
+  verLaboratorio(): void {
+
+  this.pantallaActual = 'laboratorio';
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+
+  }
+
+
+  volverEspecialidades(): void {
+
+    this.pantallaActual = 'especialidades';
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+
+  }
+
   seleccionarProfesional(nombre: string): void {
 
     this.profesionalSeleccionado = nombre;
@@ -106,42 +129,42 @@ export class PacienteComponent {
     behavior: 'smooth'
   });
 
-}
+  }
 
-volverMisTurnos(): void {
+  volverMisTurnos(): void {
 
-  this.pantallaActual = 'mis-turnos';
+    this.pantallaActual = 'mis-turnos';
 
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
 
-}
+  }
 
-reprogramarTurno(): void {
+  reprogramarTurno(): void {
 
-  console.log('Reprogramar turno');
+    console.log('Reprogramar turno');
 
-}
+  }
 
-cancelarTurnoDetalle(): void {
+  cancelarTurnoDetalle(): void {
 
-  console.log('Cancelar turno');
+    console.log('Cancelar turno');
 
-}
+  }
 
-descargarComprobante(): void {
+  descargarComprobante(): void {
 
-  console.log('Descargar comprobante');
+    console.log('Descargar comprobante');
 
-}
+  }
 
-agregarCalendario(): void {
+  agregarCalendario(): void {
 
-  console.log('Agregar al calendario');
+    console.log('Agregar al calendario');
 
-}
+  }
 
   cerrarSesion(): void {
 

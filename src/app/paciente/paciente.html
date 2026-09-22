@@ -496,6 +496,14 @@
 
           </div>
 
+          <button
+            type="button"
+            class="btn btn--primary laboratory-button"
+            (click)="verLaboratorio()"
+          >
+            🧪 Ver estudios de laboratorio
+          </button>
+
         </div>
 
 
@@ -595,6 +603,669 @@
       </section>
 
     }
+
+<!-- ===================================================
+     ESTUDIOS DE LABORATORIO
+==================================================== -->
+
+@if (pantallaActual === 'laboratorio') {
+
+  <section class="screen laboratory-screen">
+
+
+    <!-- ================================================
+         BREADCRUMB
+    ================================================= -->
+
+    <div class="laboratory-breadcrumb">
+
+      <button
+        type="button"
+        (click)="volverEspecialidades()"
+      >
+        ←
+      </button>
+
+      <span>
+        Especialidades
+      </span>
+
+      <strong>›</strong>
+
+      <span>
+        Laboratorio
+      </span>
+
+      <strong>›</strong>
+
+      <b>
+        Estudios disponibles
+      </b>
+
+    </div>
+
+
+    <!-- ================================================
+         ENCABEZADO
+    ================================================= -->
+
+    <div class="laboratory-header">
+
+      <div class="laboratory-title">
+
+        <div class="laboratory-title__icon">
+          ⚗
+        </div>
+
+        <div>
+
+          <h2>
+            Estudios de laboratorio
+          </h2>
+
+          <p>
+            Seleccioná el estudio que necesitás.
+            Luego podrás elegir la fecha y hora para realizarlo.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="laboratory-important">
+
+        <span>
+          i
+        </span>
+
+        <div>
+
+          <strong>
+            Importante
+          </strong>
+
+          <p>
+            Algunos estudios requieren preparación previa.
+          </p>
+
+          <button type="button">
+            Ver indicaciones generales
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ================================================
+         BUSCADOR Y FILTROS
+    ================================================= -->
+
+    <div class="laboratory-filters">
+
+      <div class="laboratory-search">
+
+        <span>
+          ⌕
+        </span>
+
+        <input
+          type="text"
+          placeholder="Buscar estudio por nombre..."
+        >
+
+        <strong>
+          ⌕
+        </strong>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="laboratory-select"
+      >
+
+        <small>
+          Categoría
+        </small>
+
+        <span>
+          Todas
+        </span>
+
+        <b>
+         ⌄
+        </b>
+
+      </button>
+
+
+      <button
+        type="button"
+        class="laboratory-select"
+      >
+
+        <small>
+          Preparación
+        </small>
+
+        <span>
+          Todas
+        </span>
+
+        <b>
+         ⌄
+        </b>
+
+      </button>
+
+    </div>
+
+
+    <!-- ================================================
+         CONTENIDO
+    ================================================= -->
+
+    <div class="laboratory-content">
+
+
+      <!-- CATEGORÍAS -->
+
+      <aside class="laboratory-categories">
+
+        <h3>
+          Categorías
+        </h3>
+
+
+        <button
+          type="button"
+          class="laboratory-category laboratory-category--active"
+        >
+          <span>▣</span>
+          Todos los estudios
+        </button>
+
+
+        <button
+          type="button"
+          class="laboratory-category"
+        >
+          <span>♧</span>
+          Hematología
+        </button>
+
+
+        <button
+          type="button"
+          class="laboratory-category"
+        >
+          <span>⚗</span>
+          Bioquímica
+        </button>
+
+
+        <button
+          type="button"
+          class="laboratory-category"
+        >
+          <span>▣</span>
+          Orina
+        </button>
+
+
+        <button
+          type="button"
+          class="laboratory-category"
+        >
+          <span>♧</span>
+          Hormonales
+        </button>
+
+
+        <button
+          type="button"
+          class="laboratory-category"
+        >
+          <span>♢</span>
+          Inmunología
+        </button>
+
+
+        <button
+          type="button"
+          class="laboratory-category"
+        >
+          <span>⚙</span>
+          Serología
+        </button>
+
+
+        <button
+          type="button"
+          class="laboratory-category"
+        >
+          <span>♧</span>
+          Microbiología
+        </button>
+
+
+        <button
+          type="button"
+          class="laboratory-category"
+        >
+          <span>○</span>
+          Otros
+        </button>
+
+
+        <div class="laboratory-question">
+
+          <h4>
+            ⓘ ¿Tenés dudas?
+          </h4>
+
+          <p>
+            Consultá con tu profesional sobre el estudio que necesitás realizar.
+          </p>
+
+          <button type="button">
+            Ir a profesionales
+          </button>
+
+        </div>
+
+      </aside>
+
+
+      <!-- TABLA DE ESTUDIOS -->
+
+      <div class="laboratory-list">
+
+        <div class="laboratory-list__header">
+
+          <span>
+            Estudio
+          </span>
+
+          <span>
+            Categoría
+          </span>
+
+          <span>
+            Preparación
+          </span>
+
+          <span>
+            Acciones
+          </span>
+
+        </div>
+
+
+        <!-- ESTUDIO 1 -->
+
+        <article class="laboratory-row">
+
+          <div class="laboratory-study">
+
+            <div class="laboratory-study__icon laboratory-study__icon--red">
+              ◉
+            </div>
+
+            <div>
+
+              <strong>
+                Hemograma completo
+              </strong>
+
+              <p>
+                Evalúa los componentes de la sangre:
+                glóbulos rojos, glóbulos blancos y plaquetas.
+              </p>
+
+            </div>
+
+          </div>
+
+          <span>
+            Hematología
+          </span>
+
+          <em class="preparation preparation--green">
+            No requiere
+          </em>
+
+          <button
+            type="button"
+            class="laboratory-select-button"
+          >
+            ▣ Seleccionar
+          </button>
+
+        </article>
+
+
+        <!-- ESTUDIO 2 -->
+
+        <article class="laboratory-row">
+
+          <div class="laboratory-study">
+
+            <div class="laboratory-study__icon laboratory-study__icon--purple">
+              ⚗
+            </div>
+
+            <div>
+
+              <strong>
+                Glucemia
+              </strong>
+
+              <p>
+                Mide la cantidad de glucosa en sangre.
+              </p>
+
+            </div>
+
+          </div>
+
+          <span>
+            Bioquímica
+          </span>
+
+          <em class="preparation preparation--green">
+            No requiere
+          </em>
+
+          <button
+            type="button"
+            class="laboratory-select-button"
+          >
+            ▣ Seleccionar
+          </button>
+
+        </article>
+
+
+        <!-- ESTUDIO 3 -->
+
+        <article class="laboratory-row">
+
+          <div class="laboratory-study">
+
+            <div class="laboratory-study__icon laboratory-study__icon--orange">
+              ◉
+            </div>
+
+            <div>
+
+              <strong>
+                Examen de orina completo
+              </strong>
+
+              <p>
+                Análisis físico, químico y microscópico de orina.
+              </p>
+
+            </div>
+
+          </div>
+
+          <span>
+            Orina
+          </span>
+
+          <em class="preparation preparation--orange">
+            Primera orina de la mañana
+          </em>
+
+          <button
+            type="button"
+            class="laboratory-select-button"
+          >
+            ▣ Seleccionar
+          </button>
+
+        </article>
+
+
+        <!-- ESTUDIO 4 -->
+
+        <article class="laboratory-row">
+
+          <div class="laboratory-study">
+
+            <div class="laboratory-study__icon laboratory-study__icon--pink">
+              ♡
+            </div>
+
+            <div>
+
+              <strong>
+                TSH
+              </strong>
+
+              <p>
+                Evalúa el funcionamiento de la glándula tiroides.
+              </p>
+
+            </div>
+
+          </div>
+
+          <span>
+            Hormonales
+          </span>
+
+          <em class="preparation preparation--green">
+            No requiere
+          </em>
+
+          <button
+            type="button"
+            class="laboratory-select-button"
+          >
+            ▣ Seleccionar
+          </button>
+
+        </article>
+
+
+        <!-- ESTUDIO 5 -->
+
+        <article class="laboratory-row">
+
+          <div class="laboratory-study">
+
+            <div class="laboratory-study__icon laboratory-study__icon--green">
+              ♢
+            </div>
+
+            <div>
+
+              <strong>
+                PCR (Proteína C Reactiva)
+              </strong>
+
+              <p>
+                Marcador de inflamación en el organismo.
+              </p>
+
+            </div>
+
+          </div>
+
+          <span>
+            Inmunología
+          </span>
+
+          <em class="preparation preparation--green">
+            No requiere
+          </em>
+
+          <button
+            type="button"
+            class="laboratory-select-button"
+          >
+            ▣ Seleccionar
+          </button>
+
+        </article>
+
+
+        <!-- ESTUDIO 6 -->
+
+        <article class="laboratory-row">
+
+          <div class="laboratory-study">
+
+            <div class="laboratory-study__icon laboratory-study__icon--blue">
+              ⚙
+            </div>
+
+            <div>
+
+              <strong>
+                VDRL
+              </strong>
+
+              <p>
+                Detección de sífilis.
+              </p>
+
+            </div>
+
+          </div>
+
+          <span>
+            Serología
+          </span>
+
+          <em class="preparation preparation--green">
+            No requiere
+          </em>
+
+          <button
+            type="button"
+            class="laboratory-select-button"
+          >
+            ▣ Seleccionar
+          </button>
+
+        </article>
+
+
+        <!-- ESTUDIO 7 -->
+
+        <article class="laboratory-row">
+
+          <div class="laboratory-study">
+
+            <div class="laboratory-study__icon laboratory-study__icon--cyan">
+              ♧
+            </div>
+
+            <div>
+
+              <strong>
+                Urocultivo
+              </strong>
+
+              <p>
+                Detecta infecciones urinarias.
+              </p>
+
+            </div>
+
+          </div>
+
+          <span>
+            Microbiología
+          </span>
+
+          <em class="preparation preparation--orange">
+            Antes del antibiótico
+          </em>
+
+          <button
+            type="button"
+            class="laboratory-select-button"
+          >
+            ▣ Seleccionar
+          </button>
+
+        </article>
+
+
+        <!-- ESTUDIO 8 -->
+
+        <article class="laboratory-row">
+
+          <div class="laboratory-study">
+
+            <div class="laboratory-study__icon laboratory-study__icon--gray">
+              •••
+            </div>
+
+            <div>
+
+              <strong>
+                Perfil lipídico
+              </strong>
+
+              <p>
+                Colesterol total, HDL, LDL y triglicéridos.
+              </p>
+
+            </div>
+
+          </div>
+
+          <span>
+            Bioquímica
+          </span>
+
+          <em class="preparation preparation--orange">
+            Ayuno de 12 horas
+          </em>
+
+          <button
+            type="button"
+            class="laboratory-select-button"
+          >
+            ▣ Seleccionar
+          </button>
+
+        </article>
+
+      </div>
+
+    </div>
+
+
+    <!-- ================================================
+         AVISO INFERIOR
+    ================================================= -->
+
+    <div class="laboratory-notice">
+
+      <span>
+        i
+      </span>
+
+      La preparación puede variar según cada paciente.
+      Consultá siempre las indicaciones específicas al seleccionar el estudio.
+
+    </div>
+
+  </section>
+
+}
 
 
     <!-- ===================================================
