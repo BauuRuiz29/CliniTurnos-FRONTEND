@@ -24,7 +24,7 @@
         [class.active]="pantallaActual === 'inicio'"
         (click)="cambiarPantalla('inicio')"
       >
-        <span>⌂</span>
+        <img src="inicio.png" alt="inicio" width="20px">
         Inicio
       </button>
 
@@ -35,7 +35,7 @@
         [class.active]="pantallaActual === 'mis-turnos'"
         (click)="cambiarPantalla('mis-turnos')"
       >
-        <span>▣</span>
+        <img src="calendario.png" alt="calendario" width="20px">
         Mis turnos
       </button>
 
@@ -46,7 +46,7 @@
         [class.active]="pantallaActual === 'mis-datos'"
         (click)="cambiarPantalla('mis-datos')"
       >
-        <span>♙</span>
+        <img src="usuario.png" alt="usuario" width="20px">
         Mis datos
       </button>
 
@@ -57,7 +57,7 @@
         [class.active]="pantallaActual === 'profesionales'"
         (click)="cambiarPantalla('profesionales')"
       >
-        <span>♧</span>
+        <img src="profesional.png" alt="profesional" width="20px">
         Profesionales
       </button>
 
@@ -68,7 +68,7 @@
         [class.active]="pantallaActual === 'especialidades'"
         (click)="cambiarPantalla('especialidades')"
       >
-        <span>♡</span>
+        <img src="especialidad.png" alt="especialidad" width="20px">
         Especialidades
       </button>
 
@@ -79,7 +79,7 @@
         [class.active]="pantallaActual === 'informes'"
         (click)="cambiarPantalla('informes')"
       >
-        <span>▤</span>
+        <img src="informe.png" alt="informe" width="20px">
         Informes médicos
       </button>
 
@@ -88,7 +88,7 @@
         type="button"
         class="sidebar__item"
       >
-        <span>♧</span>
+        <img src="notificacion.png" alt="notificacion" width="20px">
         Notificaciones
         <small>1</small>
       </button>
@@ -98,7 +98,7 @@
         type="button"
         class="sidebar__item"
       >
-        <span>?</span>
+        <img src="ayuda.png" alt="ayuda" width="20px">
         Ayuda
       </button>
 
@@ -502,7 +502,7 @@
         <div class="specialties-grid">
 
           <article class="specialty-card">
-            <span>♡</span>
+            <img src="cardiologia.png" alt="cardiologia" width="70px">
             <h3>Cardiología</h3>
             <p>
               Diagnóstico y tratamiento de enfermedades del corazón.
@@ -517,7 +517,7 @@
 
 
           <article class="specialty-card">
-            <span>♧</span>
+            <img src="dermatologia.png" alt="dermatologia" width="70px">
             <h3>Dermatología</h3>
             <p>
               Tratamiento de enfermedades de la piel.
@@ -532,7 +532,7 @@
 
 
           <article class="specialty-card">
-            <span>♙</span>
+            <img src="ginecologia.png" alt="ginecologia" width="70px">
             <h3>Ginecología</h3>
             <p>
               Salud femenina durante todas las etapas.
@@ -547,7 +547,7 @@
 
 
           <article class="specialty-card">
-            <span>♢</span>
+            <img src="neurologia.png" alt="neurologia" width="70px">
             <h3>Neurología</h3>
             <p>
               Evaluación y tratamiento de enfermedades neurológicas.
@@ -562,7 +562,7 @@
 
 
           <article class="specialty-card">
-            <span>♢</span>
+            <img src="traumatologia.png" alt="traumatologia" width="70px">
             <h3>Traumatología</h3>
             <p>
               Lesiones y enfermedades del sistema musculoesquelético.
@@ -577,7 +577,7 @@
 
 
           <article class="specialty-card">
-            <span>♙</span>
+            <img src="pediatria.png" alt="pediatria" width="70px">
             <h3>Pediatría</h3>
             <p>
               Atención médica integral de niños y adolescentes.
@@ -1121,7 +1121,10 @@
 
         <div class="appointments">
 
-          <article class="appointment">
+          <article
+            class="appointment appointment--clickable"
+            (click)="verDetalleTurno()"
+          >
 
             <div class="appointment__date">
               <strong>24</strong>
@@ -1140,12 +1143,9 @@
 
             <em>Confirmado</em>
 
-            <button
-              type="button"
-              class="cancel-button"
-            >
-              Cancelar
-            </button>
+            <span class="appointment__arrow">
+              ›
+            </span>
 
           </article>
 
@@ -1215,6 +1215,509 @@
 
     }
 
+
+<!-- ===================================================
+     DETALLE DEL TURNO
+==================================================== -->
+
+@if (pantallaActual === 'detalle-turno') {
+
+  <section class="screen detail-screen">
+
+    <!-- ===============================================
+         BREADCRUMB
+    ================================================ -->
+
+    <div class="detail-breadcrumb">
+
+      <button
+        type="button"
+        (click)="volverMisTurnos()"
+      >
+        ←
+      </button>
+
+      <span>
+        Mis turnos
+      </span>
+
+      <strong>
+        ›
+      </strong>
+
+      <b>
+        Detalle del turno
+      </b>
+
+    </div>
+
+
+    <!-- ===============================================
+         DOS COLUMNAS
+    ================================================ -->
+
+    <div class="detail-layout">
+
+
+      <!-- =============================================
+           COLUMNA PRINCIPAL
+      ============================================== -->
+
+      <div class="detail-main">
+
+
+        <!-- ENCABEZADO -->
+
+        <section class="detail-header">
+
+          <div>
+
+            <h2>
+              Detalle del turno
+            </h2>
+
+            <span class="detail-status">
+              Confirmado
+            </span>
+
+            <p>
+              Tu turno está confirmado. Te esperamos.
+            </p>
+
+          </div>
+
+
+          <div class="detail-calendar">
+
+            <div class="detail-calendar__top">
+
+              <span></span>
+              <span></span>
+
+            </div>
+
+            <div class="detail-calendar__body">
+
+              <span></span>
+              <span></span>
+              <span></span>
+
+              <span></span>
+              <span></span>
+              <span></span>
+
+              <span></span>
+              <span></span>
+              <span></span>
+
+            </div>
+
+            <div class="detail-calendar__check">
+              ✓
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- INFORMACIÓN DEL TURNO -->
+
+        <section class="detail-card">
+
+          <h3>
+            Información del turno
+          </h3>
+
+
+          <div class="detail-row">
+
+            <div class="detail-label">
+              <span>▣</span>
+              <strong>Fecha</strong>
+            </div>
+
+            <p>
+              {{ turnoSeleccionado.fecha }}
+            </p>
+
+          </div>
+
+
+          <div class="detail-row">
+
+            <div class="detail-label">
+              <span>◷</span>
+              <strong>Hora</strong>
+            </div>
+
+            <p>
+              {{ turnoSeleccionado.hora }}
+            </p>
+
+          </div>
+
+
+          <div class="detail-row">
+
+            <div class="detail-label">
+              <span>♙</span>
+              <strong>Profesional</strong>
+            </div>
+
+            <p>
+              {{ turnoSeleccionado.profesional }}
+            </p>
+
+          </div>
+
+
+          <div class="detail-row">
+
+            <div class="detail-label">
+              <span>♡</span>
+              <strong>Especialidad</strong>
+            </div>
+
+            <p>
+              {{ turnoSeleccionado.especialidad }}
+            </p>
+
+          </div>
+
+
+          <div class="detail-row">
+
+            <div class="detail-label">
+              <span>▣</span>
+              <strong>Consultorio</strong>
+            </div>
+
+            <p>
+              {{ turnoSeleccionado.consultorio }}
+            </p>
+
+          </div>
+
+
+          <div class="detail-row">
+
+            <div class="detail-label">
+              <span>⌖</span>
+              <strong>Lugar</strong>
+            </div>
+
+            <p>
+
+              <strong>
+                {{ turnoSeleccionado.lugar }}
+              </strong>
+
+              <small>
+                {{ turnoSeleccionado.direccion }}
+              </small>
+
+            </p>
+
+          </div>
+
+
+          <div class="detail-row">
+
+            <div class="detail-label">
+              <span>▤</span>
+              <strong>Motivo de consulta</strong>
+            </div>
+
+            <p>
+              {{ turnoSeleccionado.motivo }}
+            </p>
+
+          </div>
+
+
+          <div class="detail-row detail-row--last">
+
+            <div class="detail-label">
+              <span>□</span>
+              <strong>Observaciones</strong>
+            </div>
+
+            <p>
+              {{ turnoSeleccionado.observaciones }}
+            </p>
+
+          </div>
+
+        </section>
+
+
+        <!-- PREPARACIÓN -->
+
+        <section class="preparation-card">
+
+          <h3>
+            Preparación previa (si aplica)
+          </h3>
+
+          <div class="preparation-message">
+
+            <span>
+              ⚗
+            </span>
+
+            <strong>
+              No se requiere preparación especial para este turno.
+            </strong>
+
+          </div>
+
+        </section>
+
+
+        <!-- VOLVER -->
+
+        <button
+          type="button"
+          class="detail-back"
+          (click)="volverMisTurnos()"
+        >
+          ←
+          <span>
+            Volver a mis turnos
+          </span>
+        </button>
+
+      </div>
+
+
+      <!-- =============================================
+           COLUMNA DERECHA
+      ============================================== -->
+
+      <aside class="detail-sidebar">
+
+
+        <!-- ACCIONES -->
+
+        <section class="detail-side-card">
+
+          <h3>
+            Acciones
+          </h3>
+
+
+          <button
+            type="button"
+            class="detail-action detail-action--blue"
+            (click)="reprogramarTurno()"
+          >
+
+            <span class="detail-action__icon">
+              ▣
+            </span>
+
+            <span>
+
+              <strong>
+                Reprogramar turno
+              </strong>
+
+              <small>
+                Elegí otra fecha y horario
+              </small>
+
+            </span>
+
+          </button>
+
+
+          <button
+            type="button"
+            class="detail-action detail-action--red"
+            (click)="cancelarTurnoDetalle()"
+          >
+
+            <span class="detail-action__icon">
+              ×
+            </span>
+
+            <span>
+
+              <strong>
+                Cancelar turno
+              </strong>
+
+              <small>
+                Cancelar este turno
+              </small>
+
+            </span>
+
+          </button>
+
+
+          <button
+            type="button"
+            class="detail-action detail-action--blue"
+            (click)="descargarComprobante()"
+          >
+
+            <span class="detail-action__icon">
+              ↓
+            </span>
+
+            <span>
+
+              <strong>
+                Descargar comprobante
+              </strong>
+
+              <small>
+                Descargar en PDF
+              </small>
+
+            </span>
+
+          </button>
+
+
+          <button
+            type="button"
+            class="detail-action detail-action--blue"
+            (click)="agregarCalendario()"
+          >
+
+            <span class="detail-action__icon">
+              ▣
+            </span>
+
+            <span>
+
+              <strong>
+                Agregar al calendario
+              </strong>
+
+              <small>
+                Google, Outlook, Apple Calendar
+              </small>
+
+            </span>
+
+          </button>
+
+        </section>
+
+
+        <!-- INFORMACIÓN IMPORTANTE -->
+
+        <section class="detail-side-card">
+
+          <h3 class="important-title">
+
+            <span>
+              i
+            </span>
+
+            Información importante
+
+          </h3>
+
+
+          <div class="important-item">
+
+            <span>
+              ◷
+            </span>
+
+            <div>
+
+              <strong>
+                Llegá 15 minutos antes
+              </strong>
+
+              <p>
+                Te recomendamos llegar con anticipación
+                para realizar el check-in.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="important-item">
+
+            <span>
+              □
+            </span>
+
+            <div>
+
+              <strong>
+                Documentación
+              </strong>
+
+              <p>
+                No olvides traer tu DNI y credencial
+                de tu obra social.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="important-item">
+
+            <span>
+              ◷
+            </span>
+
+            <div>
+
+              <strong>
+                Cancelaciones
+              </strong>
+
+              <p>
+                Podés cancelar o reprogramar tu turno
+                hasta 24 horas antes.
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <!-- AYUDA -->
+
+        <section class="detail-help">
+
+          <h3>
+            ¿Necesitás ayuda?
+          </h3>
+
+          <p>
+            Contactanos por WhatsApp o por teléfono
+            de lunes a viernes de 8 a 20 hs.
+          </p>
+
+          <button type="button">
+            Contactar
+          </button>
+
+        </section>
+
+      </aside>
+
+    </div>
+
+  </section>
+
+}
 
     <!-- ===================================================
          INFORMES
