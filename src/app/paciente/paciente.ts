@@ -111,13 +111,31 @@ export class PacienteComponent {
   }
 
   confirmarTurno(): void {
-
-    alert('¡Turno confirmado correctamente!');
-
-    this.pantallaActual = 'mis-turnos';
-
+    this.pantallaActual = 'confirmado';
     this.pasoReserva = 1;
 
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  mostrarConfirmacion(tipo: string): void {
+    this.pantallaActual = tipo;
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  volverInicio(): void {
+    this.pantallaActual = 'inicio';
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   }
 
   verDetalleTurno(): void {
