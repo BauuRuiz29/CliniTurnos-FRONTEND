@@ -654,7 +654,7 @@
       <div class="laboratory-title">
 
         <div class="laboratory-title__icon">
-          ⚗
+          <img src="laboratorio.png" alt="laboratorio" width="45px">
         </div>
 
         <div>
@@ -786,7 +786,7 @@
           type="button"
           class="laboratory-category laboratory-category--active"
         >
-          <span>▣</span>
+          <img src="estudios.png" alt="estudios" width="20px">
           Todos los estudios
         </button>
 
@@ -795,7 +795,7 @@
           type="button"
           class="laboratory-category"
         >
-          <span>♧</span>
+          <img src="gota.png" alt="gota" width="15px">
           Hematología
         </button>
 
@@ -804,7 +804,7 @@
           type="button"
           class="laboratory-category"
         >
-          <span>⚗</span>
+          <img src="tubo.png" alt="tubo" width="15px">
           Bioquímica
         </button>
 
@@ -813,7 +813,7 @@
           type="button"
           class="laboratory-category"
         >
-          <span>▣</span>
+          <img src="orinas.png" alt="orinas" width="15px">
           Orina
         </button>
 
@@ -822,7 +822,7 @@
           type="button"
           class="laboratory-category"
         >
-          <span>♧</span>
+          <img src="hormonas.png" alt="hormonas" width="20px">
           Hormonales
         </button>
 
@@ -831,7 +831,7 @@
           type="button"
           class="laboratory-category"
         >
-          <span>♢</span>
+          <img src="inmuno.png" alt="inmuno" width="20px">
           Inmunología
         </button>
 
@@ -840,7 +840,7 @@
           type="button"
           class="laboratory-category"
         >
-          <span>⚙</span>
+          <img src="serologia.png" alt="serologia" width="20px">
           Serología
         </button>
 
@@ -849,7 +849,7 @@
           type="button"
           class="laboratory-category"
         >
-          <span>♧</span>
+          <img src="microbiologia.png" alt="microbiologia" width="20px">
           Microbiología
         </button>
 
@@ -858,7 +858,7 @@
           type="button"
           class="laboratory-category"
         >
-          <span>○</span>
+          <img src="otros.png" alt="otros" width="25px">
           Otros
         </button>
 
@@ -914,7 +914,7 @@
           <div class="laboratory-study">
 
             <div class="laboratory-study__icon laboratory-study__icon--red">
-              ◉
+              <img src="hematologia.png" alt="hematologia" width="30px">
             </div>
 
             <div>
@@ -944,7 +944,7 @@
             type="button"
             class="laboratory-select-button"
           >
-            ▣ Seleccionar
+            Seleccionar
           </button>
 
         </article>
@@ -957,7 +957,7 @@
           <div class="laboratory-study">
 
             <div class="laboratory-study__icon laboratory-study__icon--purple">
-              ⚗
+              <img src="bioquimica.png" alt="bioquimica" width="30px">
             </div>
 
             <div>
@@ -986,7 +986,7 @@
             type="button"
             class="laboratory-select-button"
           >
-            ▣ Seleccionar
+            Seleccionar
           </button>
 
         </article>
@@ -999,7 +999,7 @@
           <div class="laboratory-study">
 
             <div class="laboratory-study__icon laboratory-study__icon--orange">
-              ◉
+              <img src="orina.png" alt="orina" width="25px">
             </div>
 
             <div>
@@ -1028,7 +1028,7 @@
             type="button"
             class="laboratory-select-button"
           >
-            ▣ Seleccionar
+            Seleccionar
           </button>
 
         </article>
@@ -1041,7 +1041,7 @@
           <div class="laboratory-study">
 
             <div class="laboratory-study__icon laboratory-study__icon--pink">
-              ♡
+              <img src="tsh.png" alt="tsh" width="25px">
             </div>
 
             <div>
@@ -1070,7 +1070,7 @@
             type="button"
             class="laboratory-select-button"
           >
-            ▣ Seleccionar
+            Seleccionar
           </button>
 
         </article>
@@ -1083,7 +1083,7 @@
           <div class="laboratory-study">
 
             <div class="laboratory-study__icon laboratory-study__icon--green">
-              ♢
+              <img src="pcr.png" alt="pcr" width="25px">
             </div>
 
             <div>
@@ -1112,7 +1112,7 @@
             type="button"
             class="laboratory-select-button"
           >
-            ▣ Seleccionar
+            Seleccionar
           </button>
 
         </article>
@@ -1125,7 +1125,7 @@
           <div class="laboratory-study">
 
             <div class="laboratory-study__icon laboratory-study__icon--blue">
-              ⚙
+              <img src="vdrl.png" alt="vdrl" width="25px">
             </div>
 
             <div>
@@ -1154,7 +1154,7 @@
             type="button"
             class="laboratory-select-button"
           >
-            ▣ Seleccionar
+            Seleccionar
           </button>
 
         </article>
@@ -1167,7 +1167,7 @@
           <div class="laboratory-study">
 
             <div class="laboratory-study__icon laboratory-study__icon--cyan">
-              ♧
+              <img src="urocultivo.png" alt="urocultivo" width="30px">
             </div>
 
             <div>
@@ -1196,7 +1196,7 @@
             type="button"
             class="laboratory-select-button"
           >
-            ▣ Seleccionar
+            Seleccionar
           </button>
 
         </article>
@@ -2614,6 +2614,527 @@
             class="btn btn--primary"
           >
             Guardar cambios
+          </button>
+
+        </div>
+
+      </section>
+
+    }
+        <!-- ===================================================
+         CONFIRMACIÓN: TURNO CONFIRMADO
+    ==================================================== -->
+
+    @if (pantallaActual === 'confirmado') {
+
+      <section class="screen confirmation-screen">
+
+        <div class="confirmation-status">
+
+          <div class="confirmation-icon confirmation-icon--success">
+            ✓
+          </div>
+
+          <h2>
+            Turno confirmado
+          </h2>
+
+          <p>
+            ¡Tu turno fue reservado con éxito!
+          </p>
+
+        </div>
+
+
+        <div class="confirmation-main-card">
+
+          <h3>
+            Detalle del turno
+          </h3>
+
+          <div class="confirmation-detail-row">
+            <span>Especialidad</span>
+            <strong>{{ especialidadSeleccionada }}</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Profesional</span>
+            <strong>{{ profesionalSeleccionado }}</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Fecha</span>
+            <strong>24 de mayo de 2026</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Hora</span>
+            <strong>{{ horaSeleccionada }}</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Lugar</span>
+            <strong>
+              Clínica Centro
+              <small>Av. Siempre Viva 123, CABA</small>
+            </strong>
+          </div>
+
+        </div>
+
+
+        <div class="confirmation-message confirmation-message--success">
+          ✓
+          Te enviamos los detalles a tu correo electrónico.
+        </div>
+
+
+        <div class="confirmation-actions">
+
+          <button
+            type="button"
+            class="btn btn--outline"
+            (click)="cambiarPantalla('mis-turnos')"
+          >
+            Ver mis turnos
+          </button>
+
+          <button
+            type="button"
+            class="btn btn--primary"
+            (click)="volverInicio()"
+          >
+            Ir al inicio
+          </button>
+
+        </div>
+
+      </section>
+
+    }
+
+        <!-- ===================================================
+         CONFIRMACIÓN: TURNO REPROGRAMADO
+    ==================================================== -->
+
+    @if (pantallaActual === 'reprogramado') {
+
+      <section class="screen confirmation-screen">
+
+        <div class="confirmation-status">
+
+          <div class="confirmation-icon confirmation-icon--blue">
+            ◷
+          </div>
+
+          <h2>
+            Turno reprogramado
+          </h2>
+
+          <p>
+            El turno fue reprogramado correctamente.
+          </p>
+
+        </div>
+
+
+        <div class="confirmation-main-card">
+
+          <h3>
+            Nuevo detalle del turno
+          </h3>
+
+          <div class="confirmation-detail-row">
+            <span>Especialidad</span>
+            <strong>Dermatología</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Profesional</span>
+            <strong>Dra. María López</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Fecha</span>
+            <strong>28 de mayo de 2026</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Hora</span>
+            <strong>15:30 hs.</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Lugar</span>
+            <strong>
+              Clínica Norte
+              <small>Av. Córdoba 456, CABA</small>
+            </strong>
+          </div>
+
+        </div>
+
+
+        <div class="confirmation-message confirmation-message--info">
+          ⓘ
+          Te enviamos los nuevos detalles a tu correo electrónico.
+        </div>
+
+
+        <div class="confirmation-actions">
+
+          <button
+            type="button"
+            class="btn btn--outline"
+            (click)="cambiarPantalla('mis-turnos')"
+          >
+            Ver mis turnos
+          </button>
+
+          <button
+            type="button"
+            class="btn btn--primary"
+            (click)="volverInicio()"
+          >
+            Ir al inicio
+          </button>
+
+        </div>
+
+      </section>
+
+    }
+
+        <!-- ===================================================
+         CONFIRMACIÓN: TURNO CANCELADO
+    ==================================================== -->
+
+    @if (pantallaActual === 'cancelado') {
+
+      <section class="screen confirmation-screen">
+
+        <div class="confirmation-status">
+
+          <div class="confirmation-icon confirmation-icon--warning">
+            ×
+          </div>
+
+          <h2>
+            Turno cancelado
+          </h2>
+
+          <p>
+            El turno fue cancelado correctamente.
+          </p>
+
+        </div>
+
+
+        <div class="confirmation-main-card">
+
+          <h3>
+            Detalle del turno cancelado
+          </h3>
+
+          <div class="confirmation-detail-row">
+            <span>Especialidad</span>
+            <strong>Neurología</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Profesional</span>
+            <strong>Dr. Pedro Martínez</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Fecha</span>
+            <strong>28 de mayo de 2026</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Hora</span>
+            <strong>11:15 hs.</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Lugar</span>
+            <strong>
+              Clínica Centro
+              <small>Av. Siempre Viva 123, CABA</small>
+            </strong>
+          </div>
+
+        </div>
+
+
+        <div class="confirmation-message confirmation-message--warning">
+          ⚠
+          Podés reservar un nuevo turno cuando lo necesites.
+        </div>
+
+
+        <div class="confirmation-actions">
+
+          <button
+            type="button"
+            class="btn btn--outline"
+            (click)="reservarTurno()"
+          >
+            Reservar nuevo turno
+          </button>
+
+          <button
+            type="button"
+            class="btn btn--primary"
+            (click)="volverInicio()"
+          >
+            Ir al inicio
+          </button>
+
+        </div>
+
+      </section>
+
+    }
+
+        <!-- ===================================================
+         CONFIRMACIÓN: INFORME DISPONIBLE
+    ==================================================== -->
+
+    @if (pantallaActual === 'informe-disponible') {
+
+      <section class="screen confirmation-screen">
+
+        <div class="confirmation-status">
+
+          <div class="confirmation-icon confirmation-icon--success">
+            ▤
+          </div>
+
+          <h2>
+            Informe disponible
+          </h2>
+
+          <p>
+            Tu informe médico ya está disponible.
+          </p>
+
+        </div>
+
+
+        <div class="confirmation-main-card">
+
+          <h3>
+            Detalle del informe
+          </h3>
+
+          <div class="confirmation-detail-row">
+            <span>Especialidad</span>
+            <strong>Traumatología</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Profesional</span>
+            <strong>Dr. Pablo Sánchez</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Fecha de consulta</span>
+            <strong>18 de mayo de 2026</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Tipo de informe</span>
+            <strong>Informe médico</strong>
+          </div>
+
+        </div>
+
+
+        <div class="confirmation-message confirmation-message--success">
+          ⓘ
+          Podés descargarlo desde la sección Informes médicos.
+        </div>
+
+
+        <div class="confirmation-actions">
+
+          <button
+            type="button"
+            class="btn btn--outline"
+            (click)="cambiarPantalla('informes')"
+          >
+            Ir a informes médicos
+          </button>
+
+          <button
+            type="button"
+            class="btn btn--primary"
+            (click)="volverInicio()"
+          >
+            Ir al inicio
+          </button>
+
+        </div>
+
+      </section>
+
+    }
+
+        <!-- ===================================================
+         CONFIRMACIÓN: ESTUDIO DISPONIBLE
+    ==================================================== -->
+
+    @if (pantallaActual === 'estudio-disponible') {
+
+      <section class="screen confirmation-screen">
+
+        <div class="confirmation-status">
+
+          <div class="confirmation-icon confirmation-icon--purple">
+            ⚗
+          </div>
+
+          <h2>
+            Estudio disponible
+          </h2>
+
+          <p>
+            El resultado de tu estudio ya está disponible.
+          </p>
+
+        </div>
+
+
+        <div class="confirmation-main-card">
+
+          <h3>
+            Detalle del estudio
+          </h3>
+
+          <div class="confirmation-detail-row">
+            <span>Estudio</span>
+            <strong>Hemograma completo</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Fecha</span>
+            <strong>20 de mayo de 2026</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Laboratorio</span>
+            <strong>Laboratorio Central</strong>
+          </div>
+
+          <div class="confirmation-detail-row">
+            <span>Estado</span>
+            <strong class="confirmation-status-badge">
+              Disponible
+            </strong>
+          </div>
+
+        </div>
+
+
+        <div class="confirmation-message confirmation-message--purple">
+          ⓘ
+          Podés consultarlo desde la sección Informes médicos.
+        </div>
+
+
+        <div class="confirmation-actions">
+
+          <button
+            type="button"
+            class="btn btn--outline"
+            (click)="cambiarPantalla('informes')"
+          >
+            Ir a informes médicos
+          </button>
+
+          <button
+            type="button"
+            class="btn btn--primary"
+            (click)="volverInicio()"
+          >
+            Ir al inicio
+          </button>
+
+        </div>
+
+      </section>
+
+    }
+
+        <!-- ===================================================
+         CONFIRMACIÓN: CORREO ENVIADO
+    ==================================================== -->
+
+    @if (pantallaActual === 'correo-enviado') {
+
+      <section class="screen confirmation-screen">
+
+        <div class="confirmation-status">
+
+          <div class="confirmation-icon confirmation-icon--blue">
+            ✉
+          </div>
+
+          <h2>
+            Confirmación enviada
+          </h2>
+
+          <p>
+            Te enviamos la información a tu correo electrónico.
+          </p>
+
+        </div>
+
+
+        <div class="confirmation-main-card">
+
+          <h3>
+            ¿Qué incluye el correo?
+          </h3>
+
+          <div class="confirmation-check">
+            ✓
+            <span>Detalle del turno</span>
+          </div>
+
+          <div class="confirmation-check">
+            ✓
+            <span>Preparación (si corresponde)</span>
+          </div>
+
+          <div class="confirmation-check">
+            ✓
+            <span>Indicaciones importantes</span>
+          </div>
+
+          <div class="confirmation-check">
+            ✓
+            <span>Datos del lugar de atención</span>
+          </div>
+
+        </div>
+
+
+        <div class="confirmation-message confirmation-message--blue">
+          ✉
+          Correo enviado a: juan.perez@email.com
+        </div>
+
+
+        <div class="confirmation-actions confirmation-actions--single">
+
+          <button
+            type="button"
+            class="btn btn--primary"
+            (click)="volverInicio()"
+          >
+            Ir al inicio
           </button>
 
         </div>
