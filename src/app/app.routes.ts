@@ -18,9 +18,9 @@ export const routes: Routes = [
 
   {
     path: 'paciente',
-    loadComponent: () =>
-      import('./paciente/paciente')
-        .then(m => m.PacienteComponent)
+    loadChildren: () =>
+      import('./paciente/paciente.routes')
+        .then(m => m.PACIENTE_ROUTES)
   },
 
   {
