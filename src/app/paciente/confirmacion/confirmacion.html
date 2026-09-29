@@ -1,0 +1,33 @@
+<section class="screen confirmation-screen">
+  <div class="confirmation-status">
+    <div class="confirmation-icon" [class]="'confirmation-icon confirmation-icon--' + page().iconClass">{{ page().icon }}</div>
+    <h2>{{ page().title }}</h2>
+    <p>{{ page().description }}</p>
+  </div>
+
+  <div class="confirmation-main-card">
+    <h3>{{ page().cardTitle }}</h3>
+    @if (page().checks; as checks) {
+      @for (check of checks; track check) {
+        <div class="confirmation-check">✓ <span>{{ check }}</span></div>
+      }
+    } @else {
+      @for (detail of page().details; track detail.label) {
+        <div class="confirmation-detail-row">
+          <span>{{ detail.label }}</span>
+          <strong [class.confirmation-status-badge]="detail.badge">{{ detail.value }}@if (detail.note) {<small>{{ detail.note }}</small>}</strong>
+        </div>
+      }
+    }
+  </div>
+
+  <div class="confirmation-message" [class]="'confirmation-message confirmation-message--' + page().messageClass">
+    ⓘ {{ page().message }}
+  </div>
+
+  <div class="confirmation-actions" [class.confirmation-actions--single]="page().actions.length === 1">
+    @for (action of page().actions; track action.label) {
+      <a class="btn" [class.btn--primary]="action.variant === 'primary'" [class.btn--outline]="action.variant === 'outline'" [routerLink]="action.route">{{ action.label }}</a>
+    }
+  </div>
+</section>

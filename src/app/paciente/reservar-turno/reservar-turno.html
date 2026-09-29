@@ -1,0 +1,84 @@
+<section class="screen booking">
+  <div class="section-heading">
+    <div><h2>Reservar turno</h2><p>Completá los pasos para reservar tu turno</p></div>
+  </div>
+
+  <div class="booking-steps">
+    <div class="booking-step" [class.active]="step() >= 1"><span>1</span>Profesional</div>
+    <div class="booking-line"></div>
+    <div class="booking-step" [class.active]="step() >= 2"><span>2</span>Fecha y hora</div>
+    <div class="booking-line"></div>
+    <div class="booking-step" [class.active]="step() >= 3"><span>3</span>Confirmación</div>
+  </div>
+
+  @if (step() === 1) {
+    <div class="booking-panel">
+      <h3>Seleccioná el profesional</h3>
+      <input class="booking-search" type="text" placeholder="Buscar profesional o especialidad..." aria-label="Buscar profesional o especialidad">
+      <button type="button" class="booking-doctor" [class.selected]="selectedProfessional() === 'Dr. Juan García'" (click)="selectProfessional('Dr. Juan García', 'Cardiología')">
+        <div class="doctor-avatar">JG</div><div><strong>Dr. Juan García</strong><span>Cardiología</span></div><span>⭐ 4.9</span><span class="doctor-action">Seleccionar</span>
+      </button>
+      <button type="button" class="booking-doctor" [class.selected]="selectedProfessional() === 'Dra. María López'" (click)="selectProfessional('Dra. María López', 'Dermatología')">
+        <div class="doctor-avatar">ML</div><div><strong>Dra. María López</strong><span>Dermatología</span></div><span>⭐ 4.8</span><span class="doctor-action">Seleccionar</span>
+      </button>
+      <div class="booking-actions"><span></span><button type="button" class="btn btn--primary" (click)="nextStep()">Continuar</button></div>
+    </div>
+  }
+
+  @if (step() === 2) {
+    <div class="booking-panel">
+      <h3>Seleccioná la fecha y el horario</h3>
+      <div class="booking-date-time">
+        <div class="calendar">
+          <div class="calendar__header"><button type="button">‹</button><strong>Mayo 2024</strong><button type="button">›</button></div>
+          <div class="calendar__week"><span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span></div>
+          <div class="calendar__days">
+            @for (day of calendarDays; track day) {
+              @if (day === 24) { <button type="button" class="selected">{{ day }}</button> }
+              @else { <span>{{ day }}</span> }
+            }
+          </div>
+        </div>
+        <div class="time-selection">
+          <h4>Seleccioná el horario</h4>
+          <div class="time-grid">
+            @for (hour of hours; track hour) {
+              <button type="button" [class.selected]="selectedHour() === hour" (click)="selectedHour.set(hour)">{{ hour.slice(0, 5) }}</button>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="booking-actions">
+        <button type="button" class="btn btn--outline" (click)="previousStep()">Volver</button>
+        <button type="button" class="btn btn--primary" (click)="nextStep()">Continuar</button>
+      </div>
+    </div>
+  }
+
+  @if (step() === 3) {
+    <div class="booking-panel">
+      <h3>Confirmá los datos de tu turno</h3>
+      <div class="confirmation-grid">
+        <div class="confirmation-card">
+          <h4>Resumen del turno</h4>
+          <div class="confirmation-row"><span>Profesional</span><strong>{{ selectedProfessional() }}</strong></div>
+          <div class="confirmation-row"><span>Especialidad</span><strong>{{ selectedSpecialty() }}</strong></div>
+          <div class="confirmation-row"><span>Fecha</span><strong>Viernes 24 de mayo de 2024</strong></div>
+          <div class="confirmation-row"><span>Horario</span><strong>{{ selectedHour() }}</strong></div>
+          <div class="confirmation-row"><span>Lugar</span><strong>Clínica Centro</strong></div>
+        </div>
+        <div class="confirmation-card">
+          <h4>Información adicional</h4>
+          <label for="insurance">Obra social</label>
+          <select id="insurance"><option>OSDE 210</option><option>Swiss Medical</option><option>Particular</option></select>
+          <label for="appointment-comment">Comentario (opcional)</label>
+          <textarea id="appointment-comment" placeholder="Contanos brevemente el motivo de la consulta..."></textarea>
+        </div>
+      </div>
+      <div class="booking-actions">
+        <button type="button" class="btn btn--outline" (click)="previousStep()">Volver</button>
+        <button type="button" class="btn btn--primary" (click)="confirmAppointment()">Confirmar turno</button>
+      </div>
+    </div>
+  }
+</section>
