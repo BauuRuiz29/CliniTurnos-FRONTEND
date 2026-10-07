@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from '../../auth.service';
 
 @Component({
   imports: [RouterLink, RouterLinkActive, RouterOutlet],
@@ -9,8 +10,10 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
 })
 export class PacienteLayout {
   private readonly router = inject(Router);
+  private readonly auth = inject(AuthService);
 
   cerrarSesion(): void {
+    this.auth.logout();
     void this.router.navigate(['/']);
   }
 }
