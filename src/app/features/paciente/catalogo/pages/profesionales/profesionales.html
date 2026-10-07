@@ -7,25 +7,25 @@
 	</div>
 
 	<div class="search-bar">
-		<input type="text" placeholder="Buscar profesional o especialidad..." aria-label="Buscar profesional o especialidad">
+		<input #buscador type="text" placeholder="Buscar profesional o especialidad..." aria-label="Buscar profesional o especialidad" (input)="busqueda.set(buscador.value)">
 		<button type="button">Filtros</button>
 	</div>
 
-	<div class="professionals-grid">
-		<article class="professional-card">
-			<div class="doctor-avatar">JG</div>
-			<div><h3>Dr. Juan García</h3><p>Cardiología</p><span>⭐ 4.9</span></div>
-			<button type="button" class="btn btn--outline" routerLink="/paciente/reservar-turno">Ver horarios</button>
-		</article>
-		<article class="professional-card">
-			<div class="doctor-avatar">ML</div>
-			<div><h3>Dra. María López</h3><p>Dermatología</p><span>⭐ 4.8</span></div>
-			<button type="button" class="btn btn--outline" routerLink="/paciente/reservar-turno">Ver horarios</button>
-		</article>
-		<article class="professional-card">
-			<div class="doctor-avatar">PS</div>
-			<div><h3>Dr. Pablo Sánchez</h3><p>Traumatología</p><span>⭐ 4.7</span></div>
-			<button type="button" class="btn btn--outline" routerLink="/paciente/reservar-turno">Ver horarios</button>
-		</article>
-	</div>
+	@if (error()) {
+		<p role="alert">No pudimos cargar los profesionales. Intentá de nuevo más tarde.</p>
+	} @else if (cargando()) {
+		<p aria-live="polite">Cargando profesionales...</p>
+	} @else {
+		<div class="professionals-grid">
+			@for (profesional of profesionales(); track profesional.id) {
+				<article class="professional-card">
+					<div class="doctor-avatar">{{ profesional.nombre[0] }}{{ profesional.apellido[0] }}</div>
+					<div><h3>{{ profesional.titulo }} {{ profesional.nombre }} {{ profesional.apellido }}</h3><p>{{ profesional.especialidad }}</p><span>⭐ {{ profesional.calificacion.toFixed(1) }}</span></div>
+					<button type="button" class="btn btn--outline" routerLink="/paciente/reservar-turno">Ver horarios</button>
+				</article>
+			} @empty {
+				<p>No encontramos profesionales para "{{ busqueda() }}".</p>
+			}
+		</div>
+	}
 </section>

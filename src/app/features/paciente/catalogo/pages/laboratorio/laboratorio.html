@@ -23,7 +23,7 @@
   </div>
 
   <div class="laboratory-filters">
-    <div class="laboratory-search"><span>⌕</span><input type="text" placeholder="Buscar estudio por nombre..." aria-label="Buscar estudio"><strong>⌕</strong></div>
+    <div class="laboratory-search"><span>⌕</span><input #buscador type="text" placeholder="Buscar estudio por nombre..." aria-label="Buscar estudio" (input)="busqueda.set(buscador.value)"><strong>⌕</strong></div>
     <button type="button" class="laboratory-select"><small>Categoría</small><span>Todas</span><b>⌄</b></button>
     <button type="button" class="laboratory-select"><small>Preparación</small><span>Todas</span><b>⌄</b></button>
   </div>
@@ -31,8 +31,8 @@
   <div class="laboratory-content">
     <aside class="laboratory-categories">
       <h3>Categorías</h3>
-      @for (category of categories; track category.name; let first = $first) {
-        <button type="button" class="laboratory-category" [class.laboratory-category--active]="first">
+      @for (category of categories; track category.name) {
+        <button type="button" class="laboratory-category" [class.laboratory-category--active]="categoriaSeleccionada() === category.categoria" [attr.aria-pressed]="categoriaSeleccionada() === category.categoria" (click)="categoriaSeleccionada.set(category.categoria)">
           <img [src]="category.icon" alt="" [width]="category.width">{{ category.name }}
         </button>
       }
@@ -45,19 +45,28 @@
 
     <div class="laboratory-list">
       <div class="laboratory-list__header"><span>Estudio</span><span>Categoría</span><span>Preparación</span><span>Acciones</span></div>
-      @for (study of studies; track study.name) {
-        <article class="laboratory-row">
-          <div class="laboratory-study">
-            <div [class]="'laboratory-study__icon ' + study.iconClass">
-              @if (study.icon) { <img [src]="study.icon" [alt]="study.category" [width]="study.width"> }
-              @else { ••• }
+      @if (error()) {
+        <p role="alert">No pudimos cargar los estudios. Intentá de nuevo más tarde.</p>
+      } @else if (cargando()) {
+        <p aria-live="polite">Cargando estudios...</p>
+      } @else {
+        @for (study of studies(); track study.id) {
+          @let estilo = icono(study.categoria);
+          <article class="laboratory-row">
+            <div class="laboratory-study">
+              <div [class]="'laboratory-study__icon ' + estilo.iconClass">
+                @if (estilo.icon) { <img [src]="estilo.icon" [alt]="study.categoria" [width]="estilo.width"> }
+                @else { ••• }
+              </div>
+              <div><strong>{{ study.nombre }}</strong><p>{{ study.descripcion }}</p></div>
             </div>
-            <div><strong>{{ study.name }}</strong><p>{{ study.description }}</p></div>
-          </div>
-          <span>{{ study.category }}</span>
-          <em [class]="'preparation ' + study.preparationClass">{{ study.preparation }}</em>
-          <button type="button" class="laboratory-select-button" routerLink="/paciente/reservar-turno">Seleccionar</button>
-        </article>
+            <span>{{ study.categoria }}</span>
+            <em class="preparation" [class.preparation--green]="!study.preparacion" [class.preparation--orange]="study.preparacion">{{ study.preparacion ?? 'No requiere' }}</em>
+            <button type="button" class="laboratory-select-button" routerLink="/paciente/reservar-turno">Seleccionar</button>
+          </article>
+        } @empty {
+          <p>No encontramos estudios con ese criterio.</p>
+        }
       }
     </div>
   </div>

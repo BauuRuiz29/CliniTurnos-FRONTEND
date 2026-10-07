@@ -1,5 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { CatalogoFacade } from '../../data-access/catalogo.facade';
+
+interface IconoCategoria {
+  icon: string;
+  width: number;
+  iconClass: string;
+}
+
+// Presentación por categoría (íconos de /public y colores del CSS).
+const ICONOS_ESTUDIO: Record<string, IconoCategoria> = {
+  'Hematología': { icon: 'hematologia.png', width: 30, iconClass: 'laboratory-study__icon--red' },
+  'Bioquímica': { icon: 'bioquimica.png', width: 30, iconClass: 'laboratory-study__icon--purple' },
+  'Orina': { icon: 'orina.png', width: 25, iconClass: 'laboratory-study__icon--orange' },
+  'Hormonales': { icon: 'tsh.png', width: 25, iconClass: 'laboratory-study__icon--pink' },
+  'Inmunología': { icon: 'pcr.png', width: 25, iconClass: 'laboratory-study__icon--green' },
+  'Serología': { icon: 'vdrl.png', width: 25, iconClass: 'laboratory-study__icon--blue' },
+  'Microbiología': { icon: 'urocultivo.png', width: 30, iconClass: 'laboratory-study__icon--cyan' },
+};
+const ICONO_POR_DEFECTO: IconoCategoria = { icon: '', width: 0, iconClass: 'laboratory-study__icon--gray' };
 
 @Component({
   imports: [RouterLink],
@@ -7,26 +26,35 @@ import { RouterLink } from '@angular/router';
   templateUrl: './laboratorio.html',
 })
 export class Laboratorio {
-  readonly categories = [
-    { name: 'Todos los estudios', icon: 'estudios.png', width: 20 },
-    { name: 'Hematología', icon: 'gota.png', width: 15 },
-    { name: 'Bioquímica', icon: 'tubo.png', width: 15 },
-    { name: 'Orina', icon: 'orinas.png', width: 15 },
-    { name: 'Hormonales', icon: 'hormonas.png', width: 20 },
-    { name: 'Inmunología', icon: 'inmuno.png', width: 20 },
-    { name: 'Serología', icon: 'serologia.png', width: 20 },
-    { name: 'Microbiología', icon: 'microbiologia.png', width: 20 },
-    { name: 'Otros', icon: 'otros.png', width: 25 },
+  private readonly facade = inject(CatalogoFacade);
+  private readonly recurso = this.facade.tiposEstudio();
+
+  /** `categoria` null = "Todos los estudios". */
+  readonly categories: { name: string; categoria: string | null; icon: string; width: number }[] = [
+    { name: 'Todos los estudios', categoria: null, icon: 'estudios.png', width: 20 },
+    { name: 'Hematología', categoria: 'Hematología', icon: 'gota.png', width: 15 },
+    { name: 'Bioquímica', categoria: 'Bioquímica', icon: 'tubo.png', width: 15 },
+    { name: 'Orina', categoria: 'Orina', icon: 'orinas.png', width: 15 },
+    { name: 'Hormonales', categoria: 'Hormonales', icon: 'hormonas.png', width: 20 },
+    { name: 'Inmunología', categoria: 'Inmunología', icon: 'inmuno.png', width: 20 },
+    { name: 'Serología', categoria: 'Serología', icon: 'serologia.png', width: 20 },
+    { name: 'Microbiología', categoria: 'Microbiología', icon: 'microbiologia.png', width: 20 },
+    { name: 'Otros', categoria: 'Otros', icon: 'otros.png', width: 25 },
   ];
 
-  readonly studies = [
-    { name: 'Hemograma completo', description: 'Evalúa los componentes de la sangre: glóbulos rojos, glóbulos blancos y plaquetas.', category: 'Hematología', preparation: 'No requiere', preparationClass: 'preparation--green', icon: 'hematologia.png', width: 30, iconClass: 'laboratory-study__icon--red' },
-    { name: 'Glucemia', description: 'Mide la cantidad de glucosa en sangre.', category: 'Bioquímica', preparation: 'No requiere', preparationClass: 'preparation--green', icon: 'bioquimica.png', width: 30, iconClass: 'laboratory-study__icon--purple' },
-    { name: 'Examen de orina completo', description: 'Análisis físico, químico y microscópico de orina.', category: 'Orina', preparation: 'Primera orina de la mañana', preparationClass: 'preparation--orange', icon: 'orina.png', width: 25, iconClass: 'laboratory-study__icon--orange' },
-    { name: 'TSH', description: 'Evalúa el funcionamiento de la glándula tiroides.', category: 'Hormonales', preparation: 'No requiere', preparationClass: 'preparation--green', icon: 'tsh.png', width: 25, iconClass: 'laboratory-study__icon--pink' },
-    { name: 'PCR (Proteína C Reactiva)', description: 'Marcador de inflamación en el organismo.', category: 'Inmunología', preparation: 'No requiere', preparationClass: 'preparation--green', icon: 'pcr.png', width: 25, iconClass: 'laboratory-study__icon--green' },
-    { name: 'VDRL', description: 'Detección de sífilis.', category: 'Serología', preparation: 'No requiere', preparationClass: 'preparation--green', icon: 'vdrl.png', width: 25, iconClass: 'laboratory-study__icon--blue' },
-    { name: 'Urocultivo', description: 'Detecta infecciones urinarias.', category: 'Microbiología', preparation: 'Antes del antibiótico', preparationClass: 'preparation--orange', icon: 'urocultivo.png', width: 30, iconClass: 'laboratory-study__icon--cyan' },
-    { name: 'Perfil lipídico', description: 'Colesterol total, HDL, LDL y triglicéridos.', category: 'Bioquímica', preparation: 'Ayuno de 12 horas', preparationClass: 'preparation--orange', icon: '', width: 0, iconClass: 'laboratory-study__icon--gray' },
-  ];
+  readonly busqueda = signal('');
+  readonly categoriaSeleccionada = signal<string | null>(null);
+  readonly cargando = this.recurso.isLoading;
+  readonly error = this.recurso.error;
+  readonly studies = computed(() =>
+    this.facade.filtrarTiposEstudio(
+      this.recurso.hasValue() ? this.recurso.value() : [],
+      this.busqueda(),
+      this.categoriaSeleccionada(),
+    ),
+  );
+
+  icono(categoria: string): IconoCategoria {
+    return ICONOS_ESTUDIO[categoria] ?? ICONO_POR_DEFECTO;
+  }
 }

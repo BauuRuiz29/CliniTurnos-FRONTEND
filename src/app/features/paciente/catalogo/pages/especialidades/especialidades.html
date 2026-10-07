@@ -7,36 +7,21 @@
 		<button type="button" class="btn btn--primary laboratory-button" routerLink="/paciente/laboratorio">🧪 Ver estudios de laboratorio</button>
 	</div>
 
-	<div class="specialties-grid">
-		<article class="specialty-card">
-			<img src="cardiologia.png" alt="Cardiología" width="70">
-			<h3>Cardiología</h3><p>Diagnóstico y tratamiento de enfermedades del corazón.</p>
-			<button type="button" routerLink="/paciente/reservar-turno">Ver profesionales</button>
-		</article>
-		<article class="specialty-card">
-			<img src="dermatologia.png" alt="Dermatología" width="70">
-			<h3>Dermatología</h3><p>Tratamiento de enfermedades de la piel.</p>
-			<button type="button" routerLink="/paciente/reservar-turno">Ver profesionales</button>
-		</article>
-		<article class="specialty-card">
-			<img src="ginecologia.png" alt="Ginecología" width="70">
-			<h3>Ginecología</h3><p>Salud femenina durante todas las etapas.</p>
-			<button type="button" routerLink="/paciente/reservar-turno">Ver profesionales</button>
-		</article>
-		<article class="specialty-card">
-			<img src="neurologia.png" alt="Neurología" width="70">
-			<h3>Neurología</h3><p>Evaluación y tratamiento de enfermedades neurológicas.</p>
-			<button type="button" routerLink="/paciente/reservar-turno">Ver profesionales</button>
-		</article>
-		<article class="specialty-card">
-			<img src="traumatologia.png" alt="Traumatología" width="70">
-			<h3>Traumatología</h3><p>Lesiones y enfermedades del sistema musculoesquelético.</p>
-			<button type="button" routerLink="/paciente/reservar-turno">Ver profesionales</button>
-		</article>
-		<article class="specialty-card">
-			<img src="pediatria.png" alt="Pediatría" width="70">
-			<h3>Pediatría</h3><p>Atención médica integral de niños y adolescentes.</p>
-			<button type="button" routerLink="/paciente/reservar-turno">Ver profesionales</button>
-		</article>
-	</div>
+	@if (error()) {
+		<p role="alert">No pudimos cargar las especialidades. Intentá de nuevo más tarde.</p>
+	} @else if (cargando()) {
+		<p aria-live="polite">Cargando especialidades...</p>
+	} @else {
+		<div class="specialties-grid">
+			@for (especialidad of especialidades(); track especialidad.id) {
+				<article class="specialty-card">
+					<img [src]="imagen(especialidad.nombre)" [alt]="especialidad.nombre" width="70">
+					<h3>{{ especialidad.nombre }}</h3><p>{{ especialidad.descripcion }}</p>
+					<button type="button" routerLink="/paciente/reservar-turno">Ver profesionales</button>
+				</article>
+			} @empty {
+				<p>No hay especialidades disponibles.</p>
+			}
+		</div>
+	}
 </section>
