@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { rolGuard } from './core/guards/rol-guard';
+import { Rol } from './core/models/enums';
 
 export const routes: Routes = [
 
@@ -18,8 +20,9 @@ export const routes: Routes = [
 
   {
     path: 'paciente',
+    canMatch: [rolGuard(Rol.PACIENTE)],
     loadChildren: () =>
-      import('./paciente/paciente.routes')
+      import('./features/paciente/paciente.routes')
         .then(m => m.PACIENTE_ROUTES)
   },
 

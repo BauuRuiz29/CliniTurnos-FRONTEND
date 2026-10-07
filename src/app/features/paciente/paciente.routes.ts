@@ -4,25 +4,13 @@ export const PACIENTE_ROUTES: Routes = [
 	{
 		path: '',
 		loadComponent: () =>
-			import('./paciente-layout/paciente-layout')
+			import('../../core/layout/paciente-layout/paciente-layout')
 				.then(m => m.PacienteLayout),
 		children: [
 			{ path: '', pathMatch: 'full', redirectTo: 'inicio' },
 			{
 				path: 'inicio',
 				loadComponent: () => import('./inicio/inicio').then(m => m.Inicio),
-			},
-			{
-				path: 'profesionales',
-				loadComponent: () => import('./profesionales/profesionales').then(m => m.Profesionales),
-			},
-			{
-				path: 'especialidades',
-				loadComponent: () => import('./especialidades/especialidades').then(m => m.Especialidades),
-			},
-			{
-				path: 'laboratorio',
-				loadComponent: () => import('./laboratorio/laboratorio').then(m => m.Laboratorio),
 			},
 			{
 				path: 'reservar-turno',
@@ -47,6 +35,11 @@ export const PACIENTE_ROUTES: Routes = [
 			{
 				path: 'confirmacion/:type',
 				loadComponent: () => import('./confirmacion/confirmacion').then(m => m.Confirmacion),
+			},
+			// Catálogo [profesionales, especialidades, laboratorio]: va último porque su path es ''.
+			{
+				path: '',
+				loadChildren: () => import('./catalogo/catalogo.routes').then(m => m.CATALOGO_ROUTES),
 			},
 		],
 	},
