@@ -7,15 +7,15 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
-      import('./home/home')
-        .then(m => m.HomeComponent)
+      import('./features/home/home')
+        .then(m => m.Home)
   },
 
   {
     path: 'login',
     loadComponent: () =>
-      import('./login/login')
-        .then(m => m.LoginComponent)
+      import('./features/auth/login/login')
+        .then(m => m.Login)
   },
 
   {
@@ -29,8 +29,8 @@ export const routes: Routes = [
   {
     path: 'registro',
     loadComponent: () =>
-      import('./registro/registro')
-        .then(m => m.RegistroComponent)
+      import('./features/auth/registro/registro')
+        .then(m => m.Registro)
   },
 
   {
