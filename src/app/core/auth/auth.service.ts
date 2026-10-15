@@ -1,9 +1,9 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, tap } from 'rxjs';
-import { environment } from '../../environments/environment';
-import { ROL_SESION_SIMULADA } from './config/tokens';
-import { Rol } from './models/enums';
+import { environment } from '../../../environments/environment';
+import { ROL_SESION_SIMULADA } from '../config/tokens';
+import { Rol } from '../models/enums';
 import { decodificarJwt, jwtVencido } from './jwt';
 
 export interface LoginResponse {

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { PartialMatchRouteSnapshot, Route, Router, UrlTree, provideRouter } from '@angular/router';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../auth/auth.service';
 import { Rol } from '../models/enums';
 import { rolGuard } from './rol-guard';
 

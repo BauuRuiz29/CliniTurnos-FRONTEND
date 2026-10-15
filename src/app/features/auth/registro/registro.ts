@@ -1,18 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registro',
-  standalone: true,
-  imports: [],
   templateUrl: './registro.html',
   styleUrl: './registro.scss'
 })
-export class RegistroComponent {
+export class Registro {
+
+  private readonly router = inject(Router);
 
   pasoRegistro = 1;
-
-  constructor(private router: Router) {}
 
   siguientePaso(): void {
     if (this.pasoRegistro < 4) {

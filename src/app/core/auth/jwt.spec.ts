@@ -1,4 +1,4 @@
-import { Rol } from './models/enums';
+import { Rol } from '../models/enums';
 import { decodificarJwt, jwtVencido } from './jwt';
 
 const base64Url = (obj: object) =>

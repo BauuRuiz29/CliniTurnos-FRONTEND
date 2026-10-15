@@ -1,4 +1,4 @@
-import { Rol } from './models/enums';
+import { Rol } from '../models/enums';
 
 // TODO: confirmar con el back el nombre del claim del rol.
 const CLAIM_ROL = 'rol';
