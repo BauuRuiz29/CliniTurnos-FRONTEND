@@ -34,6 +34,20 @@ export const routes: Routes = [
   },
 
   {
+    path: 'profesional',
+    loadComponent: () =>
+      import('./features/profesional/profesional')
+        .then(m => m.ProfesionalComponent)
+  },
+
+  {
+  path: 'administrador',
+    loadComponent: () =>
+      import('./features/administrador/administrador')
+        .then(m => m.AdministradorComponent)
+  },
+
+  {
     path: '**',
     redirectTo: ''
   }

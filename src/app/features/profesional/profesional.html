@@ -1,0 +1,402 @@
+
+<main class="professional-app">
+  <aside class="sidebar">
+    <button class="brand" type="button" (click)="navegar('inicio')">
+      <span class="brand-symbol">✚</span>
+      <span>CliniTurnos</span>
+    </button>
+
+    <nav class="navigation">
+      @for (item of menu; track item.id) {
+        <button class="nav-item"
+          type="button"
+          [class.active]="seccion === item.id || (seccion === 'detalle' && item.id === 'pacientes') || (seccion === 'turnos' && item.id === 'agenda')"
+          (click)="navegar(item.id)">
+          @switch (item.icono) {
+            @case ('home') {
+              <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V21h13V9.5M9.5 21v-7h5v7"/></svg>
+            }
+            @case ('calendar') {
+              <svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M7.5 3v4M16.5 3v4M4 10h16M8 14h3M8 17h3"/></svg>
+            }
+            @case ('users') {
+              <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-2a6.5 6.5 0 0 1 13 0v2z"/><path d="M16 5a3.5 3.5 0 0 1 0 6.8M18 14a5 5 0 0 1 3.5 4.8V20"/></svg>
+            }
+            @case ('file') {
+              <svg viewBox="0 0 24 24"><path d="M6 3.5h8l4 4V21H6z"/><path d="M14 3.5V8h4M9 12h6M9 15h6M9 18h4"/></svg>
+            }
+            @case ('clock') {
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg>
+            }
+            @case ('bell') {
+              <svg viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
+            }
+          }
+          <span>{{ item.nombre }}</span>
+          @if (item.id === 'notificaciones' && notificacionesNoLeidas > 0) {
+            <span class="nav-badge">{{ notificacionesNoLeidas }}</span>
+          }
+        </button>
+      }
+
+      <button class="nav-item"
+        [class.active]="seccion === 'turnos'"
+        (click)="navegar('turnos')">
+        <svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/><circle cx="8" cy="5" r="1"/><circle cx="14" cy="12" r="1"/><circle cx="10" cy="19" r="1"/></svg>
+        <span>Mis turnos</span>
+      </button>
+    </nav>
+
+    <button class="logout-button" (click)="cerrarSesion()">
+      <svg viewBox="0 0 24 24"><path d="M10 4H4v16h6M14 8l4 4-4 4M8 12h10"/></svg>
+      <span>Cerrar sesión</span>
+    </button>
+  </aside>
+
+  <section class="workspace">
+    @switch (seccion) {
+
+      @case ('inicio') {
+        <header class="welcome-header">
+          <div>
+            <h1>Hola, Dr. Juan García <span class="wave">👋</span></h1>
+            <p>Gestioná tu agenda y pacientes</p>
+          </div>
+          <div class="account">
+            <button class="icon-button" aria-label="Notificaciones" (click)="navegar('notificaciones')">
+              <svg viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
+              @if (notificacionesNoLeidas > 0) { <i></i> }
+            </button>
+            <span class="doctor-avatar">JG</span>
+            <div><strong>{{ nombreProfesional }}</strong><small>{{ especialidadProfesional }}</small></div>
+            <span class="chevron">⌄</span>
+          </div>
+        </header>
+
+        <div class="stats-grid">
+          <article class="stat-card blue">
+            <span>Turnos de hoy</span><strong>8</strong>
+            <button (click)="navegar('agenda')">Ver agenda</button>
+          </article>
+          <article class="stat-card green">
+            <span>Pendientes</span><strong>{{ turnosFiltrados.length }}</strong>
+            <button (click)="navegar('turnos')">Por atender</button>
+          </article>
+          <article class="stat-card purple">
+            <span>Completados</span><strong>3</strong>
+            <button (click)="navegar('turnos')">Hoy</button>
+          </article>
+          <article class="stat-card teal">
+            <span>Informes por completar</span><strong>{{ informesFiltrados.length }}</strong>
+            <button (click)="filtroInformes = 'Pendientes'; navegar('informes')">Ver pendientes</button>
+          </article>
+        </div>
+
+        <div class="section-title">
+          <h2>Próximos turnos de hoy</h2>
+          <button class="text-link" (click)="navegar('agenda')">Ver agenda completa</button>
+        </div>
+
+        <div class="panel appointment-list">
+          @for (turno of turnos.slice(0, 3); track turno.id) {
+            <button class="appointment-row" (click)="abrirPaciente(turno.id)">
+              <span class="calendar-icon">
+                <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg>
+              </span>
+              <strong class="appointment-time">{{ turno.hora }}</strong>
+              <span class="appointment-person"><strong>{{ turno.nombre }}</strong><small>DNI {{ turno.dni }}</small></span>
+              <span class="appointment-specialty">{{ turno.tipo }}</span>
+              <span class="status pending">{{ turno.estado }}</span>
+              <span class="row-arrow">›</span>
+            </button>
+          }
+        </div>
+      }
+
+      @case ('agenda') {
+        <header class="page-header"><h1>Agenda</h1></header>
+
+        <div class="calendar-navigation">
+          <button class="plain-icon" (click)="cambiarDia(-1)">‹</button>
+          <strong>{{ fechaAgendaTexto }}</strong>
+          <button class="plain-icon" (click)="cambiarDia(1)">›</button>
+          <button class="button-secondary today" (click)="fechaAgenda.setFullYear(2024, 4, 21)">Hoy</button>
+        </div>
+
+        <div class="calendar-controls">
+          <div class="segmented">
+            @for (vista of ['Día', 'Semana', 'Mes']; track vista) {
+              <button [class.selected]="vistaAgenda === vista"
+                (click)="vistaAgenda = $any(vista)">{{ vista }}</button>
+            }
+          </div>
+        </div>
+
+        <div class="calendar-grid">
+          @for (hora of ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00']; track hora) {
+            <div class="calendar-row">
+              <span class="calendar-time">{{ hora }}</span>
+              <div class="calendar-track">
+                @if (hora === '08:00') {
+                  <button class="calendar-event event-green" (click)="abrirPaciente(1)"><strong>María López</strong><small>Control</small></button>
+                }
+                @if (hora === '09:00') {
+                  <button class="calendar-event event-blue" (click)="abrirPaciente(2)"><strong>Pedro Martínez</strong><small>Primera vez</small></button>
+                }
+                @if (hora === '10:00') {
+                  <button class="calendar-event event-green" (click)="abrirPaciente(3)"><strong>Ana Fernández</strong><small>Control</small></button>
+                }
+                @if (hora === '12:00') {
+                  <button class="calendar-event event-blue" (click)="abrirPaciente(4)"><strong>Luis Rodríguez</strong><small>Control</small></button>
+                }
+                @if (hora === '17:00') {
+                  <div class="calendar-block">Bloqueo / Pausa</div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @case ('detalle') {
+        <header class="page-header detail-page-header">
+          <button class="back-button" (click)="navegar('pacientes')">←</button>
+          <h1>Detalle del turno</h1>
+          <button class="button-secondary" (click)="mostrarMensaje('Acciones del turno')">Acciones⌄</button>
+        </header>
+
+        <div class="patient-heading">
+          <span class="patient-avatar large">{{ turnoActual.nombre.split(' ').map(p => p[0]).join('') }}</span>
+          <div class="patient-heading-info">
+            <h2>{{ turnoActual.nombre }}</h2>
+            <p>DNI {{ turnoActual.dni }} · {{ turnoActual.edad }} años</p>
+          </div>
+          <span class="status" [class.pending]="turnoActual.estado === 'Pendiente'" [class.confirmed]="turnoActual.estado === 'Confirmado'">{{ turnoActual.estado }}</span>
+        </div>
+
+        <nav class="record-tabs">
+          @for (tab of ['Información', 'Historial clínico', 'Turnos', 'Informes', 'Documentos']; track tab) {
+            <button [class.active]="pestanaPaciente === tab" (click)="pestanaPaciente = tab">{{ tab }}</button>
+          }
+        </nav>
+
+        @if (pestanaPaciente === 'Información') {
+          <div class="patient-details">
+            <div class="patient-facts">
+              <div class="fact"><span>▦</span><div><strong>Fecha y hora</strong><p>21/05/2024 · {{ turnoActual.hora }} hs</p></div></div>
+              <div class="fact"><span>♧</span><div><strong>Especialidad</strong><p>{{ turnoActual.tipo }}</p></div></div>
+              <div class="fact"><span>◷</span><div><strong>Motivo de consulta</strong><p>{{ turnoActual.motivo }}</p></div></div>
+              <div class="fact"><span>♙</span><div><strong>Obra social</strong><p>{{ turnoActual.obraSocial }}</p></div></div>
+              <div class="fact"><span>⌕</span><div><strong>Teléfono</strong><p>{{ turnoActual.telefono }}</p></div></div>
+              <div class="fact"><span>✉</span><div><strong>Email</strong><p>{{ turnoActual.email }}</p></div></div>
+            </div>
+            <div class="record-side">
+              <article class="inner-card"><h3>Notas / Comentarios</h3><p class="clinical-note">{{ turnoActual.notas }}</p></article>
+              <article class="inner-card"><h3>Información adicional</h3><div class="additional-info"><span>Alergias</span><strong>Penicilina</strong></div><div class="additional-info"><span>Medicamentos</span><strong>Enalapril 10mg</strong></div></article>
+              <button class="button-primary full-button" (click)="navegar('informe')">Comenzar consulta</button>
+            </div>
+          </div>
+        } @else {
+          <div class="empty-state">
+            <span>▤</span><h3>{{ pestanaPaciente }}</h3>
+            <p>Información de {{ turnoActual.nombre }}.</p>
+            <button class="button-secondary" (click)="navegar('informes')">Consultar informes</button>
+          </div>
+        }
+      }
+
+      @case ('informe') {
+        <header class="page-header"><button class="back-button" (click)="navegar('detalle')">←</button><h1>Crear informe médico</h1></header>
+
+        <form class="medical-form" (ngSubmit)="guardarInforme()">
+          <label for="diagnostico">Diagnóstico</label>
+          <input id="diagnostico" name="diagnostico" [(ngModel)]="diagnostico"/>
+
+          <label for="tratamiento">Plan de tratamiento</label>
+          <textarea id="tratamiento" name="tratamiento" rows="3" [(ngModel)]="tratamiento"></textarea>
+
+          <label for="indicaciones">Indicaciones</label>
+          <textarea id="indicaciones" name="indicaciones" rows="2" [(ngModel)]="indicaciones"></textarea>
+
+          <label>Estudios solicitados</label>
+          <div class="study-chips">
+            @for (estudio of estudios; track estudio) {
+              <span>{{ estudio }} <button type="button" (click)="quitarEstudio(estudio)">×</button></span>
+            }
+            <button type="button" class="text-link add-study" (click)="agregarEstudio()">＋ Agregar</button>
+          </div>
+
+          <label>Archivos adjuntos</label>
+          <div class="file-attachment">
+            <span class="file-icon">▤</span><span>{{ archivoInforme }}</span><small>Adjunto</small>
+            <button type="button" aria-label="Quitar archivo" (click)="archivoInforme = ''">×</button>
+          </div>
+          <label class="file-picker">＋ Agregar archivo<input type="file" (change)="seleccionarArchivo($event)" accept=".pdf,.png,.jpg,.jpeg"/></label>
+
+          <div class="form-footer">
+            <button type="button" class="button-secondary" (click)="navegar('detalle')">Cancelar</button>
+            <button type="submit" class="button-primary">Guardar informe</button>
+          </div>
+        </form>
+      }
+
+      @case ('turnos') {
+        <header class="page-header"><h1>Mis turnos</h1></header>
+        <nav class="table-tabs">
+          @for (filtro of ['Pendientes', 'Pasados', 'Todos']; track filtro) {
+            <button [class.active]="filtroTurnos === filtro" (click)="filtroTurnos = $any(filtro)">{{ filtro }}</button>
+          }
+        </nav>
+
+        <div class="turnos-table">
+          @for (turno of turnosFiltrados; track turno.id) {
+            <button class="turno-row" (click)="abrirPaciente(turno.id)">
+              <span class="date-block"><strong>{{ turno.dia }}</strong><small>{{ turno.mes }}</small></span>
+              <strong class="turno-time">{{ turno.hora }}</strong>
+              <span class="turno-person"><strong>{{ turno.nombre }}</strong><small>DNI {{ turno.dni }}</small></span>
+              <span class="turno-specialty">{{ turno.tipo }}</span>
+              <span class="status" [class.pending]="turno.estado === 'Pendiente'" [class.confirmed]="turno.estado === 'Confirmado'">{{ turno.estado }}</span>
+              <span class="row-arrow">›</span>
+            </button>
+          }
+        </div>
+        <div class="table-bottom-link"><button class="text-link" (click)="navegar('agenda')">Ver agenda completa</button></div>
+      }
+
+      @case ('disponibilidad') {
+        <header class="page-header availability-header">
+          <h1>Disponibilidad horaria</h1>
+          <button class="button-primary" (click)="mostrarFormularioHorario = !mostrarFormularioHorario">＋ Agregar horario</button>
+        </header>
+
+        @if (mostrarFormularioHorario) {
+          <form class="inline-form" (ngSubmit)="agregarHorario()">
+            <label>Día<select name="dia" [(ngModel)]="nuevoHorario.dia"><option>Lunes</option><option>Martes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option></select></label>
+            <label>Desde<input type="time" name="desde" [(ngModel)]="nuevoHorario.desde" required/></label>
+            <label>Hasta<input type="time" name="hasta" [(ngModel)]="nuevoHorario.hasta" required/></label>
+            <button class="button-primary" type="submit">Guardar</button>
+          </form>
+        }
+
+        <div class="day-selector"><label for="dia-seleccionado">Seleccioná el día</label><select id="dia-seleccionado" #dia (change)="nuevoHorario.dia = dia.value"><option>Martes</option><option>Lunes</option><option>Miércoles</option><option>Jueves</option><option>Viernes</option></select></div>
+
+        <div class="availability-table">
+          <div class="availability-row availability-head"><strong>Horario</strong><strong>Duración</strong><strong>Tipo de consulta</strong><strong>Estado</strong><strong>Acciones</strong></div>
+          @for (horario of horarios.filter(h => h.dia === nuevoHorario.dia); track horario.desde) {
+            <div class="availability-row">
+              <span>{{ horario.desde }} - {{ horario.hasta }}</span><span>{{ horario.duracion }} min</span><span>{{ horario.tipo }}</span>
+              <button class="switch" [class.on]="horario.activo" (click)="alternarHorario(horario)" [attr.aria-label]="'Alternar horario ' + horario.desde"><span></span></button>
+              <div class="row-actions"><button aria-label="Editar horario" (click)="nuevoHorario = { dia: horario.dia, desde: horario.desde, hasta: horario.hasta, duracion: horario.duracion, tipo: horario.tipo }; mostrarFormularioHorario = true">✎</button><button aria-label="Eliminar horario" (click)="eliminarHorario(horario)">♧</button></div>
+            </div>
+          }
+        </div>
+      }
+
+      @case ('pacientes') {
+        <header class="page-header patients-header"><h1>Pacientes</h1><button class="button-primary" (click)="mostrarFormularioPaciente = !mostrarFormularioPaciente">＋ Nuevo paciente</button></header>
+
+        @if (mostrarFormularioPaciente) {
+          <form class="inline-form patient-create-form" (ngSubmit)="agregarPaciente()">
+            <label>Nombre completo<input name="nombre" [(ngModel)]="nuevoPaciente.nombre" required/></label>
+            <label>DNI<input name="dni" [(ngModel)]="nuevoPaciente.dni" required/></label>
+            <label>Teléfono<input name="telefono" [(ngModel)]="nuevoPaciente.telefono"/></label>
+            <button class="button-primary" type="submit">Guardar paciente</button>
+          </form>
+        }
+
+        <div class="search-toolbar">
+          <label class="search-field"><span>⌕</span><input placeholder="Buscar paciente por nombre, DNI o teléfono" [(ngModel)]="busquedaPaciente"/></label>
+          <button class="button-secondary" (click)="busquedaPaciente = ''">× Limpiar</button>
+        </div>
+
+        <div class="patients-table">
+          <div class="patients-row patients-table-head"><strong>Paciente</strong><strong>DNI</strong><strong>Teléfono</strong><strong>Última consulta</strong><strong>Acciones</strong></div>
+          @for (paciente of pacientesPaginados; track paciente.dni) {
+            <div class="patients-row">
+              <span class="patient-name-cell"><span class="patient-avatar">{{ paciente.iniciales }}</span><strong>{{ paciente.nombre }}</strong></span>
+              <span>{{ paciente.dni }}</span><span>{{ paciente.telefono }}</span><span>{{ paciente.fecha }}</span>
+              <button class="view-button" aria-label="Ver paciente" (click)="abrirPaciente(turnos.find(t => t.dni === paciente.dni)?.id ?? 1)">⊙</button>
+            </div>
+          }
+          @if (pacientesFiltrados.length === 0) { <p class="no-results">No se encontraron pacientes.</p> }
+        </div>
+
+        <div class="pagination">
+          <button (click)="paginaPacientes = paginaPacientes > 1 ? paginaPacientes - 1 : 1">‹</button>
+          <button [class.current]="paginaPacientes === 1" (click)="paginaPacientes = 1">1</button>
+          <button [class.current]="paginaPacientes === 2" (click)="paginaPacientes = 2">2</button>
+          <button [class.current]="paginaPacientes === 3" (click)="paginaPacientes = 3">3</button>
+          <span>…</span><button (click)="paginaPacientes = paginaPacientes + 1">›</button>
+        </div>
+      }
+
+      @case ('informes') {
+        <header class="page-header"><h1>Informes médicos</h1></header>
+
+        <nav class="table-tabs">
+          @for (filtro of ['Todos', 'Pendientes', 'Completados']; track filtro) {
+            <button [class.active]="filtroInformes === filtro" (click)="filtroInformes = $any(filtro)">{{ filtro }}</button>
+          }
+        </nav>
+
+        <div class="search-toolbar">
+          <label class="search-field"><span>⌕</span><input placeholder="Buscar informe por paciente o fecha" [(ngModel)]="busquedaInforme"/></label>
+          <button class="button-secondary" (click)="busquedaInforme = ''">× Limpiar</button>
+        </div>
+
+        <div class="reports-list">
+          @for (informe of informesFiltrados; track informe.nombre) {
+            <article class="report-row">
+              <span class="report-document">
+                <svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v5h4M9 12h6M9 15h6"/></svg>
+              </span>
+              <div class="report-person"><strong>{{ informe.nombre }}</strong><small>Informe · {{ informe.fecha }}</small></div>
+              <span class="report-specialty">{{ informe.especialidad }}</span>
+              <span class="status" [class.confirmed]="informe.estado === 'Completado'" [class.pending]="informe.estado === 'Pendiente'">{{ informe.estado }}</span>
+              <button class="download-button" aria-label="Descargar informe" (click)="mostrarMensaje('Descarga de demostración: ' + informe.nombre)">⇩</button>
+            </article>
+          }
+          @if (informesFiltrados.length === 0) { <p class="no-results">No hay informes que coincidan con la búsqueda.</p> }
+        </div>
+      }
+
+      @case ('notificaciones') {
+        <header class="page-header notifications-header">
+          <h1>Notificaciones</h1>
+          <button class="text-link" (click)="marcarTodasLeidas()">Marcar todas como leídas</button>
+        </header>
+
+        <nav class="table-tabs notification-filters">
+          @for (filtro of ['Todas', 'No leídas', 'Turnos', 'Sistema']; track filtro) {
+            <button [class.active]="filtroNotificaciones === filtro" (click)="filtroNotificaciones = $any(filtro)">{{ filtro }}</button>
+          }
+        </nav>
+
+        <div class="search-toolbar">
+          <label class="search-field"><span>⌕</span><input placeholder="Buscar notificación" [(ngModel)]="busquedaNotificacion"/></label>
+        </div>
+
+        <div class="notifications-list">
+          @for (notificacion of notificacionesFiltradas; track notificacion.titulo) {
+            <button class="notification-row" [class.unread]="!notificacion.leida" (click)="marcarLeida(notificacion)">
+              <span class="notification-symbol">
+                @if (notificacion.icono === 'calendar') { ▦ }
+                @else if (notificacion.icono === 'clock') { ◷ }
+                @else if (notificacion.icono === 'file') { ▤ }
+                @else { ♧ }
+              </span>
+              <span class="notification-body"><strong>{{ notificacion.titulo }}</strong><small>{{ notificacion.texto }}</small></span>
+              <span class="notification-time">{{ notificacion.tiempo }}</span>
+              @if (!notificacion.leida) { <span class="unread-dot"></span> }
+            </button>
+          }
+          @if (notificacionesFiltradas.length === 0) { <p class="no-results">No hay notificaciones para mostrar.</p> }
+        </div>
+      }
+    }
+  </section>
+
+  @if (mensaje) {
+    <div class="toast" role="status">{{ mensaje }}</div>
+  }
+</main>
