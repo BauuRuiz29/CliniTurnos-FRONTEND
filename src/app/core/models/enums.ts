@@ -1,5 +1,5 @@
-// Valores alineados con la base de datos (db-cliniturnos). El back valida;
-// el front los usa para anticipar reglas y evitar strings sueltos.
+// Valores alineados con la base de datos (db-cliniturnos).
+// Valores siempre fijos 
 
 export const Rol = {
   PACIENTE: 'PACIENTE',
@@ -40,6 +40,14 @@ export const EstadoNotificacion = {
   CANCELADA: 'CANCELADA',
 } as const;
 export type EstadoNotificacion = (typeof EstadoNotificacion)[keyof typeof EstadoNotificacion];
+
+export const Genero = {
+  FEMENINO: 'FEMENINO',
+  MASCULINO: 'MASCULINO',
+  NO_BINARIO: 'NO_BINARIO',
+  PREFIERO_NO_DECIRLO: 'PREFIERO_NO_DECIRLO',
+} as const;
+export type Genero = (typeof Genero)[keyof typeof Genero];
 
 export const TipoDocumento = {
   DNI: 'DNI',
