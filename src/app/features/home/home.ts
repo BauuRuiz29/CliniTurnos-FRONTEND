@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { IconItem } from './components/icon-item/icon-item';
 import { InfoBanner } from './components/info-banner/info-banner';
 import { InfoCard } from './components/info-card/info-card';
@@ -25,7 +25,7 @@ interface Step {
 
 @Component({
   selector: 'app-home',
-  imports: [IconItem, InfoBanner, InfoCard],
+  imports: [IconItem, InfoBanner, InfoCard,RouterLink],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
@@ -146,27 +146,6 @@ export class Home implements AfterViewInit {
         block: 'start'
       });
     }
-  }
-
-  onReservarTurno(): void {
-    // Navegar al flujo de reserva de turno.
-    // this.router.navigate(['/reservar-turno']);
-    console.log('Ir a Reservar turno');
-  }
-
-  onSoyProfesional(): void {
-    // Navegar a la sección/registro para profesionales.
-    // this.router.navigate(['/para-profesionales']);
-    console.log('Ir a Soy profesional');
-  }
-
-  onIniciarSesion(): void {
-    this.router.navigate(['/login']);
-  }
-
-  onRegistrarse(): void {
-    // this.router.navigate(['/registro']);
-    console.log('Ir a Registrarse');
   }
 
   ngAfterViewInit(): void {

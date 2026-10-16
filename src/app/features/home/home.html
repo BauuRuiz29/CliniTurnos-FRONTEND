@@ -17,8 +17,8 @@
       }
     </nav>
     <div class="navbar__actions">
-      <button type="button" class="btn btn--ghost" (click)="onIniciarSesion()">Iniciar sesión</button>
-      <button type="button" class="btn btn--primary" (click)="onRegistrarse()">Registrarse</button>
+      <button type="button" class="btn btn--ghost" routerLink="/login">Iniciar sesión</button>
+      <button type="button" class="btn btn--primary" routerLink="/registro">Registrarse</button>
     </div>
   </div>
 </header>
@@ -41,7 +41,7 @@
         </p>
 
         <div class="hero__cta">
-          <button type="button" class="btn btn--primary btn--lg" (click)="onReservarTurno()">
+          <button type="button" class="btn btn--primary btn--lg" routerLink="/login">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.7" />
               <path d="M3 9.5h18M8 3v3M16 3v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
@@ -49,7 +49,7 @@
             Reservar turno
           </button>
 
-          <button type="button" class="btn btn--outline btn--lg" (click)="onSoyProfesional()">
+          <button type="button" class="btn btn--outline btn--lg" (click)="scrollToSection($event,'#contacto')">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.7" />
               <path d="M5 20c0-3.6 3.1-6.2 7-6.2s7 2.6 7 6.2" stroke="currentColor" stroke-width="1.7"
@@ -369,8 +369,8 @@
 
     <app-info-banner class="professionals__join" icono="♙+" titulo="¡Sumate a CliniTurnos!"
       texto="Unite a nuestra comunidad de profesionales y simplificá tu día a día.">
-      <button type="button" class="btn btn--primary" (click)="onRegistrarse()">
-        Quiero registrarme
+      <button type="button" class="btn btn--primary" (click)="scrollToSection($event,'#contacto')">
+        Quiero unirme
       </button>
     </app-info-banner>
 
@@ -381,11 +381,9 @@
   <!-- ============================================================ -->
 
   <section id="contacto" class="contact scroll-section">
-
     <div class="contact__info">
 
       <h2>Contacto</h2>
-
       <div class="contact__line"></div>
 
       <p>
@@ -406,17 +404,13 @@
     <form class="contact__form">
 
       <label>Nombre y apellido</label>
-
       <input type="text" placeholder="Ej: Juan Pérez">
 
 
       <label>Email</label>
-
       <input type="email" placeholder="Ej: juan@email.com">
 
-
       <label>Asunto</label>
-
       <select>
         <option>Seleccioná un asunto</option>
         <option>Consulta general</option>
@@ -424,53 +418,15 @@
         <option>Profesionales</option>
       </select>
 
-
       <label>Mensaje</label>
 
       <textarea placeholder="Escribí tu mensaje..."></textarea>
-
 
       <button type="button" class="btn btn--primary">
         Enviar mensaje
       </button>
 
     </form>
-
-
-    <div class="contact__extra">
-
-      <div class="contact__extra-card">
-
-        <h3>Otras consultas</h3>
-
-        <p>
-          Visitá nuestras preguntas frecuentes
-          para resolver dudas comunes.
-        </p>
-
-        <button type="button" class="btn btn--outline">
-          Ver preguntas frecuentes
-        </button>
-
-      </div>
-
-
-      <div class="contact__extra-card contact__extra-card--green">
-
-        <h3>Seguinos</h3>
-
-        <p>
-          Enterate de novedades y consejos de salud.
-        </p>
-
-        <div class="contact__social">
-          ◎　●　in
-        </div>
-
-      </div>
-
-    </div>
-
   </section>
 
   <!-- ============================================================ -->
