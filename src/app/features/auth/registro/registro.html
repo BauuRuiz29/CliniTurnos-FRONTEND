@@ -1,1 +1,178 @@
-<p>registro works!</p>
+<main class="login-page">
+
+  <div class="login-background-shape login-background-shape--one"></div>
+  <div class="login-background-shape login-background-shape--two"></div>
+
+  <section class="login-container registro-container">
+
+    <!-- IZQUIERDA -->
+
+    <div class="login-brand">
+
+      <button type="button" class="login-logo" (click)="volverHome()">
+        <img src="logo_horizontal.png" alt="CliniTurnos">
+      </button>
+
+      <h1>Creá tu cuenta<br>de paciente.</h1>
+
+      <p>
+        Registrate para reservar turnos, consultar tus
+        informes médicos y gestionar tu salud desde un solo lugar.
+      </p>
+
+      <div class="login-benefits">
+        <div class="login-benefit">
+          <div class="login-benefit__icon">✓</div>
+          <div>
+            <strong>Turnos online</strong>
+            <span>Reservá, cancelá o reprogramá cuando quieras.</span>
+          </div>
+        </div>
+        <div class="login-benefit">
+          <div class="login-benefit__icon">✓</div>
+          <div>
+            <strong>Tus datos protegidos</strong>
+            <span>Tu información médica es confidencial.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- DERECHA -->
+
+    <form class="login-card" [formGroup]="form" (ngSubmit)="crearCuenta()" novalidate>
+
+      <div class="login-card__header">
+        <h2>Crear cuenta</h2>
+        <p>Todos los campos son obligatorios</p>
+      </div>
+
+      <div class="registro-grid">
+
+        <div class="login-field">
+          <label for="nombre">Nombre</label>
+          <input id="nombre" type="text" formControlName="nombre" autocomplete="given-name" [attr.aria-invalid]="invalido('nombre')">
+          @if (invalido('nombre')) { <p class="registro-error">Ingresá tu nombre (máx. 50 caracteres).</p> }
+        </div>
+
+        <div class="login-field">
+          <label for="apellido">Apellido</label>
+          <input id="apellido" type="text" formControlName="apellido" autocomplete="family-name" [attr.aria-invalid]="invalido('apellido')">
+          @if (invalido('apellido')) { <p class="registro-error">Ingresá tu apellido (máx. 50 caracteres).</p> }
+        </div>
+
+        <div class="login-field">
+          <label for="tipoIdentificacion">Tipo de documento</label>
+          <select id="tipoIdentificacion" formControlName="tipoIdentificacion">
+            @for (tipo of tiposDocumento; track tipo) {
+              <option [value]="tipo">{{ tipo === 'DNI' ? 'DNI' : 'Pasaporte' }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="login-field">
+          <label for="numIdentificacion">N° de documento</label>
+          <input id="numIdentificacion" type="text" formControlName="numIdentificacion" [attr.aria-invalid]="invalido('numIdentificacion') || errorDeGrupo('dniInvalido', 'numIdentificacion')">
+          @if (invalido('numIdentificacion')) {
+            <p class="registro-error">Ingresá tu número de documento.</p>
+          } @else if (errorDeGrupo('dniInvalido', 'numIdentificacion')) {
+            <p class="registro-error">El DNI tiene 7 u 8 números, sin puntos.</p>
+          }
+        </div>
+
+        <div class="login-field">
+          <label for="fechaNacimiento">Fecha de nacimiento</label>
+          <input id="fechaNacimiento" type="date" formControlName="fechaNacimiento" [max]="hoy" autocomplete="bday" [attr.aria-invalid]="invalido('fechaNacimiento')">
+          @if (invalido('fechaNacimiento')) { <p class="registro-error">Ingresá una fecha válida.</p> }
+        </div>
+
+        <div class="login-field">
+          <label for="genero">Género</label>
+          <select id="genero" formControlName="genero" [attr.aria-invalid]="invalido('genero')">
+            <option value="" disabled>Seleccioná</option>
+            @for (genero of generos; track genero.valor) {
+              <option [value]="genero.valor">{{ genero.texto }}</option>
+            }
+          </select>
+          @if (invalido('genero')) { <p class="registro-error">Seleccioná una opción.</p> }
+        </div>
+
+        <div class="login-field">
+          <label for="telefono">Teléfono</label>
+          <input id="telefono" type="tel" formControlName="telefono" autocomplete="tel" placeholder="+54 11 1234 5678" [attr.aria-invalid]="invalido('telefono')">
+          @if (invalido('telefono')) { <p class="registro-error">Ingresá un teléfono válido.</p> }
+        </div>
+
+        <div class="login-field">
+          <label for="correo">Correo electrónico</label>
+          <input id="correo" type="email" formControlName="correo" autocomplete="email" placeholder="tu@email.com" [attr.aria-invalid]="invalido('correo')">
+          @if (invalido('correo')) { <p class="registro-error">Ingresá un correo válido.</p> }
+        </div>
+
+        <div class="login-field registro-grid__full">
+          <label for="login">Usuario</label>
+          <input id="login" type="text" formControlName="login" autocomplete="username" [attr.aria-invalid]="invalido('login')">
+          @if (invalido('login')) { <p class="registro-error">Elegí un usuario (máx. 50 caracteres).</p> }
+        </div>
+
+        <div class="login-field">
+          <label for="password">Contraseña</label>
+          <input id="password" type="password" formControlName="password" autocomplete="new-password" placeholder="••••••••" [attr.aria-invalid]="invalido('password')">
+          @if (invalido('password')) { <p class="registro-error">Mínimo 8 caracteres.</p> }
+        </div>
+
+        <div class="login-field">
+          <label for="confirmarPassword">Repetí la contraseña</label>
+          <input id="confirmarPassword" type="password" formControlName="confirmarPassword" autocomplete="new-password" placeholder="••••••••" [attr.aria-invalid]="invalido('confirmarPassword') || errorDeGrupo('passwordsDistintas', 'confirmarPassword')">
+          @if (invalido('confirmarPassword')) {
+            <p class="registro-error">Repetí la contraseña.</p>
+          } @else if (errorDeGrupo('passwordsDistintas', 'confirmarPassword')) {
+            <p class="registro-error">Las contraseñas no coinciden.</p>
+          }
+        </div>
+
+      </div>
+
+      <!-- Rnf 14: consentimiento explícito para el tratamiento de datos de salud -->
+      <div class="registro-check">
+        <input id="consentimiento" type="checkbox" formControlName="consentimiento">
+        <label for="consentimiento">
+          Acepto que CliniTurnos trate mis datos personales y de salud para gestionar mis turnos
+          e informes médicos, conforme a la Ley de Protección de Datos Personales.
+        </label>
+      </div>
+      @if (invalido('consentimiento')) { <p class="registro-error">Necesitamos tu consentimiento para continuar.</p> }
+
+      <button type="submit" class="login-button" [disabled]="enviando()">
+        {{ enviando() ? 'Creando cuenta…' : 'Continuar' }}
+      </button>
+
+      @if (errorMessage()) {
+        <p class="login-error" role="alert">{{ errorMessage() }}</p>
+      }
+
+      <div class="login-divider">
+        <span></span>
+        <p>o</p>
+        <span></span>
+      </div>
+
+      <p class="login-register">
+        ¿Ya tenés una cuenta?
+        <a routerLink="/login">Iniciá sesión</a>
+      </p>
+
+    </form>
+
+  </section>
+
+  <!-- popup de redireccion -->
+  <dialog #popup class="registro-popup" aria-labelledby="registro-popup-titulo">
+    <h2 id="registro-popup-titulo">¡Cuenta creada!</h2>
+    <p>Te enviamos un correo de confirmación. En unos segundos te llevamos al inicio de sesión.</p>
+    <button type="button" class="login-button" (click)="irLogin()">Ir a iniciar sesión</button>
+  </dialog>
+
+</main>

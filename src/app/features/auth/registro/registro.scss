@@ -1,0 +1,116 @@
+// Sobre la base visual del login (login.scss): el formulario es más largo, así que la página scrollea.
+
+:host,
+.login-page {
+  height: auto;
+  min-height: 100vh;
+  overflow: visible;
+}
+
+.registro-container {
+  grid-template-columns: 1fr 540px;
+  gap: 60px;
+}
+
+.registro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 14px;
+
+  &__full {
+    grid-column: 1 / -1;
+  }
+}
+
+.login-field select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid #dce4ef;
+  border-radius: 7px;
+  background: white;
+  color: #101a35;
+  font-family: inherit;
+}
+
+.login-field select:focus {
+  border-color: #2563eb;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+.login-field [aria-invalid='true'] {
+  border-color: #dc2626;
+}
+
+.registro-error,
+.login-error {
+  margin: 6px 0 0;
+  color: #dc2626;
+  font-size: 11px;
+}
+
+.registro-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 4px;
+
+  input {
+    margin-top: 2px;
+    accent-color: #2563eb;
+  }
+
+  label {
+    color: #4a5568;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+}
+
+.login-button {
+  margin-top: 18px;
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: wait;
+    transform: none;
+  }
+}
+
+.registro-popup {
+  max-width: 380px;
+  padding: 32px;
+  border: 0;
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: 0 15px 45px rgba(32, 70, 120, 0.18);
+
+  &::backdrop {
+    background: rgba(16, 26, 53, 0.45);
+  }
+
+  h2 {
+    margin: 0 0 10px;
+    color: #101a35;
+  }
+
+  p {
+    margin: 0 0 22px;
+    color: #66728b;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 850px) {
+  .registro-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .registro-grid {
+    grid-template-columns: 1fr;
+  }
+}
