@@ -1,0 +1,122 @@
+/* Sobre la base .data-card / .data-field de paciente.scss */
+
+.data-grupo {
+  margin: 0 0 8px;
+  padding: 0;
+  border: 0;
+}
+
+.data-grupo legend {
+  margin-bottom: 14px;
+  color: #101a35;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.data-grupo legend span {
+  color: #718096;
+  font-weight: 400;
+}
+
+.data-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 14px;
+}
+
+.data-grid__full {
+  grid-column: 1 / -1;
+}
+
+.data-fila {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  column-gap: 14px;
+  align-items: start;
+}
+
+.data-fila--med {
+  grid-template-columns: 2fr 1fr 1fr auto;
+}
+
+/* Alinea el botón con los inputs, debajo del label */
+.data-quitar {
+  margin-top: 22px;
+}
+
+.data-agregar {
+  margin-bottom: 12px;
+}
+
+.data-field select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #dce4ef;
+  border-radius: 6px;
+  padding: 11px;
+  background: white;
+  font-family: inherit;
+  font-size: 10px;
+}
+
+.data-field input:focus,
+.data-field select:focus {
+  border-color: #2563eb;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.data-field input:disabled,
+.data-field select:disabled {
+  background: #f5f7fb;
+  color: #4a5568;
+}
+
+.data-field [aria-invalid='true'] {
+  border-color: #dc2626;
+}
+
+.data-error,
+.data-ok,
+.data-ayuda,
+.data-estado {
+  margin: 6px 0 0;
+  font-size: 11px;
+}
+
+.data-error { color: #dc2626; }
+.data-ok { color: #15803d; }
+.data-ayuda, .data-estado { color: #718096; }
+.data-ayuda { margin: -8px 0 10px; }
+
+.data-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.data-acciones .btn:disabled {
+  opacity: 0.7;
+  cursor: wait;
+  transform: none;
+}
+
+@media (max-width: 520px) {
+  .data-grid,
+  .data-fila,
+  .data-fila--med {
+    grid-template-columns: 1fr;
+  }
+
+  .data-fila {
+    padding-bottom: 12px;
+    border-bottom: 1px solid #dce4ef;
+    margin-bottom: 12px;
+  }
+
+  .data-quitar {
+    margin-top: 0;
+    justify-self: end;
+  }
+}

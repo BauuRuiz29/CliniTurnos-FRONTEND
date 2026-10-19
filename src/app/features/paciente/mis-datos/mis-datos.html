@@ -3,19 +3,199 @@
 		<div><h2>Mis datos</h2><p>Consultá y actualizá tu información personal</p></div>
 	</div>
 
-	<div class="data-card">
-		<div class="data-field">
-			<label for="patient-name">Nombre y apellido</label>
-			<input id="patient-name" type="text" value="Juan Pérez">
-		</div>
-		<div class="data-field">
-			<label for="patient-email">Correo electrónico</label>
-			<input id="patient-email" type="email" value="juan@cliniturnos.com">
-		</div>
-		<div class="data-field">
-			<label for="patient-phone">Teléfono</label>
-			<input id="patient-phone" type="text" value="+54 11 1234 5678">
-		</div>
-		<button type="button" class="btn btn--primary">Guardar cambios</button>
-	</div>
+	@if (cargando()) {
+		<p class="data-estado">Cargando tus datos…</p>
+	} @else if (!errorMessage() || editando()) {
+		<form class="data-card" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+
+			<fieldset class="data-grupo">
+				<legend>Datos personales</legend>
+				<div class="data-grid">
+					<div class="data-field">
+						<label for="nombre">Nombre</label>
+						<input id="nombre" type="text" formControlName="nombre" autocomplete="given-name" [attr.aria-invalid]="invalido('nombre')">
+						@if (invalido('nombre')) { <p class="data-error">Ingresá tu nombre (máx. 50 caracteres).</p> }
+					</div>
+
+					<div class="data-field">
+						<label for="apellido">Apellido</label>
+						<input id="apellido" type="text" formControlName="apellido" autocomplete="family-name" [attr.aria-invalid]="invalido('apellido')">
+						@if (invalido('apellido')) { <p class="data-error">Ingresá tu apellido (máx. 50 caracteres).</p> }
+					</div>
+
+					<div class="data-field">
+						<label for="tipoIdentificacion">Tipo de documento</label>
+						<select id="tipoIdentificacion" formControlName="tipoIdentificacion">
+							<option value="DNI">DNI</option>
+							<option value="PASAPORTE">Pasaporte</option>
+						</select>
+					</div>
+
+					<div class="data-field">
+						<label for="numIdentificacion">N° de documento</label>
+						<input id="numIdentificacion" type="text" formControlName="numIdentificacion">
+					</div>
+
+					<div class="data-field">
+						<label for="fechaNacimiento">Fecha de nacimiento</label>
+						<input id="fechaNacimiento" type="date" formControlName="fechaNacimiento" [max]="hoy" autocomplete="bday" [attr.aria-invalid]="invalido('fechaNacimiento')">
+						@if (invalido('fechaNacimiento')) { <p class="data-error">Ingresá una fecha válida.</p> }
+					</div>
+
+					<div class="data-field">
+						<label for="genero">Género</label>
+						<select id="genero" formControlName="genero" [attr.aria-invalid]="invalido('genero')">
+							<option value="" disabled>Seleccioná</option>
+							@for (genero of generos; track genero.valor) {
+								<option [value]="genero.valor">{{ genero.texto }}</option>
+							}
+						</select>
+						@if (invalido('genero')) { <p class="data-error">Seleccioná una opción.</p> }
+					</div>
+				</div>
+				@if (editando()) {
+					<p class="data-ayuda">Para corregir tu documento comunicate con el centro médico.</p>
+				}
+			</fieldset>
+
+			<fieldset class="data-grupo">
+				<legend>Contacto y cuenta</legend>
+				<div class="data-grid">
+					<div class="data-field">
+						<label for="telefono">Teléfono</label>
+						<input id="telefono" type="tel" formControlName="telefono" autocomplete="tel" [attr.aria-invalid]="invalido('telefono')">
+						@if (invalido('telefono')) { <p class="data-error">Ingresá un teléfono válido.</p> }
+					</div>
+
+					<div class="data-field">
+						<label for="correo">Correo electrónico</label>
+						<input id="correo" type="email" formControlName="correo" autocomplete="email" [attr.aria-invalid]="invalido('correo')">
+						@if (invalido('correo')) { <p class="data-error">Ingresá un correo válido.</p> }
+					</div>
+
+					<div class="data-field data-grid__full">
+						<label for="login">Usuario</label>
+						<input id="login" type="text" formControlName="login" autocomplete="username">
+					</div>
+				</div>
+			</fieldset>
+
+			<!-- R03: información adicional, opcional -->
+			<fieldset class="data-grupo">
+				<legend>Información adicional <span>(opcional)</span></legend>
+				<div class="data-grid">
+					<div class="data-field">
+						<label for="grupoSanguineo">Grupo sanguíneo</label>
+						<select id="grupoSanguineo" formControlName="grupoSanguineo">
+							<option value="">No especificado</option>
+							@for (grupo of gruposSanguineos; track grupo) {
+								<option [value]="grupo">{{ grupo }}</option>
+							}
+						</select>
+					</div>
+
+					<div class="data-field"></div>
+
+					<div class="data-field">
+						<label for="contactoEmergenciaNombre">Contacto de emergencia</label>
+						<input id="contactoEmergenciaNombre" type="text" formControlName="contactoEmergenciaNombre" placeholder="Nombre y apellido" [attr.aria-invalid]="invalido('contactoEmergenciaNombre')">
+						@if (invalido('contactoEmergenciaNombre')) { <p class="data-error">Máximo 50 caracteres.</p> }
+					</div>
+
+					<div class="data-field">
+						<label for="contactoEmergenciaNumero">Teléfono del contacto</label>
+						<input id="contactoEmergenciaNumero" type="tel" formControlName="contactoEmergenciaNumero" [attr.aria-invalid]="invalido('contactoEmergenciaNumero')">
+						@if (invalido('contactoEmergenciaNumero')) { <p class="data-error">Ingresá un teléfono válido.</p> }
+					</div>
+				</div>
+			</fieldset>
+
+			<!-- R03: alergias y medicación habitual, listas de la historia clínica -->
+			<fieldset class="data-grupo" formArrayName="alergias">
+				<legend>Alergias <span>(opcional)</span></legend>
+				@for (fila of form.controls.alergias.controls; track fila; let i = $index) {
+					<div class="data-fila" [formGroupName]="i">
+						<div class="data-field">
+							<label [for]="'alergia-' + i">Alergia</label>
+							<input [id]="'alergia-' + i" type="text" formControlName="descripcion" placeholder="Ej.: penicilina"
+								[attr.aria-invalid]="fila.controls.descripcion.invalid && fila.controls.descripcion.touched">
+							@if (fila.controls.descripcion.invalid && fila.controls.descripcion.touched) {
+								<p class="data-error">Ingresá la alergia (máx. 100 caracteres).</p>
+							}
+						</div>
+						<div class="data-field">
+							<label [for]="'severidad-' + i">Severidad</label>
+							<select [id]="'severidad-' + i" formControlName="severidad">
+								<option value="">No especificada</option>
+								@for (s of severidades; track s.valor) {
+									<option [value]="s.valor">{{ s.texto }}</option>
+								}
+							</select>
+						</div>
+						@if (editando()) {
+							<button type="button" class="btn btn--outline data-quitar" (click)="quitar(form.controls.alergias, i)" [attr.aria-label]="'Quitar alergia ' + (i + 1)">Quitar</button>
+						}
+					</div>
+				} @empty {
+					@if (!editando()) { <p class="data-estado">No registraste alergias.</p> }
+				}
+				@if (editando()) {
+					<button type="button" class="btn btn--outline data-agregar" (click)="agregarAlergia()">+ Agregar alergia</button>
+				}
+			</fieldset>
+
+			<fieldset class="data-grupo" formArrayName="medicaciones">
+				<legend>Medicación habitual <span>(opcional)</span></legend>
+				@for (fila of form.controls.medicaciones.controls; track fila; let i = $index) {
+					<div class="data-fila data-fila--med" [formGroupName]="i">
+						<div class="data-field">
+							<label [for]="'medicamento-' + i">Medicamento</label>
+							<input [id]="'medicamento-' + i" type="text" formControlName="medicamento"
+								[attr.aria-invalid]="fila.controls.medicamento.invalid && fila.controls.medicamento.touched">
+							@if (fila.controls.medicamento.invalid && fila.controls.medicamento.touched) {
+								<p class="data-error">Ingresá el medicamento (máx. 100 caracteres).</p>
+							}
+						</div>
+						<div class="data-field">
+							<label [for]="'dosis-' + i">Dosis</label>
+							<input [id]="'dosis-' + i" type="text" formControlName="dosis" placeholder="Ej.: 10 mg"
+								[attr.aria-invalid]="fila.controls.dosis.invalid && fila.controls.dosis.touched">
+							@if (fila.controls.dosis.invalid && fila.controls.dosis.touched) { <p class="data-error">Máximo 50 caracteres.</p> }
+						</div>
+						<div class="data-field">
+							<label [for]="'frecuencia-' + i">Frecuencia</label>
+							<input [id]="'frecuencia-' + i" type="text" formControlName="frecuencia" placeholder="Ej.: cada 12 h"
+								[attr.aria-invalid]="fila.controls.frecuencia.invalid && fila.controls.frecuencia.touched">
+							@if (fila.controls.frecuencia.invalid && fila.controls.frecuencia.touched) { <p class="data-error">Máximo 50 caracteres.</p> }
+						</div>
+						@if (editando()) {
+							<button type="button" class="btn btn--outline data-quitar" (click)="quitar(form.controls.medicaciones, i)" [attr.aria-label]="'Quitar medicación ' + (i + 1)">Quitar</button>
+						}
+					</div>
+				} @empty {
+					@if (!editando()) { <p class="data-estado">No registraste medicación habitual.</p> }
+				}
+				@if (editando()) {
+					<button type="button" class="btn btn--outline data-agregar" (click)="agregarMedicacion()">+ Agregar medicación</button>
+				}
+			</fieldset>
+
+			<div class="data-acciones">
+				@if (editando()) {
+					<button type="button" class="btn btn--outline" (click)="cancelar()" [disabled]="guardando()">Cancelar</button>
+					<button type="submit" class="btn btn--primary" [disabled]="guardando()">
+						{{ guardando() ? 'Guardando…' : 'Guardar' }}
+					</button>
+				} @else {
+					<button type="button" class="btn btn--primary" (click)="editar()">Editar datos</button>
+				}
+			</div>
+
+			<!-- CU03: mensaje de confirmación -->
+			@if (guardado()) { <p class="data-ok" role="status">Tus datos se guardaron correctamente.</p> }
+			@if (errorMessage()) { <p class="data-error" role="alert">{{ errorMessage() }}</p> }
+		</form>
+	} @else {
+		<p class="data-error" role="alert">{{ errorMessage() }}</p>
+	}
 </section>
