@@ -94,7 +94,15 @@
 						</select>
 					</div>
 
-					<div class="data-field"></div>
+					<div class="data-field">
+						<label for="obraSocialId">Obra social</label>
+						<select id="obraSocialId" formControlName="obraSocialId">
+							<option [ngValue]="null">Particular</option>
+							@for (os of obrasSociales(); track os.id) {
+								<option [ngValue]="os.id">{{ os.nombre }}</option>
+							}
+						</select>
+					</div>
 
 					<div class="data-field">
 						<label for="contactoEmergenciaNombre">Contacto de emergencia</label>

@@ -14,6 +14,7 @@ export interface DatosPaciente {
   telefono: string;
   correo: string;
   login: string;
+  obraSocialId: number | null; // null = Particular
   grupoSanguineo: string | null;
   contactoEmergenciaNombre: string | null;
   contactoEmergenciaNumero: string | null;

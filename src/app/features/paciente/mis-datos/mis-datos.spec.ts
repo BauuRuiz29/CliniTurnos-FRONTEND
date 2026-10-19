@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Observable, of } from 'rxjs';
 import { DatosPaciente, DatosPacienteEditables, MisDatosRepository } from './data-access/mis-datos.repository';
+import { ObraSocial, ObrasSocialesRepository } from './data-access/obras-sociales.repository';
 import { MisDatos } from './mis-datos';
 
 const DATOS: DatosPaciente = {
@@ -13,6 +14,7 @@ const DATOS: DatosPaciente = {
   telefono: '+54 11 1234 5678',
   correo: 'juan@email.com',
   login: 'juanperez',
+  obraSocialId: 1,
   grupoSanguineo: null,
   contactoEmergenciaNombre: null,
   contactoEmergenciaNumero: null,
@@ -31,6 +33,11 @@ class RepoFalso implements MisDatosRepository {
   }
 }
 
+const OBRAS_SOCIALES: ObraSocial[] = [
+  { id: 1, nombre: 'OSDE 210' },
+  { id: 2, nombre: 'Galeno' },
+];
+
 describe('MisDatos', () => {
   let component: MisDatos;
   let fixture: ComponentFixture<MisDatos>;
@@ -40,7 +47,10 @@ describe('MisDatos', () => {
     repo = new RepoFalso();
     await TestBed.configureTestingModule({
       imports: [MisDatos],
-      providers: [{ provide: MisDatosRepository, useValue: repo }],
+      providers: [
+        { provide: MisDatosRepository, useValue: repo },
+        { provide: ObrasSocialesRepository, useValue: { listar: () => of(OBRAS_SOCIALES) } },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MisDatos);
@@ -141,6 +151,31 @@ describe('MisDatos', () => {
       component.cancelar();
       expect(component.form.controls.alergias.getRawValue()[0].descripcion).toBe('Penicilina');
       expect(component.form.controls.medicaciones.length).toBe(1);
+    });
+  });
+
+  describe('obra social', () => {
+    it('carga la obra social bloqueada y ofrece Particular más el catálogo', () => {
+      fixture.detectChanges();
+      expect(component.form.controls.obraSocialId.value).toBe(1);
+      expect(component.form.controls.obraSocialId.disabled).toBe(true);
+      const opciones = [...fixture.nativeElement.querySelectorAll('#obraSocialId option')].map((o: HTMLOptionElement) => o.textContent!.trim());
+      expect(opciones).toEqual(['Particular', 'OSDE 210', 'Galeno']);
+    });
+
+    it('guarda la obra social elegida', () => {
+      component.editar();
+      component.form.patchValue({ obraSocialId: 2 });
+      component.guardar();
+      expect(repo.guardados[0].obraSocialId).toBe(2);
+    });
+
+    it('Particular se guarda como null', () => {
+      component.editar();
+      component.form.patchValue({ obraSocialId: null });
+      component.guardar();
+      expect(repo.guardados[0].obraSocialId).toBeNull();
+      expect(component.form.controls.obraSocialId.value).toBeNull();
     });
   });
 });
