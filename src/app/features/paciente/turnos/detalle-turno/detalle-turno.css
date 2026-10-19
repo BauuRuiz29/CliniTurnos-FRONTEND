@@ -1,0 +1,90 @@
+/* Sobre la base .detail-* de paciente.scss */
+
+.detail-header > div:first-child {
+  flex: 1;
+}
+
+.detalle-resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px 24px;
+  margin: 18px 0 0;
+}
+
+.detalle-resumen dt {
+  color: #718096;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.detalle-resumen dd {
+  margin: 4px 0 0;
+  color: #102047;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.detalle-resumen dd::first-letter {
+  text-transform: uppercase;
+}
+
+.detail-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+a.detail-action {
+  text-decoration: none;
+}
+
+.detalle-aviso,
+.detalle-error {
+  margin: 10px 0 0;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.detalle-aviso { color: #718096; }
+.detalle-error { color: #dc2626; }
+
+.detalle-dialogo {
+  max-width: 380px;
+  padding: 28px;
+  border: 0;
+  border-radius: 14px;
+  box-shadow: 0 15px 45px rgba(32, 70, 120, 0.18);
+}
+
+.detalle-dialogo::backdrop {
+  background: rgba(16, 26, 53, 0.45);
+}
+
+.detalle-dialogo h2 {
+  margin: 0 0 10px;
+  font-size: 17px;
+}
+
+.detalle-dialogo p {
+  margin: 0 0 22px;
+  color: #56647d;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.detalle-dialogo__acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.detalle-dialogo__cancelar {
+  border-color: #dc2626;
+  background: #dc2626;
+}
+
+.detalle-dialogo button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}

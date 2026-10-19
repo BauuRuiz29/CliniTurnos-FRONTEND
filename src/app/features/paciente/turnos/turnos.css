@@ -1,0 +1,15 @@
+.turnos-titulo {
+  margin: 24px 0 10px;
+  font-size: 13px;
+}
+
+.turnos-titulo:first-of-type {
+  margin-top: 0;
+}
+
+.turnos-vacio {
+  margin: 0;
+  padding: 20px;
+  color: #718096;
+  font-size: 11px;
+}
