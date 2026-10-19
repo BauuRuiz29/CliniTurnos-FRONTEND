@@ -11,6 +11,13 @@
 		<button type="button">Filtros</button>
 	</div>
 
+	@if (especialidadActiva(); as especialidad) {
+		<p class="filtro-activo">
+			Especialidad: <strong>{{ especialidad.nombre }}</strong>
+			<a routerLink="/paciente/profesionales" aria-label="Quitar filtro de especialidad">✕ Quitar</a>
+		</p>
+	}
+
 	@if (error()) {
 		<p role="alert">No pudimos cargar los profesionales. Intentá de nuevo más tarde.</p>
 	} @else if (cargando()) {
@@ -20,11 +27,11 @@
 			@for (profesional of profesionales(); track profesional.id) {
 				<article class="professional-card">
 					<div class="doctor-avatar">{{ profesional.nombre[0] }}{{ profesional.apellido[0] }}</div>
-					<div><h3>{{ profesional.titulo }} {{ profesional.nombre }} {{ profesional.apellido }}</h3><p>{{ profesional.especialidad }}</p><span>⭐ {{ profesional.calificacion.toFixed(1) }}</span></div>
-					<button type="button" class="btn btn--outline" routerLink="/paciente/reservar-turno">Ver horarios</button>
+					<div><h3>{{ profesional.titulo }} {{ profesional.nombre }} {{ profesional.apellido }}</h3><p>{{ profesional.especialidad }}</p></div>
+					<button type="button" class="btn btn--outline" [routerLink]="['/paciente/reservar-turno', profesional.id]">Ver horarios</button>
 				</article>
 			} @empty {
-				<p>No encontramos profesionales para "{{ busqueda() }}".</p>
+				<p>No encontramos profesionales con ese criterio.</p>
 			}
 		</div>
 	}

@@ -24,11 +24,13 @@ export class CatalogoFacade {
     return rxResource({ stream: () => this.repo.getTiposEstudio(), defaultValue: [] });
   }
 
-  filtrarProfesionales(profesionales: Profesional[], busqueda: string): Profesional[] {
+  /** `especialidadId` null = todas. */
+  filtrarProfesionales(profesionales: Profesional[], busqueda: string, especialidadId: number | null): Profesional[] {
     const texto = normalizar(busqueda);
-    if (!texto) return profesionales;
-    return profesionales.filter((p) =>
-      normalizar(`${p.titulo} ${p.nombre} ${p.apellido} ${p.especialidad}`).includes(texto),
+    return profesionales.filter(
+      (p) =>
+        (especialidadId === null || p.especialidadId === especialidadId) &&
+        normalizar(`${p.titulo} ${p.nombre} ${p.apellido} ${p.especialidad}`).includes(texto),
     );
   }
 

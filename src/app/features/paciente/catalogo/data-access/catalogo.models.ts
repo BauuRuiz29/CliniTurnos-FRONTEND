@@ -12,8 +12,8 @@ export interface Profesional {
   titulo: "Dr." | "Dra."; 
   nombre: string;
   apellido: string;
+  especialidadId: number;
   especialidad: string;
-  calificacion: number;
 }
 
 /** Estudio que se puede solicitar (catálogo), no el estudio de un paciente. */
