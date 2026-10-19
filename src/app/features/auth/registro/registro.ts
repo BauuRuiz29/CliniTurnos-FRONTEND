@@ -2,20 +2,13 @@ import { Component, ElementRef, effect, inject, signal, viewChild } from '@angul
 import { AbstractControl, NonNullableFormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Genero, TipoDocumento } from '../../../core/models/enums';
+import { GENEROS, PATRON_TELEFONO, hoyIso, noFutura } from '../../../shared/utils/formularios';
 import { RegistroPaciente, RegistroRepository } from '../data-access/registro.repository';
-import { formatDate } from '@angular/common';
 
 type Campo = keyof Registro['form']['controls'];
 
 // Tras registrarse, CU01 redirige al login "después de unos segundos".
 const REDIRECCION_MS = 3000;
-
-const GENEROS: { valor: Genero; texto: string }[] = [
-  { valor: Genero.FEMENINO, texto: 'Femenino' },
-  { valor: Genero.MASCULINO, texto: 'Masculino' },
-  { valor: Genero.NO_BINARIO, texto: 'No binario' },
-  { valor: Genero.PREFIERO_NO_DECIRLO, texto: 'Prefiero no decirlo' },
-];
 
 /** Alta de pacientes [R01, CU01]. Los profesionales los crea el administrador [R16]. */
 @Component({
@@ -42,7 +35,7 @@ export class Registro {
       tipoIdentificacion: [TipoDocumento.DNI as TipoDocumento, Validators.required],
       numIdentificacion: ['', [Validators.required, Validators.maxLength(20)]],
       fechaNacimiento: ['', [Validators.required, noFutura]],
-      telefono: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(/^[0-9+()\s-]{6,}$/)]], //regex telefono valido
+      telefono: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(PATRON_TELEFONO)]],
       correo: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       login: ['', [Validators.required, Validators.maxLength(50)]],
       password: ['', [Validators.required, Validators.minLength(8)]],
@@ -102,14 +95,6 @@ export class Registro {
   volverHome(): void {
     this.router.navigate(['/']);
   }
-}
- 
-function hoyIso(): string {
-  return formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
-}
-
-function noFutura(control: AbstractControl<string>): ValidationErrors | null {
-  return control.value && control.value > hoyIso() ? { fechaFutura: true } : null;
 }
 
 function validarRegistro(group: AbstractControl): ValidationErrors | null {
