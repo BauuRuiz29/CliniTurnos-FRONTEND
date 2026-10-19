@@ -1,0 +1,659 @@
+
+<div class="admin-layout">
+
+  <aside class="sidebar">
+    <button class="brand" (click)="cambiarSeccion('profesional')">
+      <span class="brand-symbol">✚</span>
+      <span>CliniTurnos</span>
+    </button>
+
+    <p class="sidebar-caption">ADMINISTRACIÓN</p>
+
+    <nav class="navigation">
+      <button class="nav-item" (click)="cambiarSeccion('configuracion')">
+        <span class="nav-icon">⌂</span>
+        <span>Resumen</span>
+      </button>
+
+      <button class="nav-item">
+        <span class="nav-icon">▦</span>
+        <span>Turnos</span>
+      </button>
+
+      <button
+        class="nav-item"
+        [class.active]="seccion === 'profesional'"
+        (click)="cambiarSeccion('profesional')">
+        <span class="nav-icon">♙</span>
+        <span>Profesionales</span>
+      </button>
+
+      <button class="nav-item">
+        <span class="nav-icon">♧</span>
+        <span>Pacientes</span>
+      </button>
+
+      <button
+        class="nav-item"
+        [class.active]="seccion === 'especialidad'"
+        (click)="cambiarSeccion('especialidad')">
+        <span class="nav-icon">♙</span>
+        <span>Especialidades</span>
+      </button>
+
+      <button class="nav-item">
+        <span class="nav-icon">♧</span>
+        <span>Laboratorio</span>
+      </button>
+
+      <button class="nav-item">
+        <span class="nav-icon">▤</span>
+        <span>Informes</span>
+      </button>
+
+      <button
+        class="nav-item"
+        [class.active]="seccion === 'configuracion'"
+        (click)="cambiarSeccion('configuracion')">
+        <span class="nav-icon">⚙</span>
+        <span>Configuración</span>
+        <span class="nav-chevron">⌄</span>
+      </button>
+    </nav>
+
+    <button class="logout" (click)="cerrarSesion()">
+      <span>⇥</span>
+      Cerrar sesión
+    </button>
+  </aside>
+
+  <main class="main-area">
+
+    <header class="topbar">
+      <div class="breadcrumbs">
+        <span>Administración</span>
+        <span class="breadcrumb-arrow">›</span>
+
+        <strong *ngIf="seccion === 'profesional'">
+          Profesionales <span>›</span> Nuevo profesional
+        </strong>
+
+        <strong *ngIf="seccion === 'especialidad'">
+          Especialidades <span>›</span> Nueva especialidad
+        </strong>
+
+        <strong *ngIf="seccion === 'configuracion'">
+          Configuración <span>›</span> Configuración del lugar
+        </strong>
+      </div>
+
+      <div class="account">
+        <button class="notification-button" aria-label="Notificaciones">
+          ♧
+          <span class="notification-dot"></span>
+        </button>
+
+        <div class="account-avatar">A</div>
+
+        <div class="account-info">
+          <strong>Admin</strong>
+          <span>Administrador</span>
+        </div>
+
+        <span class="account-chevron">⌄</span>
+      </div>
+    </header>
+
+    <div class="page-content">
+
+      <!-- NUEVO PROFESIONAL -->
+
+      <section *ngIf="seccion === 'profesional'" class="page-section">
+
+        <div class="page-heading">
+          <div class="heading-icon">♧</div>
+          <div>
+            <h1>Nuevo profesional</h1>
+            <p>Completá los datos del profesional para darlo de alta en el sistema.</p>
+          </div>
+        </div>
+
+        <form (ngSubmit)="guardarProfesional()" #profForm="ngForm">
+
+          <section class="form-card personal-card">
+            <h2>Datos personales</h2>
+
+            <div class="personal-grid">
+
+              <div class="photo-column">
+                <div class="photo-preview">
+                  <img *ngIf="fotoProfesional" [src]="fotoProfesional" alt="Foto del profesional">
+                  <span *ngIf="!fotoProfesional" class="user-placeholder">●</span>
+                </div>
+
+                <label class="button-outline upload-button">
+                  Subir foto
+                  <input
+                    type="file"
+                    accept="image/*"
+                    (change)="cargarArchivo($event, 'foto')"
+                    hidden>
+                </label>
+
+                <small>Formatos permitidos: JPG, PNG. Máx. 2 MB</small>
+              </div>
+
+              <div class="fields-grid personal-fields">
+
+                <label class="field">
+                  <span>Nombre <b>*</b></span>
+                  <input
+                    type="text"
+                    name="nombre"
+                    [(ngModel)]="profesional.nombre"
+                    placeholder="Ej.: Juan"
+                    required>
+                </label>
+
+                <label class="field">
+                  <span>Apellido <b>*</b></span>
+                  <input
+                    type="text"
+                    name="apellido"
+                    [(ngModel)]="profesional.apellido"
+                    placeholder="Ej.: Pérez"
+                    required>
+                </label>
+
+                <label class="field">
+                  <span>DNI <b>*</b></span>
+                  <input
+                    type="text"
+                    name="dni"
+                    [(ngModel)]="profesional.dni"
+                    placeholder="Ej.: 12345678"
+                    required>
+                </label>
+
+                <label class="field">
+                  <span>Fecha de nacimiento</span>
+                  <input
+                    type="date"
+                    name="nacimiento"
+                    [(ngModel)]="profesional.nacimiento">
+                </label>
+
+                <label class="field">
+                  <span>Correo electrónico <b>*</b></span>
+                  <input
+                    type="email"
+                    name="email"
+                    [(ngModel)]="profesional.email"
+                    placeholder="ejemplo@clinica.com"
+                    required>
+                </label>
+
+                <label class="field">
+                  <span>Teléfono <b>*</b></span>
+                  <input
+                    type="tel"
+                    name="telefono"
+                    [(ngModel)]="profesional.telefono"
+                    placeholder="Ej.: 11 1234 5678"
+                    required>
+                </label>
+
+              </div>
+            </div>
+          </section>
+
+          <section class="form-card professional-card">
+            <h2>Información profesional</h2>
+
+            <div class="fields-grid professional-fields">
+
+              <label class="field">
+                <span>Rol <b>*</b></span>
+                <select name="rol" [(ngModel)]="profesional.rol" required>
+                  <option value="">Seleccionar rol</option>
+                  <option *ngFor="let rol of roles" [value]="rol">
+                    {{ rol }}
+                  </option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Especialidad <b>*</b></span>
+                <select
+                  name="especialidad"
+                  [(ngModel)]="profesional.especialidad"
+                  required>
+                  <option value="">Seleccionar especialidad</option>
+                  <option *ngFor="let esp of especialidades" [value]="esp">
+                    {{ esp }}
+                  </option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Matrícula <b>*</b></span>
+                <input
+                  type="text"
+                  name="matricula"
+                  [(ngModel)]="profesional.matricula"
+                  placeholder="Ej.: MN 123456"
+                  required>
+              </label>
+
+              <label class="field">
+                <span>Subespecialidad</span>
+                <select
+                  name="subespecialidad"
+                  [(ngModel)]="profesional.subespecialidad">
+                  <option value="">Seleccionar (opcional)</option>
+                  <option>Cardiología infantil</option>
+                  <option>Clínica médica</option>
+                  <option>Cirugía</option>
+                  <option>Otra</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Consultorio</span>
+                <select
+                  name="consultorio"
+                  [(ngModel)]="profesional.consultorio">
+                  <option value="">Seleccionar consultorio</option>
+                  <option *ngFor="let c of consultorios" [value]="c">
+                    {{ c }}
+                  </option>
+                </select>
+              </label>
+
+              <div class="field">
+                <span>Modalidad de atención</span>
+                <div class="checkbox-group">
+                  <label>
+                    <input
+                      type="checkbox"
+                      [checked]="profesional.presencial"
+                      (change)="cambiarModalidad('presencial')">
+                    Presencial
+                  </label>
+
+                  <label>
+                    <input
+                      type="checkbox"
+                      [checked]="profesional.virtual"
+                      (change)="cambiarModalidad('virtual')">
+                    Virtual
+                  </label>
+
+                  <label>
+                    <input
+                      type="checkbox"
+                      [checked]="profesional.ambas"
+                      (change)="cambiarModalidad('ambas')">
+                    Ambas
+                  </label>
+                </div>
+              </div>
+
+              <label class="field full-width">
+                <span>Observaciones</span>
+                <textarea
+                  name="observaciones"
+                  [(ngModel)]="profesional.observaciones"
+                  placeholder="Información adicional (opcional)"
+                  rows="2"></textarea>
+              </label>
+
+            </div>
+          </section>
+
+          <div class="form-actions">
+            <button type="button" class="button-secondary" (click)="cancelar()">
+              Cancelar
+            </button>
+            <button type="submit" class="button-primary">
+              Guardar profesional
+            </button>
+          </div>
+
+        </form>
+      </section>
+
+      <!-- NUEVA ESPECIALIDAD -->
+
+      <section *ngIf="seccion === 'especialidad'" class="page-section">
+
+        <div class="page-heading">
+          <div class="heading-icon">♧</div>
+          <div>
+            <h1>Nueva especialidad</h1>
+            <p>Completá los datos para crear una nueva especialidad.</p>
+          </div>
+        </div>
+
+        <form (ngSubmit)="guardarEspecialidad()" #espForm="ngForm">
+
+          <section class="form-card specialty-card">
+            <h2>Información de la especialidad</h2>
+
+            <label class="field specialty-name">
+              <span>Nombre de la especialidad <b>*</b></span>
+              <input
+                type="text"
+                name="nombreEspecialidad"
+                [(ngModel)]="especialidad.nombre"
+                placeholder="Ej.: Cardiología"
+                maxlength="100"
+                required>
+            </label>
+
+            <label class="field description-field">
+              <span>Descripción</span>
+              <textarea
+                name="descripcion"
+                [(ngModel)]="especialidad.descripcion"
+                placeholder="Descripción de la especialidad (opcional)"
+                maxlength="200"
+                rows="4"></textarea>
+              <small class="character-count">
+                {{ especialidad.descripcion.length }}/200
+              </small>
+            </label>
+
+            <div class="field icon-field">
+              <span>Icono</span>
+              <p>Seleccioná un icono que represente la especialidad</p>
+
+              <div class="icon-picker">
+                <button
+                  type="button"
+                  *ngFor="let icono of iconos; let i = index"
+                  [class.selected]="iconoSeleccionado === i"
+                  [attr.aria-label]="icono.nombre"
+                  [title]="icono.nombre"
+                  (click)="seleccionarIcono(i)">
+                  {{ icono.simbolo }}
+                </button>
+              </div>
+            </div>
+
+            <div class="field state-field">
+              <span>Estado</span>
+
+              <label class="switch-row">
+                <input
+                  type="checkbox"
+                  name="especialidadActiva"
+                  [(ngModel)]="especialidad.activa">
+                <span class="switch"></span>
+                <strong>{{ especialidad.activa ? 'Activa' : 'Inactiva' }}</strong>
+              </label>
+
+              <small>La especialidad estará disponible para ser asignada.</small>
+            </div>
+
+          </section>
+
+          <div class="form-actions">
+            <button type="button" class="button-secondary" (click)="cancelar()">
+              Cancelar
+            </button>
+            <button type="submit" class="button-primary">
+              Guardar especialidad
+            </button>
+          </div>
+
+        </form>
+      </section>
+
+      <!-- CONFIGURACIÓN DEL LUGAR -->
+
+      <section *ngIf="seccion === 'configuracion'" class="page-section">
+
+        <div class="page-heading">
+          <div class="heading-icon">♧</div>
+          <div>
+            <h1>Configuración del lugar</h1>
+            <p>Gestioná la información y preferencias generales del centro médico.</p>
+          </div>
+        </div>
+
+        <form (ngSubmit)="guardarConfiguracion()" #configForm="ngForm">
+
+          <div class="configuration-grid">
+
+            <section class="form-card center-card">
+              <h2>Información del centro</h2>
+
+              <div class="fields-grid center-fields">
+
+                <label class="field">
+                  <span>Nombre del centro <b>*</b></span>
+                  <input
+                    type="text"
+                    name="centroNombre"
+                    [(ngModel)]="centro.nombre"
+                    required>
+                </label>
+
+                <label class="field">
+                  <span>CUIT</span>
+                  <input
+                    type="text"
+                    name="cuit"
+                    [(ngModel)]="centro.cuit"
+                    placeholder="30-12345678-9">
+                </label>
+
+                <label class="field full-width">
+                  <span>Dirección <b>*</b></span>
+                  <input
+                    type="text"
+                    name="direccion"
+                    [(ngModel)]="centro.direccion"
+                    required>
+                </label>
+
+                <label class="field">
+                  <span>Ciudad <b>*</b></span>
+                  <input
+                    type="text"
+                    name="ciudad"
+                    [(ngModel)]="centro.ciudad"
+                    required>
+                </label>
+
+                <label class="field">
+                  <span>Provincia <b>*</b></span>
+                  <select
+                    name="provincia"
+                    [(ngModel)]="centro.provincia"
+                    required>
+                    <option *ngFor="let provincia of provincias" [value]="provincia">
+                      {{ provincia }}
+                    </option>
+                  </select>
+                </label>
+
+                <label class="field">
+                  <span>Código postal <b>*</b></span>
+                  <input
+                    type="text"
+                    name="codigoPostal"
+                    [(ngModel)]="centro.codigoPostal"
+                    required>
+                </label>
+
+                <label class="field">
+                  <span>Teléfono <b>*</b></span>
+                  <input
+                    type="tel"
+                    name="centroTelefono"
+                    [(ngModel)]="centro.telefono"
+                    required>
+                </label>
+
+                <label class="field">
+                  <span>Correo electrónico <b>*</b></span>
+                  <input
+                    type="email"
+                    name="centroEmail"
+                    [(ngModel)]="centro.email"
+                    required>
+                </label>
+
+                <label class="field">
+                  <span>Sitio web</span>
+                  <input
+                    type="text"
+                    name="web"
+                    [(ngModel)]="centro.web"
+                    placeholder="www.clinica.com">
+                </label>
+
+              </div>
+
+              <div class="field logo-field">
+                <span>Logo del centro</span>
+
+                <div class="logo-controls">
+                  <div class="logo-preview">
+                    <img *ngIf="logoCentro" [src]="logoCentro" alt="Logo del centro">
+                    <div *ngIf="!logoCentro" class="logo-default">
+                      <span>✚</span>
+                      <strong>CliniTurnos</strong>
+                    </div>
+                  </div>
+
+                  <div class="logo-upload">
+                    <label class="button-outline">
+                      Cambiar logo
+                      <input
+                        type="file"
+                        accept="image/*"
+                        (change)="cargarArchivo($event, 'logo')"
+                        hidden>
+                    </label>
+                    <small>Formatos permitidos: JPG, PNG. Máx. 2 MB</small>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="form-card preferences-card">
+              <h2>Preferencias del sistema</h2>
+
+              <div class="preferences-fields">
+
+                <label class="field">
+                  <span>Zona horaria</span>
+                  <select name="zonaHoraria" [(ngModel)]="preferencias.zonaHoraria">
+                    <option>GMT-03:00 Buenos Aires</option>
+                    <option>GMT-04:00 Santiago</option>
+                    <option>GMT+00:00 Londres</option>
+                    <option>GMT-05:00 Nueva York</option>
+                  </select>
+                </label>
+
+                <label class="field">
+                  <span>Formato de fecha</span>
+                  <select name="formatoFecha" [(ngModel)]="preferencias.formatoFecha">
+                    <option>dd/mm/aaaa</option>
+                    <option>mm/dd/aaaa</option>
+                    <option>aaaa-mm-dd</option>
+                  </select>
+                </label>
+
+                <label class="field">
+                  <span>Formato de hora</span>
+                  <select name="formatoHora" [(ngModel)]="preferencias.formatoHora">
+                    <option>24 horas</option>
+                    <option>12 horas</option>
+                  </select>
+                </label>
+
+                <label class="field">
+                  <span>Duración por defecto de turnos</span>
+                  <select
+                    name="duracionTurno"
+                    [(ngModel)]="preferencias.duracionTurno">
+                    <option>15 minutos</option>
+                    <option>20 minutos</option>
+                    <option>30 minutos</option>
+                    <option>45 minutos</option>
+                    <option>60 minutos</option>
+                  </select>
+                </label>
+
+              </div>
+
+              <div class="preference-toggles">
+
+                <label class="preference-item">
+                  <input
+                    type="checkbox"
+                    name="turnosOnline"
+                    [(ngModel)]="preferencias.turnosOnline">
+                  <span class="switch"></span>
+                  <span class="preference-copy">
+                    <strong>Permitir turnos online</strong>
+                    <small>Los pacientes podrán reservar turnos desde la web.</small>
+                  </span>
+                </label>
+
+                <label class="preference-item">
+                  <input
+                    type="checkbox"
+                    name="recordatorios"
+                    [(ngModel)]="preferencias.recordatorios">
+                  <span class="switch"></span>
+                  <span class="preference-copy">
+                    <strong>Enviar recordatorios automáticos</strong>
+                    <small>El sistema enviará recordatorios por email y/o SMS.</small>
+                  </span>
+                </label>
+
+                <label class="preference-item">
+                  <input
+                    type="checkbox"
+                    name="confirmacion"
+                    [(ngModel)]="preferencias.confirmacion">
+                  <span class="switch"></span>
+                  <span class="preference-copy">
+                    <strong>Requiere confirmación de turno</strong>
+                    <small>Los turnos deberán ser confirmados por el profesional.</small>
+                  </span>
+                </label>
+
+              </div>
+            </section>
+
+          </div>
+
+          <div class="configuration-actions">
+            <button type="submit" class="button-primary">
+              Guardar cambios
+            </button>
+          </div>
+
+        </form>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<div
+  class="toast"
+  *ngIf="mostrarMensaje"
+  role="status"
+  aria-live="polite">
+  <span>{{ mensaje }}</span>
+  <button type="button" (click)="cerrarNotificacion()" aria-label="Cerrar aviso">
+    ×
+  </button>
+</div>

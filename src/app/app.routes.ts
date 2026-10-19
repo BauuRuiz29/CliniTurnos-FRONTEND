@@ -48,6 +48,13 @@ export const routes: Routes = [
   },
 
   {
+  path: 'administrador-formularios',
+    loadComponent: () =>
+      import('./features/administrador-formularios/administrador-formularios')
+        .then(m => m.AdministradorFormulariosComponent)
+  },
+
+  {
     path: '**',
     redirectTo: ''
   }
