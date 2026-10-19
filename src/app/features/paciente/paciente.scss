@@ -539,6 +539,23 @@
   color: #d18a17;
 }
 
+/* Badge por estado del turno (lista y detalle). RESERVADO usa el verde por defecto. */
+.estado-turno[data-estado='EN_CURSO'] {
+  background: #e8f0ff;
+  color: #2563eb;
+}
+
+.estado-turno[data-estado='FINALIZADO'] {
+  background: #eef1f5;
+  color: #4a5568;
+}
+
+.estado-turno[data-estado='CANCELADO'],
+.estado-turno[data-estado='AUSENTE'] {
+  background: #fdecec;
+  color: #c53030;
+}
+
 .cancel-button {
   border: 1px solid #f1b6b6;
 
@@ -911,6 +928,27 @@
 }
 
 
+.booking-doctor--static {
+  grid-template-columns: auto 1fr;
+
+  cursor: default;
+}
+
+.booking-error {
+  border: 1px solid #f5c2c0;
+
+  background: #fdf0ef;
+
+  color: #b42318;
+
+  border-radius: 7px;
+
+  padding: 10px 14px;
+
+  font-size: 11px;
+}
+
+
 /* =====================================================
    FECHA Y HORA
 ===================================================== */
@@ -1000,11 +1038,45 @@
 }
 
 .calendar__days button {
+  border: 1px solid #dce4ef;
+
+  color: #1f2a44;
+
+  cursor: pointer;
+}
+
+.calendar__days button.selected {
+  border-color: #2563eb;
+
   background: #2563eb;
 
   color: white;
+}
 
-  cursor: pointer;
+.calendar__days button[aria-disabled='true'],
+.time-grid button[aria-disabled='true'] {
+  border-color: transparent;
+
+  background: #f3f5f9;
+
+  color: #b4bccb;
+
+  text-decoration: line-through;
+
+  cursor: not-allowed;
+}
+
+.calendar__header button:disabled {
+  color: #c7cfdc;
+
+  cursor: default;
+}
+
+.calendar__days button:focus-visible,
+.time-grid button:focus-visible {
+  outline: 2px solid #2563eb;
+
+  outline-offset: 2px;
 }
 
 .time-selection h4 {
@@ -1037,7 +1109,7 @@
   cursor: pointer;
 }
 
-.time-grid button:hover,
+.time-grid button:not([aria-disabled='true']):hover,
 .time-grid button.selected {
   border-color: #2563eb;
 
