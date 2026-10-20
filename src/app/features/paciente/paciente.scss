@@ -3222,3 +3222,126 @@
 }
 
 }
+/* Notificaciones: copiado de profesional.scss (mismas clases). Sin columna de no leída: el DER no la tiene. */
+
+.table-tabs {
+  display: flex;
+  gap: 21px;
+  overflow-x: auto;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #e2e9f3;
+}
+
+.table-tabs button {
+  flex: 0 0 auto;
+  padding: 13px 2px 11px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #52617d;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.table-tabs button.active {
+  border-bottom-color: #0963e8;
+  color: #075de2;
+  font-weight: 600;
+}
+
+.notification-filters {
+  gap: 18px;
+}
+
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.notification-row {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  min-height: 81px;
+  padding: 12px;
+  border: 1px solid #e4eaf3;
+  border-radius: 5px;
+  background: #fff;
+  color: #233453;
+  text-align: left;
+  text-decoration: none;
+}
+
+a.notification-row[href]:hover {
+  background: #f9fbff;
+}
+
+.notification-symbol {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border: 1px solid #dce8fa;
+  border-radius: 5px;
+  background: #f1f6ff;
+  color: #0863e8;
+  font-size: 22px;
+}
+
+.notification-body {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.notification-body strong {
+  font-size: 12px;
+}
+
+.notification-body small {
+  color: #667590;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.notification-time {
+  color: #74819a;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.no-results {
+  padding: 25px;
+  color: #6c7a94;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .notification-row {
+    grid-template-columns: 33px minmax(0, 1fr);
+    gap: 8px;
+    padding: 9px;
+  }
+
+  .notification-symbol {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
+
+  .notification-body strong {
+    font-size: 11px;
+  }
+
+  .notification-body small {
+    font-size: 10px;
+  }
+
+  .notification-time {
+    display: none;
+  }
+}
