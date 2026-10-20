@@ -1,0 +1,50 @@
+<section class="screen detail-screen">
+  <div class="detail-breadcrumb">
+    <button type="button" routerLink="/paciente/informes" aria-label="Volver a informes médicos">←</button><span>Informes médicos</span><strong>›</strong><b>Detalle del informe</b>
+  </div>
+
+  @if (informe(); as i) {
+    <div class="detail-layout">
+      <div class="detail-main">
+        <section class="detail-header">
+          <div>
+            <h2>Informe médico</h2>
+            <p>{{ i.profesional.nombre }} - {{ i.especialidad }}</p>
+
+            <dl class="detalle-resumen">
+              <div><dt>Fecha</dt><dd>{{ fecha() }}</dd></div>
+              <div><dt>Lugar</dt><dd>{{ i.lugar.nombre }}</dd></div>
+            </dl>
+          </div>
+        </section>
+
+        <section class="detail-card">
+          <h3>Informe de la consulta</h3>
+          <div class="detail-row"><div class="detail-label"><span>♡</span><strong>Diagnóstico</strong></div><p>{{ i.diagnostico ?? 'Sin datos' }}</p></div>
+          <div class="detail-row"><div class="detail-label"><span>▤</span><strong>Plan de tratamiento</strong></div><p>{{ i.planTratamiento ?? 'Sin datos' }}</p></div>
+          <div class="detail-row" [class.detail-row--last]="!i.adjuntos.length"><div class="detail-label"><span>i</span><strong>Indicaciones</strong></div><p>{{ i.indicaciones ?? 'Sin datos' }}</p></div>
+          @if (i.adjuntos.length) {
+            <div class="detail-row detail-row--last">
+              <div class="detail-label"><span>□</span><strong>Archivos adjuntos</strong></div>
+              <!-- shortcut: sin back no hay archivos; solo se listan los títulos hasta que exista la descarga. -->
+              <p>@for (a of i.adjuntos; track a.id) { <strong>{{ a.titulo }}</strong> }</p>
+            </div>
+          }
+        </section>
+
+        <button type="button" class="detail-back" routerLink="/paciente/informes">← <span>Volver a informes médicos</span></button>
+      </div>
+
+      <aside class="detail-sidebar">
+        <section class="detail-side-card">
+          <h3>Acciones</h3>
+          <a class="detail-action detail-action--blue" [routerLink]="['/paciente/turnos', i.turnoId]"><span class="detail-action__icon">▣</span><span><strong>Ver turno</strong><small>Turno de esta consulta</small></span></a>
+          <!-- shortcut: sin back no hay PDF; habilitar cuando exista el endpoint de descarga. -->
+          <button type="button" class="detail-action detail-action--blue" disabled><span class="detail-action__icon">↓</span><span><strong>Descargar</strong><small>Disponible próximamente</small></span></button>
+        </section>
+      </aside>
+    </div>
+  } @else {
+    <p aria-live="polite">Cargando informe...</p>
+  }
+</section>

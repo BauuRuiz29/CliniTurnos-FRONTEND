@@ -1,0 +1,11 @@
+.informes-vacio {
+  margin: 0;
+  padding: 20px;
+  color: #718096;
+  font-size: 11px;
+}
+
+.report .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
