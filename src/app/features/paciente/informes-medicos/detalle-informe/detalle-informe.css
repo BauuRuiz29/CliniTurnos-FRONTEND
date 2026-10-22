@@ -1,0 +1,36 @@
+/* mismo resumen que detalle-turno. */
+
+.detalle-resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px 24px;
+  margin: 18px 0 0;
+}
+
+.detalle-resumen dt {
+  color: #718096;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.detalle-resumen dd {
+  margin: 4px 0 0;
+  color: #102047;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.detalle-resumen dd::first-letter {
+  text-transform: uppercase;
+}
+
+.detail-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+a.detail-action {
+  text-decoration: none;
+}

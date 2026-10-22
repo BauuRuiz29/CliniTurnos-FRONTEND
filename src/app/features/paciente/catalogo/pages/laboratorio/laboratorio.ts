@@ -23,6 +23,7 @@ const ICONO_POR_DEFECTO: IconoCategoria = { icon: '', width: 0, iconClass: 'labo
 @Component({
   imports: [RouterLink],
   selector: 'app-laboratorio',
+  styleUrl: './laboratorio.css',
   templateUrl: './laboratorio.html',
 })
 export class Laboratorio {

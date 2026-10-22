@@ -1,0 +1,29 @@
+<section class="screen">
+	<div class="section-heading">
+		<div><h2>Notificaciones</h2><p>Avisos sobre tus turnos e informes médicos</p></div>
+	</div>
+
+	<nav class="table-tabs notification-filters" aria-label="Filtrar notificaciones">
+		@for (f of filtros; track f) {
+			<button type="button" [class.active]="filtro() === f" [attr.aria-pressed]="filtro() === f" (click)="filtro.set(f)">{{ f }}</button>
+		}
+	</nav>
+
+	@if (error()) {
+		<p role="alert">No pudimos cargar tus notificaciones. Intentá de nuevo más tarde.</p>
+	} @else if (cargando()) {
+		<p aria-live="polite">Cargando notificaciones...</p>
+	} @else {
+		<div class="notifications-list">
+			@for (n of visibles(); track n.id) {
+				<a class="notification-row" [routerLink]="destino(n)">
+					<span class="notification-symbol" aria-hidden="true">{{ simbolo(n) }}</span>
+					<span class="notification-body"><strong>{{ n.asunto }}</strong><small>{{ n.mensaje }}</small></span>
+					<time class="notification-time" [attr.datetime]="n.fechaEnvio">{{ n.fechaEnvio | date: 'dd/MM/yyyy HH:mm' }}</time>
+				</a>
+			} @empty {
+				<p class="no-results">No hay notificaciones para mostrar.</p>
+			}
+		</div>
+	}
+</section>

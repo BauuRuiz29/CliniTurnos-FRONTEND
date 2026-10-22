@@ -1,46 +1,48 @@
 <section class="screen">
-	<div class="stats-grid">
-		<article class="stat-card stat-card--blue">
-			<span>Próximo turno</span>
-			<strong>24</strong>
-			<small>MAY.</small>
-			<div>10:30 hs.<br>Dr. Juan García<br>Cardiología</div>
-		</article>
-		<article class="stat-card stat-card--green">
-			<span>Turnos confirmados</span>
-			<strong>2</strong>
-			<button type="button" routerLink="/paciente/turnos">Ver mis turnos</button>
-		</article>
-		<article class="stat-card stat-card--purple">
-			<span>Informes disponibles</span>
-			<strong>3</strong>
-			<button type="button" routerLink="/paciente/informes">Ver informes</button>
-		</article>
-	</div>
+	@if (error()) {
+		<p role="alert">No pudimos cargar tus turnos. Intentá de nuevo más tarde.</p>
+	} @else if (cargando()) {
+		<p aria-live="polite">Cargando turnos...</p>
+	} @else {
+		<div class="stats-grid">
+			<article class="stat-card stat-card--blue">
+				<span>Próximo turno</span>
+				@if (proximo(); as t) {
+					<strong>{{ dia(t) }}</strong>
+					<small>{{ mes(t) }}</small>
+					<div>{{ t.horaInicio }} hs.<br>{{ t.profesional.nombre }}<br>{{ t.especialidad }}</div>
+				} @else {
+					<div>No tenés turnos próximos.</div>
+				}
+			</article>
+			<article class="stat-card stat-card--green">
+				<span>Turnos reservados</span>
+				<strong>{{ reservados().length }}</strong>
+				<button type="button" routerLink="/paciente/turnos">Ver mis turnos</button>
+			</article>
+			<article class="stat-card stat-card--purple">
+				<span>Informes disponibles</span>
+				<strong>{{ informesDisponibles }}</strong>
+				<button type="button" routerLink="/paciente/informes">Ver informes</button>
+			</article>
+		</div>
 
-	<div class="section-heading">
-		<div><h2>Próximos turnos</h2></div>
-		<button type="button" class="btn btn--primary" routerLink="/paciente/reservar-turno">+ Reservar turno</button>
-	</div>
+		<div class="section-heading">
+			<div><h2>Próximos turnos</h2></div>
+			<button type="button" class="btn btn--primary" routerLink="/paciente/especialidades">+ Reservar turno</button>
+		</div>
 
-	<div class="appointments">
-		<a class="appointment appointment--clickable" routerLink="/paciente/turnos/detalle">
-			<div class="appointment__date"><strong>24</strong><span>MAY.</span></div>
-			<div><strong>10:30 hs.</strong><span>Dr. Juan García</span></div>
-			<div><span>Cardiología</span><small>Clínica Centro</small></div>
-			<em>Confirmado</em><span class="appointment__arrow">›</span>
-		</a>
-		<a class="appointment appointment--clickable" routerLink="/paciente/turnos/detalle">
-			<div class="appointment__date"><strong>07</strong><span>JUN.</span></div>
-			<div><strong>09:00 hs.</strong><span>Dra. María López</span></div>
-			<div><span>Dermatología</span><small>Clínica Norte</small></div>
-			<em>Confirmado</em><span class="appointment__arrow">›</span>
-		</a>
-		<a class="appointment appointment--clickable" routerLink="/paciente/turnos/detalle">
-			<div class="appointment__date"><strong>21</strong><span>JUN.</span></div>
-			<div><strong>11:15 hs.</strong><span>Dr. Pablo Sánchez</span></div>
-			<div><span>Traumatología</span><small>Clínica Centro</small></div>
-			<em class="pending">Pendiente</em><span class="appointment__arrow">›</span>
-		</a>
-	</div>
+		<div class="appointments">
+			@for (t of proximos(); track t.id) {
+				<a class="appointment appointment--clickable" [routerLink]="['/paciente/turnos', t.id]">
+					<div class="appointment__date"><strong>{{ dia(t) }}</strong><span>{{ mes(t) }}</span></div>
+					<div><strong>{{ t.horaInicio }} hs.</strong><span>{{ t.profesional.nombre }}</span></div>
+					<div><span>{{ t.especialidad }}</span><small>{{ t.lugar.nombre }}</small></div>
+					<em class="estado-turno" [attr.data-estado]="t.estado">{{ estado(t) }}</em><span class="appointment__arrow">›</span>
+				</a>
+			} @empty {
+				<p class="turnos-vacio">No tenés turnos próximos.</p>
+			}
+		</div>
+	}
 </section>

@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormArray, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Genero, TipoDocumento } from '../../../core/models/enums';
 import { GENEROS, PATRON_TELEFONO, hoyIso, noFutura } from '../../../shared/utils/formularios';
@@ -11,6 +12,7 @@ import {
   SEVERIDADES,
   Severidad,
 } from './data-access/mis-datos.repository';
+import { ObrasSocialesRepository } from './data-access/obras-sociales.repository';
 
 type Campo = keyof MisDatos['form']['controls'];
 
@@ -35,6 +37,7 @@ export class MisDatos {
   readonly gruposSanguineos = GRUPOS_SANGUINEOS;
   readonly severidades = SEVERIDADES;
   readonly hoy = hoyIso();
+  readonly obrasSociales = toSignal(inject(ObrasSocialesRepository).listar(), { initialValue: [] });
 
   // Mismas reglas que el registro; largos máximos del DER (usuarios / pacientes).
   readonly form = this.fb.group({
@@ -47,6 +50,7 @@ export class MisDatos {
     telefono: ['', [Validators.required, Validators.maxLength(50), Validators.pattern(PATRON_TELEFONO)]],
     correo: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
     login: [''],
+    obraSocialId: [null as number | null],
     grupoSanguineo: [''],
     contactoEmergenciaNombre: ['', Validators.maxLength(50)],
     contactoEmergenciaNumero: ['', [Validators.maxLength(50), Validators.pattern(PATRON_TELEFONO)]],

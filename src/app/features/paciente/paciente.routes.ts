@@ -12,8 +12,9 @@ export const PACIENTE_ROUTES: Routes = [
 				path: 'inicio',
 				loadComponent: () => import('./inicio/inicio').then(m => m.Inicio),
 			},
+			{ path: 'reservar-turno', pathMatch: 'full', redirectTo: 'especialidades' },
 			{
-				path: 'reservar-turno',
+				path: 'reservar-turno/:profesionalId',
 				loadComponent: () => import('./reservar-turno/reservar-turno').then(m => m.ReservarTurno),
 			},
 			{
@@ -21,7 +22,7 @@ export const PACIENTE_ROUTES: Routes = [
 				loadComponent: () => import('./turnos/turnos').then(m => m.Turnos),
 			},
 			{
-				path: 'turnos/detalle',
+				path: 'turnos/:turnoId',
 				loadComponent: () => import('./turnos/detalle-turno/detalle-turno').then(m => m.DetalleTurno),
 			},
 			{
@@ -29,8 +30,16 @@ export const PACIENTE_ROUTES: Routes = [
 				loadComponent: () => import('./informes-medicos/informes-medicos').then(m => m.InformesMedicos),
 			},
 			{
+				path: 'informes/:informeId',
+				loadComponent: () => import('./informes-medicos/detalle-informe/detalle-informe').then(m => m.DetalleInforme),
+			},
+			{
 				path: 'mis-datos',
 				loadComponent: () => import('./mis-datos/mis-datos').then(m => m.MisDatos),
+			},
+			{
+				path: 'notificaciones',
+				loadComponent: () => import('./notificaciones/notificaciones').then(m => m.Notificaciones),
 			},
 			{
 				path: 'confirmacion/:type',

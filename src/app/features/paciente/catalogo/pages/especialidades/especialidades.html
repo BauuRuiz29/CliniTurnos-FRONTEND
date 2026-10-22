@@ -17,7 +17,7 @@
 				<article class="specialty-card">
 					<img [src]="imagen(especialidad.nombre)" [alt]="especialidad.nombre" width="70">
 					<h3>{{ especialidad.nombre }}</h3><p>{{ especialidad.descripcion }}</p>
-					<button type="button" routerLink="/paciente/reservar-turno">Ver profesionales</button>
+					<button type="button" routerLink="/paciente/profesionales" [queryParams]="{ especialidad: especialidad.id }">Ver profesionales</button>
 				</article>
 			} @empty {
 				<p>No hay especialidades disponibles.</p>

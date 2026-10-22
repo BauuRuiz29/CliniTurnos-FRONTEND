@@ -2,42 +2,82 @@
   <div class="detail-breadcrumb">
     <button type="button" routerLink="/paciente/turnos" aria-label="Volver a mis turnos">←</button><span>Mis turnos</span><strong>›</strong><b>Detalle del turno</b>
   </div>
-  <div class="detail-layout">
-    <div class="detail-main">
-      <section class="detail-header">
-        <div><h2>Detalle del turno</h2><span class="detail-status">Confirmado</span><p>Tu turno está confirmado. Te esperamos.</p></div>
-        <div class="detail-calendar"><div class="detail-calendar__top"><span></span><span></span></div><div class="detail-calendar__body"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="detail-calendar__check">✓</div></div>
-      </section>
-      <section class="detail-card">
-        <h3>Información del turno</h3>
-        <div class="detail-row"><div class="detail-label"><span>▣</span><strong>Fecha</strong></div><p>Martes, 17 de septiembre de 2026</p></div>
-        <div class="detail-row"><div class="detail-label"><span>◷</span><strong>Hora</strong></div><p>10:30 hs</p></div>
-        <div class="detail-row"><div class="detail-label"><span>♙</span><strong>Profesional</strong></div><p>Dr. Juan Manuel García</p></div>
-        <div class="detail-row"><div class="detail-label"><span>♡</span><strong>Especialidad</strong></div><p>Cardiología</p></div>
-        <div class="detail-row"><div class="detail-label"><span>▣</span><strong>Consultorio</strong></div><p>Consultorio 4 - Piso 1</p></div>
-        <div class="detail-row"><div class="detail-label"><span>⌖</span><strong>Lugar</strong></div><p><strong>Clínica Centro</strong><small>Av. Siempre Viva 123, CABA</small></p></div>
-        <div class="detail-row"><div class="detail-label"><span>▤</span><strong>Motivo de consulta</strong></div><p>Control cardiológico</p></div>
-        <div class="detail-row detail-row--last"><div class="detail-label"><span>□</span><strong>Observaciones</strong></div><p>Traer estudios anteriores y medicación que esté tomando actualmente.</p></div>
-      </section>
-      <section class="preparation-card"><h3>Preparación previa (si aplica)</h3><div class="preparation-message"><span>⚗</span><strong>No se requiere preparación especial para este turno.</strong></div></section>
-      <button type="button" class="detail-back" routerLink="/paciente/turnos">← <span>Volver a mis turnos</span></button>
+
+  @if (turno(); as t) {
+    <div class="detail-layout">
+      <div class="detail-main">
+        <section class="detail-header">
+          <div>
+            <h2>Detalle del turno</h2>
+            <span class="detail-status estado-turno" [attr.data-estado]="t.estado">{{ estadoTexto() }}</span>
+            <p>{{ mensaje() }}</p>
+
+            <dl class="detalle-resumen">
+              <div><dt>Fecha</dt><dd>{{ fecha() }}</dd></div>
+              <div><dt>Hora</dt><dd>{{ t.horaInicio }} hs.</dd></div>
+              <div><dt>Lugar</dt><dd>{{ t.lugar.nombre }}</dd></div>
+              @if (t.comentario) {
+                <div><dt>Motivo</dt><dd>{{ t.comentario }}</dd></div>
+              }
+            </dl>
+          </div>
+          <div class="detail-calendar" aria-hidden="true"><div class="detail-calendar__top"><span></span><span></span></div><div class="detail-calendar__body"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><div class="detail-calendar__check">✓</div></div>
+        </section>
+
+        <section class="detail-card">
+          <h3>Información del turno</h3>
+          <div class="detail-row"><div class="detail-label"><span>▣</span><strong>Fecha</strong></div><p>{{ fecha() }}</p></div>
+          <div class="detail-row"><div class="detail-label"><span>◷</span><strong>Hora</strong></div><p>{{ t.horaInicio }} a {{ t.horaFin }} hs.</p></div>
+          <div class="detail-row"><div class="detail-label"><span>♙</span><strong>Profesional</strong></div><p>{{ t.profesional.nombre }}</p></div>
+          <div class="detail-row"><div class="detail-label"><span>♡</span><strong>Especialidad</strong></div><p>{{ t.especialidad }}</p></div>
+          <div class="detail-row" [class.detail-row--last]="!t.comentario"><div class="detail-label"><span>⌖</span><strong>Lugar</strong></div><p><strong>{{ t.lugar.nombre }}</strong><small>{{ t.lugar.direccion }}</small></p></div>
+          @if (t.comentario) {
+            <div class="detail-row detail-row--last"><div class="detail-label"><span>▤</span><strong>Motivo de consulta</strong></div><p>{{ t.comentario }}</p></div>
+          }
+        </section>
+
+        <button type="button" class="detail-back" routerLink="/paciente/turnos">← <span>Volver a mis turnos</span></button>
+      </div>
+
+      @if (reservado() || finalizado()) {
+        <aside class="detail-sidebar">
+          <section class="detail-side-card">
+            <h3>Acciones</h3>
+            @if (reservado()) {
+              <button type="button" class="detail-action detail-action--blue" [disabled]="!modificable()" (click)="reprogramar()"><span class="detail-action__icon">▣</span><span><strong>Reprogramar turno</strong><small>Elegí otra fecha y horario</small></span></button>
+              <button type="button" class="detail-action detail-action--red" [disabled]="!modificable()" (click)="pedirCancelacion()"><span class="detail-action__icon">×</span><span><strong>Cancelar turno</strong><small>Cancelar este turno</small></span></button>
+              @if (!modificable()) {
+                <p class="detalle-aviso">Faltan menos de {{ ventanaHoras }} hs. para el turno: ya no se puede cancelar ni reprogramar.</p>
+              }
+            } @else {
+              <a class="detail-action detail-action--blue" routerLink="/paciente/informes"><span class="detail-action__icon">▤</span><span><strong>Ver informe</strong><small>Informe médico de esta consulta</small></span></a>
+            }
+            @if (error()) { <p class="detalle-error" role="alert">{{ error() }}</p> }
+          </section>
+
+          @if (reservado()) {
+            <section class="detail-side-card">
+              <h3 class="important-title"><span>i</span>Información importante</h3>
+              <div class="important-item"><span>◷</span><div><strong>Llegá 15 minutos antes</strong><p>Te recomendamos llegar con anticipación para realizar el check-in.</p></div></div>
+              <div class="important-item"><span>□</span><div><strong>Documentación</strong><p>No olvides traer tu DNI y credencial de tu obra social.</p></div></div>
+              <div class="important-item"><span>◷</span><div><strong>Cancelaciones</strong><p>Podés cancelar o reprogramar tu turno hasta {{ ventanaHoras }} horas antes.</p></div></div>
+            </section>
+          }
+        </aside>
+      }
     </div>
 
-    <aside class="detail-sidebar">
-      <section class="detail-side-card">
-        <h3>Acciones</h3>
-        <button type="button" class="detail-action detail-action--blue"><span class="detail-action__icon">▣</span><span><strong>Reprogramar turno</strong><small>Elegí otra fecha y horario</small></span></button>
-        <button type="button" class="detail-action detail-action--red"><span class="detail-action__icon">×</span><span><strong>Cancelar turno</strong><small>Cancelar este turno</small></span></button>
-        <button type="button" class="detail-action detail-action--blue"><span class="detail-action__icon">↓</span><span><strong>Descargar comprobante</strong><small>Descargar en PDF</small></span></button>
-        <button type="button" class="detail-action detail-action--blue"><span class="detail-action__icon">▣</span><span><strong>Agregar al calendario</strong><small>Google, Outlook, Apple Calendar</small></span></button>
-      </section>
-      <section class="detail-side-card">
-        <h3 class="important-title"><span>i</span>Información importante</h3>
-        <div class="important-item"><span>◷</span><div><strong>Llegá 15 minutos antes</strong><p>Te recomendamos llegar con anticipación para realizar el check-in.</p></div></div>
-        <div class="important-item"><span>□</span><div><strong>Documentación</strong><p>No olvides traer tu DNI y credencial de tu obra social.</p></div></div>
-        <div class="important-item"><span>◷</span><div><strong>Cancelaciones</strong><p>Podés cancelar o reprogramar tu turno hasta 24 horas antes.</p></div></div>
-      </section>
-      <section class="detail-help"><h3>¿Necesitás ayuda?</h3><p>Contactanos por WhatsApp o por teléfono de lunes a viernes de 8 a 20 hs.</p><button type="button">Contactar</button></section>
-    </aside>
-  </div>
+    <dialog #confirmarCancelacion class="detalle-dialogo" aria-labelledby="detalle-dialogo-titulo">
+      <h2 id="detalle-dialogo-titulo">¿Cancelar el turno?</h2>
+      <p>{{ t.profesional.nombre }}, {{ fecha() }} a las {{ t.horaInicio }} hs. Esta acción no se puede deshacer.</p>
+      <div class="detalle-dialogo__acciones">
+        <button type="button" class="btn btn--outline" (click)="cerrarDialogo()" [disabled]="cancelando()">Volver</button>
+        <button type="button" class="btn btn--primary detalle-dialogo__cancelar" (click)="cancelar()" [disabled]="cancelando()">
+          {{ cancelando() ? 'Cancelando…' : 'Sí, cancelar' }}
+        </button>
+      </div>
+    </dialog>
+  } @else {
+    <p aria-live="polite">Cargando turno...</p>
+  }
 </section>

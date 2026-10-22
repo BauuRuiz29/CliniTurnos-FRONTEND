@@ -17,6 +17,7 @@ export class MisDatosMockRepository implements MisDatosRepository {
     telefono: '+54 11 1234 5678',
     correo: 'juan@cliniturnos.com',
     login: 'juanperez',
+    obraSocialId: 1, // OSDE 210
     grupoSanguineo: null,
     contactoEmergenciaNombre: null,
     contactoEmergenciaNumero: null,

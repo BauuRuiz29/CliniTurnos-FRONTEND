@@ -1,0 +1,53 @@
+/* ESPECIALIDADES */
+.specialties-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+.specialty-card {
+  background: white;
+  border: 1px solid #e1e7f0;
+  border-radius: 10px;
+  padding: 25px;
+  min-height: 175px;
+}
+.specialty-card > span {
+  color: #2563eb;
+  font-size: 24px;
+}
+.specialty-card h3 {
+  margin: 15px 0 8px;
+  font-size: 15px;
+}
+.specialty-card p {
+  margin: 0;
+  color: #718096;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.specialty-card button {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin-top: 15px;
+  color: #2563eb;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1000px) {
+  .specialties-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 750px) {
+  .specialties-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ESTUDIOS DE LABORATORIO */
+.laboratory-button {
+  white-space: nowrap;
+}

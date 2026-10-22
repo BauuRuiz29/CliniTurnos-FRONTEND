@@ -3,24 +3,23 @@
 		<div><h2>Informes médicos</h2><p>Accedé a tus informes médicos</p></div>
 	</div>
 
-	<div class="reports">
-		<article class="report">
-			<div class="report-icon">▤</div>
-			<div><strong>Informe - 10/05/2024</strong><span>Dr. Juan García - Cardiología</span><small>Clínica Centro</small></div>
-			<button type="button" class="btn btn--outline">Ver detalles</button>
-			<button type="button" class="btn btn--outline">Descargar</button>
-		</article>
-		<article class="report">
-			<div class="report-icon">▤</div>
-			<div><strong>Informe - 16/04/2024</strong><span>Dra. María López - Dermatología</span><small>Clínica Norte</small></div>
-			<button type="button" class="btn btn--outline">Ver detalles</button>
-			<button type="button" class="btn btn--outline">Descargar</button>
-		</article>
-		<article class="report">
-			<div class="report-icon">▤</div>
-			<div><strong>Informe - 20/03/2024</strong><span>Dr. Pablo Sánchez - Traumatología</span><small>Clínica Centro</small></div>
-			<button type="button" class="btn btn--outline">Ver detalles</button>
-			<button type="button" class="btn btn--outline">Descargar</button>
-		</article>
-	</div>
+	@if (error()) {
+		<p role="alert">No pudimos cargar tus informes. Intentá de nuevo más tarde.</p>
+	} @else if (cargando()) {
+		<p aria-live="polite">Cargando informes...</p>
+	} @else {
+		<div class="reports">
+			@for (i of informes(); track i.id) {
+				<article class="report">
+					<div class="report-icon">▤</div>
+					<div><strong>Informe - {{ fecha(i) }}</strong><span>{{ i.profesional.nombre }} - {{ i.especialidad }}</span><small>{{ i.lugar.nombre }}</small></div>
+					<button type="button" class="btn btn--outline" [routerLink]="['/paciente/informes', i.id]">Ver detalles</button>
+					<!-- shortcut: sin back no hay archivo que descargar; habilitar cuando exista el endpoint del PDF. -->
+					<button type="button" class="btn btn--outline" disabled title="Disponible próximamente">Descargar</button>
+				</article>
+			} @empty {
+				<p class="informes-vacio">Todavía no tenés informes médicos.</p>
+			}
+		</div>
+	}
 </section>

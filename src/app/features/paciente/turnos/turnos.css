@@ -1,0 +1,176 @@
+/* ESTADÍSTICAS */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.stat-card {
+  min-height: 135px;
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card--blue {
+  background: #2563eb;
+}
+.stat-card--green {
+  background: #18b5a5;
+}
+.stat-card--purple {
+  background: #6366dc;
+}
+.stat-card > span {
+  display: block;
+  font-size: 13px;
+  opacity: 0.9;
+}
+.stat-card strong {
+  display: inline-block;
+  margin-top: 15px;
+  font-size: 30px;
+}
+.stat-card small {
+  font-size: 11px;
+  margin-left: 3px;
+}
+.stat-card div {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.stat-card button {
+  position: absolute;
+  left: 20px;
+  bottom: 18px;
+  border: 0;
+  background: transparent;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* TURNOS */
+.appointments {
+  background: white;
+  border: 1px solid #e1e7f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.appointment {
+  min-height: 75px;
+  padding: 12px 20px;
+  display: grid;
+  grid-template-columns: 80px 1fr 1fr 100px 25px;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid #edf1f6;
+}
+.appointment:last-child {
+  border-bottom: 0;
+}
+.appointment__date strong {
+  display: block;
+  font-size: 21px;
+}
+.appointment__date span {
+  font-size: 11px;
+  color: #718096;
+}
+.appointment > div:not(.appointment__date) strong,
+.appointment > div:not(.appointment__date) span,
+.appointment > div:not(.appointment__date) small {
+  display: block;
+}
+.appointment > div:not(.appointment__date) strong {
+  font-size: 13px;
+}
+.appointment > div:not(.appointment__date) span {
+  margin-top: 4px;
+  font-size: 12px;
+}
+.appointment > div:not(.appointment__date) small {
+  margin-top: 3px;
+  color: #718096;
+  font-size: 11px;
+}
+.appointment em {
+  padding: 5px 8px;
+  border-radius: 5px;
+  background: #e7f7f0;
+  color: #15946c;
+  font-size: 11px;
+  font-style: normal;
+  text-align: center;
+}
+.appointment .estado-turno[data-estado=EN_CURSO] {
+  background: #e8f0ff;
+  color: #2563eb;
+}
+.appointment .estado-turno[data-estado=FINALIZADO] {
+  background: #eef1f5;
+  color: #4a5568;
+}
+.appointment .estado-turno[data-estado=CANCELADO],
+.appointment .estado-turno[data-estado=AUSENTE] {
+  background: #fdecec;
+  color: #c53030;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1000px) {
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 750px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .appointment {
+    grid-template-columns: 60px 1fr;
+    gap: 10px;
+  }
+  .appointment > div:nth-child(3),
+  .appointment em,
+  .appointment > span {
+    display: none;
+  }
+}
+
+/* DETALLE DEL TURNO */
+.appointment--clickable {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.appointment--clickable:hover {
+  background: #f8faff;
+}
+.appointment__arrow {
+  color: #2563eb;
+  font-size: 23px;
+  font-weight: 400;
+}
+
+/* Propios de la pantalla */
+.turnos-titulo {
+  margin: 24px 0 10px;
+  font-size: 15px;
+}
+
+.turnos-titulo:first-of-type {
+  margin-top: 0;
+}
+
+.turnos-vacio {
+  margin: 0;
+  padding: 20px;
+  color: #718096;
+  font-size: 13px;
+}
