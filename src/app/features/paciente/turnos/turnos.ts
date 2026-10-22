@@ -5,10 +5,9 @@ import { RouterLink } from '@angular/router';
 import { EstadoTurno } from '../../../core/models/enums';
 import { ESTADO_TURNO_TEXTO, TurnoPaciente, TurnosRepository } from './data-access/turnos.repository';
 
-// Un turno vencido sin atender lo pasa el back a AUSENTE, así que el estado alcanza para separar.
 const ACTIVOS: EstadoTurno[] = [EstadoTurno.RESERVADO, EstadoTurno.EN_CURSO];
 
-/** Turnos próximos y pasados del paciente [R07]. Cancelar se hace desde el detalle. */
+/** Turnos del paciente, desde acá se accede al detalle del turno */
 @Component({
   imports: [RouterLink, NgTemplateOutlet],
   selector: 'app-turnos',

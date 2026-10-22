@@ -21,6 +21,7 @@ const SIMBOLO: Record<TipoNotificacion, string> = {
 @Component({
   imports: [DatePipe, RouterLink],
   selector: 'app-notificaciones',
+  styleUrl: './notificaciones.css',
   templateUrl: './notificaciones.html',
 })
 export class Notificaciones {

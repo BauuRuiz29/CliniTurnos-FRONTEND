@@ -8,7 +8,7 @@ import { InformeMedico, InformesRepository } from '../data-access/informes.repos
 @Component({
   imports: [RouterLink],
   selector: 'app-detalle-informe',
-  styleUrl: './detalle-informe.css',
+  styleUrls: ['../../detalle.css', './detalle-informe.css'],
   templateUrl: './detalle-informe.html',
 })
 export class DetalleInforme {

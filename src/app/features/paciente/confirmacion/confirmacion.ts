@@ -41,6 +41,7 @@ interface ConfirmationPage {
 @Component({
   selector: 'app-confirmacion',
   imports: [RouterLink],
+  styleUrl: './confirmacion.css',
   templateUrl: './confirmacion.html',
 })
 export class Confirmacion {

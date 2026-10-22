@@ -19,6 +19,7 @@ const SIN_DISPONIBILIDAD: Disponibilidad = { horarios: [], bloqueos: [], slots: 
 @Component({
   selector: 'app-reservar-turno',
   imports: [ReactiveFormsModule],
+  styleUrl: './reservar-turno.css',
   templateUrl: './reservar-turno.html',
 })
 export class ReservarTurno {

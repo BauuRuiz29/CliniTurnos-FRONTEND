@@ -33,10 +33,6 @@
 				<img src="notificacion.png" alt="" width="20">
 				Notificaciones
 			</a>
-			<button type="button" class="sidebar__item">
-				<img src="ayuda.png" alt="" width="20">
-				Ayuda
-			</button>
 		</nav>
 
 		<button type="button" class="sidebar__logout" (click)="cerrarSesion()">
@@ -50,7 +46,7 @@
 				<h1>Hola, Juan 👋</h1>
 				<p>Gestioná tus turnos de manera simple</p>
 			</div>
-			<div class="patient-user">
+			<div class="patient-user" routerLink="mis-datos">
 				<div class="patient-avatar">JP</div>
 				<div>
 					<strong>Juan Pérez</strong>

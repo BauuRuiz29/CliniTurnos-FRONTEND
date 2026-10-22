@@ -1,3 +1,31 @@
+/* MIS DATOS */
+.data-card {
+  background: white;
+  border: 1px solid #e1e7f0;
+  border-radius: 10px;
+  padding: 25px;
+  max-width: 700px;
+}
+.data-field {
+  margin-bottom: 18px;
+}
+.data-field label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.data-field input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #dce4ef;
+  border-radius: 6px;
+  padding: 11px;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+/* Propios de la pantalla */
 /* Sobre la base .data-card / .data-field de paciente.scss */
 
 .data-grupo {
@@ -9,7 +37,7 @@
 .data-grupo legend {
   margin-bottom: 14px;
   color: #101a35;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
 }
 
@@ -56,7 +84,7 @@
   padding: 11px;
   background: white;
   font-family: inherit;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .data-field input:focus,
@@ -81,7 +109,7 @@
 .data-ayuda,
 .data-estado {
   margin: 6px 0 0;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .data-error { color: #dc2626; }

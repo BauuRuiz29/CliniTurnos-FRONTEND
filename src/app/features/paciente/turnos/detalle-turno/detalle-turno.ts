@@ -21,7 +21,7 @@ const MENSAJE_ESTADO: Record<EstadoTurno, string> = {
 @Component({
   imports: [RouterLink],
   selector: 'app-detalle-turno',
-  styleUrl: './detalle-turno.css',
+  styleUrls: ['../../detalle.css', './detalle-turno.css'],
   templateUrl: './detalle-turno.html',
 })
 export class DetalleTurno {

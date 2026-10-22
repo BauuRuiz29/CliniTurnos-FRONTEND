@@ -1,4 +1,4 @@
-/* Sobre la base .detail-* de paciente.scss; mismo resumen que detalle-turno. */
+/* mismo resumen que detalle-turno. */
 
 .detalle-resumen {
   display: grid;
@@ -9,7 +9,7 @@
 
 .detalle-resumen dt {
   color: #718096;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
 }
@@ -17,7 +17,7 @@
 .detalle-resumen dd {
   margin: 4px 0 0;
   color: #102047;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
 }
 
