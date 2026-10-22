@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AdministradorFormularios } from './administrador-formularios';
+import { AdministradorFormulariosComponent } from './administrador-formularios';
 
 describe('AdministradorFormularios', () => {
-  let component: AdministradorFormularios;
-  let fixture: ComponentFixture<AdministradorFormularios>;
+  let component: AdministradorFormulariosComponent;
+  let fixture: ComponentFixture<AdministradorFormulariosComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AdministradorFormularios],
+      imports: [AdministradorFormulariosComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AdministradorFormularios);
+    fixture = TestBed.createComponent(AdministradorFormulariosComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
