@@ -35,9 +35,10 @@ export const routes: Routes = [
 
   {
     path: 'profesional',
-    loadComponent: () =>
-      import('./features/profesional/profesional')
-        .then(m => m.ProfesionalComponent)
+    canMatch: [rolGuard(Rol.MEDICO)],
+    loadChildren: () =>
+      import('./features/profesional/profesional.routes')
+        .then(m => m.PROFESIONAL_ROUTES)
   },
 
   {
