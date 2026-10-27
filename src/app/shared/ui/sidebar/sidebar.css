@@ -1,0 +1,95 @@
+/* El host no genera caja: el <aside> se comporta como hijo directo del shell. */
+:host {
+  display: contents;
+}
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 225px;
+  background: white;
+  border-right: 1px solid #e2e8f0;
+  padding: 25px 14px;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+.sidebar__logo {
+  padding: 0 12px 28px;
+  border-bottom: 1px solid #edf1f6;
+}
+.sidebar__logo img {
+  width: 135px;
+  display: block;
+}
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 22px;
+}
+.sidebar__item {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: #56647d;
+  padding: 11px 12px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.sidebar__item:hover {
+  background: #f2f6ff;
+  color: #2563eb;
+}
+.sidebar__item.active {
+  background: #edf4ff;
+  color: #2563eb;
+  font-weight: 600;
+}
+.sidebar__logout {
+  margin-top: auto;
+  border: 0;
+  background: transparent;
+  color: #56647d;
+  padding: 12px;
+  text-align: left;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* RESPONSIVE: el ancho tiene que coincidir con el margen del contenido de cada shell */
+@media (max-width: 1000px) {
+  .sidebar {
+    width: 190px;
+  }
+}
+@media (max-width: 750px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .sidebar__nav {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  .sidebar__item {
+    white-space: nowrap;
+  }
+  .sidebar__logout {
+    display: none;
+  }
+}

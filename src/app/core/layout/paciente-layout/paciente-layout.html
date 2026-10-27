@@ -1,44 +1,5 @@
 <main class="patient-page">
-	<aside class="sidebar">
-		<div class="sidebar__logo">
-			<img src="logo_horizontal.png" alt="CliniTurnos">
-		</div>
-
-		<nav class="sidebar__nav" aria-label="Navegación del paciente">
-			<a class="sidebar__item" routerLink="inicio" routerLinkActive="active" ariaCurrentWhenActive="page">
-				<img src="inicio.png" alt="" width="20">
-				Inicio
-			</a>
-			<a class="sidebar__item" routerLink="turnos" routerLinkActive="active" ariaCurrentWhenActive="page">
-				<img src="calendario.png" alt="" width="20">
-				Mis turnos
-			</a>
-			<a class="sidebar__item" routerLink="mis-datos" routerLinkActive="active" ariaCurrentWhenActive="page">
-				<img src="usuario.png" alt="" width="20">
-				Mis datos
-			</a>
-			<a class="sidebar__item" routerLink="profesionales" routerLinkActive="active" ariaCurrentWhenActive="page">
-				<img src="profesional.png" alt="" width="20">
-				Profesionales
-			</a>
-			<a class="sidebar__item" routerLink="especialidades" routerLinkActive="active" ariaCurrentWhenActive="page">
-				<img src="especialidad.png" alt="" width="20">
-				Especialidades
-			</a>
-			<a class="sidebar__item" routerLink="informes" routerLinkActive="active" ariaCurrentWhenActive="page">
-				<img src="informe.png" alt="" width="20">
-				Informes médicos
-			</a>
-			<a class="sidebar__item" routerLink="notificaciones" routerLinkActive="active" ariaCurrentWhenActive="page">
-				<img src="notificacion.png" alt="" width="20">
-				Notificaciones
-			</a>
-		</nav>
-
-		<button type="button" class="sidebar__logout" (click)="cerrarSesion()">
-			↪ Cerrar sesión
-		</button>
-	</aside>
+	<app-sidebar [items]="menu" ariaLabel="Navegación del paciente" (cerrarSesion)="cerrarSesion()" />
 
 	<section class="patient-content">
 		<header class="patient-header">

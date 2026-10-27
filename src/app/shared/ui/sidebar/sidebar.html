@@ -1,0 +1,18 @@
+<aside class="sidebar">
+	<div class="sidebar__logo">
+		<img src="logo_horizontal.png" alt="CliniTurnos">
+	</div>
+
+	<nav class="sidebar__nav" [attr.aria-label]="ariaLabel()">
+		@for (item of items(); track item.ruta) {
+			<a class="sidebar__item" [routerLink]="item.ruta" routerLinkActive="active" ariaCurrentWhenActive="page">
+				<img [src]="item.icono" alt="" width="20">
+				{{ item.texto }}
+			</a>
+		}
+	</nav>
+
+	<button type="button" class="sidebar__logout" (click)="cerrarSesion.emit()">
+		↪ Cerrar sesión
+	</button>
+</aside>
