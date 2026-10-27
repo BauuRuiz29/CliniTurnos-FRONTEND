@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/auth/auth.service';
+import { rutaInicio } from '../../../core/auth/inicio-por-rol';
 
 @Component({
   selector: 'app-login',
@@ -30,8 +31,8 @@ export class Login {
     }
 
     this.auth.login(this.login.trim(), this.password).subscribe({
-      // Token ya quedó guardado en localStorage (lo hace AuthService)
-      next: () => this.router.navigate(['/paciente']),
+      // Token ya quedó guardado en localStorage (lo hace AuthService); el rol sale del token
+      next: () => this.router.navigateByUrl(rutaInicio(this.auth.getRol())),
       // Si falla (401, 400, red, etc.)
       error: (err) => {
         this.errorMessage.set(
