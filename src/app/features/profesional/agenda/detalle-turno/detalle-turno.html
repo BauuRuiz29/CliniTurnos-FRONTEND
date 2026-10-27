@@ -1,0 +1,42 @@
+@if (turno; as turno) {
+  <header class="page-header detail-page-header">
+    <button type="button" class="back-button" routerLink="/profesional/agenda" aria-label="Volver a la agenda">←</button>
+    <h1>Detalle del turno</h1>
+  </header>
+
+  <div class="patient-heading">
+    <span class="patient-avatar large">{{ iniciales }}</span>
+    <div class="patient-heading-info">
+      <h2>{{ turno.nombre }}</h2>
+      <p>DNI {{ turno.dni }} · {{ turno.edad }} años</p>
+    </div>
+    <span class="status" [class.pending]="turno.estado === 'Pendiente'" [class.confirmed]="turno.estado === 'Confirmado'">{{ turno.estado }}</span>
+  </div>
+
+  <div class="patient-details">
+    <div class="patient-facts">
+      <div class="fact"><span>▦</span><div><strong>Fecha y hora</strong><p>21/05/2024 · {{ turno.hora }} hs</p></div></div>
+      <div class="fact"><span>♧</span><div><strong>Especialidad</strong><p>{{ turno.tipo }}</p></div></div>
+      <div class="fact"><span>◷</span><div><strong>Motivo de consulta</strong><p>{{ turno.motivo }}</p></div></div>
+      <div class="fact"><span>♙</span><div><strong>Obra social</strong><p>{{ turno.obraSocial }}</p></div></div>
+      <div class="fact"><span>⌕</span><div><strong>Teléfono</strong><p>{{ turno.telefono }}</p></div></div>
+      <div class="fact"><span>✉</span><div><strong>Email</strong><p>{{ turno.email }}</p></div></div>
+    </div>
+
+    <div class="record-side">
+      <article class="inner-card"><h3>Notas / Comentarios</h3><p class="clinical-note">{{ turno.notas }}</p></article>
+      <article class="inner-card">
+        <h3>Información adicional</h3>
+        <div class="additional-info"><span>Alergias</span><strong>Penicilina</strong></div>
+        <div class="additional-info"><span>Medicamentos</span><strong>Enalapril 10mg</strong></div>
+      </article>
+      <button type="button" class="button-primary" [routerLink]="['/profesional/turnos', turno.id, 'informe']">Comenzar consulta</button>
+      <button type="button" class="button-secondary" routerLink="/profesional/agenda">Volver</button>
+      <!-- TODO Fase B: reprogramar = elegir franja nueva; cancelar = respetar la ventana de 24 h [R12] -->
+      <div class="turn-actions">
+        <button type="button" class="text-link turn-actions__reschedule" [routerLink]="['/profesional/turnos', turno.id, 'reprogramado']">Reprogramar turno</button>
+        <button type="button" class="text-link turn-actions__cancel" [routerLink]="['/profesional/turnos', turno.id, 'cancelado']">Cancelar turno</button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,38 @@
+<header class="welcome-header">
+  <h1>Hola, {{ profesional.nombre }} <span class="wave">👋</span></h1>
+  <p>Gestioná tu agenda y pacientes</p>
+</header>
+
+<div class="stats-grid">
+  <article class="stat-card blue">
+    <span>Turnos de hoy</span><strong>{{ resumen.turnos }}</strong>
+    <button type="button" routerLink="/profesional/agenda">Ver agenda</button>
+  </article>
+  <article class="stat-card green">
+    <span>Turnos pendientes</span><strong>{{ pendientes }}</strong>
+  </article>
+  <article class="stat-card teal">
+    <span>Informes pendientes</span><strong>{{ resumen.informesPendientes }}</strong>
+    <button type="button" routerLink="/profesional/agenda">Ver pendientes</button>
+  </article>
+</div>
+
+<div class="section-title">
+  <h2>Próximos turnos de hoy</h2>
+  <button type="button" class="text-link" routerLink="/profesional/agenda">Ver todos</button>
+</div>
+
+<div class="panel">
+  @for (turno of proximos; track turno.id) {
+    <button type="button" class="appointment-row" [routerLink]="['/profesional/turnos', turno.id]">
+      <span class="calendar-icon">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg>
+      </span>
+      <strong class="appointment-time">{{ turno.hora }}</strong>
+      <span class="appointment-person"><strong>{{ turno.nombre }}</strong><small>DNI {{ turno.dni }}</small></span>
+      <span class="appointment-specialty">{{ turno.tipo }}</span>
+      <span class="status pending">{{ turno.estado }}</span>
+      <span class="row-arrow">›</span>
+    </button>
+  }
+</div>

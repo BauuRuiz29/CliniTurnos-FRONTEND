@@ -1,0 +1,106 @@
+.detail-page-header {
+  justify-content: flex-start;
+}
+.detail-page-header h1 {
+  flex: 1;
+}
+
+/* PACIENTE */
+.patient-heading {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 13px 0 20px;
+  border-bottom: 1px solid #e3eaf3;
+}
+.patient-avatar.large {
+  width: 54px;
+  height: 54px;
+  font-size: 15px;
+}
+.patient-heading-info {
+  flex: 1;
+  min-width: 0;
+}
+.patient-heading-info h2 {
+  margin: 0 0 7px;
+  font-size: 16px;
+}
+.patient-heading-info p {
+  margin: 0;
+  color: #6c7a94;
+  font-size: 11px;
+}
+
+/* DATOS DEL TURNO */
+.patient-details {
+  display: grid;
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+  gap: 25px;
+  padding-top: 23px;
+}
+.patient-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.record-side {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  min-width: 0;
+}
+.clinical-note {
+  min-height: 70px;
+  margin: 0;
+  padding: 11px;
+  border: 1px solid #edf1f6;
+  border-radius: 4px;
+  color: #66748d;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.additional-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px 0;
+  font-size: 11px;
+}
+.additional-info span {
+  color: #5b6983;
+}
+
+/* ACCIONES */
+.turn-actions {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+}
+.turn-actions__reschedule {
+  color: #d18a17;
+}
+.turn-actions__cancel {
+  color: #dc2626;
+}
+
+@media (max-width: 1100px) {
+  .patient-details {
+    gap: 14px;
+  }
+}
+@media (max-width: 750px) {
+  .patient-details {
+    grid-template-columns: 1fr;
+  }
+  .patient-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+  }
+}
+@media (max-width: 480px) {
+  .patient-facts {
+    grid-template-columns: 1fr;
+  }
+}

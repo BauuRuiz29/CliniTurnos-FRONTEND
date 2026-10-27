@@ -1,0 +1,119 @@
+.detail-page-header {
+  justify-content: flex-start;
+}
+.detail-page-header h1 {
+  flex: 1;
+}
+
+.medical-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 900px;
+}
+.medical-form > label,
+.field-label {
+  margin-top: 5px;
+  color: #283958;
+  font-size: 12px;
+  font-weight: 600;
+}
+.medical-form input,
+.medical-form textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid #dfe6f0;
+  border-radius: 5px;
+  background: #fff;
+  color: #263754;
+  font-size: 12px;
+}
+.medical-form textarea {
+  resize: vertical;
+  line-height: 1.55;
+}
+
+/* ESTUDIOS */
+.study-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.study-chips > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 10px;
+  border: 1px solid #dce7f8;
+  border-radius: 5px;
+  background: #f3f7ff;
+  color: #245aa8;
+  font-size: 11px;
+}
+.study-chips > span button,
+.file-attachment > button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #667895;
+}
+.add-study {
+  margin-left: 6px;
+}
+
+/* ADJUNTOS */
+.file-attachment {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px;
+  border: 1px solid #e1e8f2;
+  border-radius: 5px;
+  font-size: 11px;
+}
+.file-icon {
+  color: #0962e8;
+  font-size: 16px;
+}
+.file-attachment small {
+  margin-left: auto;
+  color: #71809a;
+}
+.medical-form > .file-picker {
+  position: relative;
+  align-self: flex-start;
+  color: #075de2;
+  cursor: pointer;
+  font-weight: 500;
+}
+.file-picker:focus-within {
+  outline: 2px solid #82b4ff;
+  outline-offset: 2px;
+}
+.file-picker input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 15px;
+  margin-top: 8px;
+  border-top: 1px solid #e6ebf3;
+}
+.form-footer > button {
+  min-width: 145px;
+}
+
+@media (max-width: 480px) {
+  .form-footer > button {
+    flex: 1;
+    min-width: 0;
+  }
+}

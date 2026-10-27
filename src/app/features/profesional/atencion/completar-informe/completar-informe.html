@@ -1,0 +1,41 @@
+<header class="page-header detail-page-header">
+  <button type="button" class="back-button" [routerLink]="['/profesional/turnos', turnoId]" aria-label="Volver al turno">←</button>
+  <h1>Completar informe médico</h1>
+</header>
+
+<form class="medical-form" (submit)="guardar($event)">
+  <label for="diagnostico">Diagnóstico</label>
+  <input id="diagnostico" name="diagnostico" [value]="diagnostico()" (input)="diagnostico.set($any($event.target).value)"/>
+
+  <label for="tratamiento">Plan de tratamiento</label>
+  <textarea id="tratamiento" name="tratamiento" rows="3" [value]="tratamiento()" (input)="tratamiento.set($any($event.target).value)"></textarea>
+
+  <label for="indicaciones">Indicaciones</label>
+  <textarea id="indicaciones" name="indicaciones" rows="2" [value]="indicaciones()" (input)="indicaciones.set($any($event.target).value)"></textarea>
+
+  <span class="field-label" id="estudios-label">Estudios solicitados</span>
+  <div class="study-chips" role="group" aria-labelledby="estudios-label">
+    @for (estudio of estudios(); track estudio) {
+      <span>{{ estudio }} <button type="button" [attr.aria-label]="'Quitar ' + estudio" (click)="quitarEstudio(estudio)">×</button></span>
+    }
+    <button type="button" class="text-link add-study" (click)="agregarEstudio()">＋ Agregar</button>
+  </div>
+
+  <span class="field-label">Archivos adjuntos</span>
+  @if (archivo()) {
+    <div class="file-attachment">
+      <span class="file-icon">▤</span><span>{{ archivo() }}</span><small>Adjunto</small>
+      <button type="button" aria-label="Quitar archivo" (click)="archivo.set('')">×</button>
+    </div>
+  }
+  <label class="file-picker">＋ Agregar archivo<input type="file" (change)="seleccionarArchivo($event)" accept=".pdf,.png,.jpg,.jpeg"/></label>
+
+  <div class="form-footer">
+    <button type="button" class="button-secondary" [routerLink]="['/profesional/turnos', turnoId]">Cancelar</button>
+    <button type="submit" class="button-primary">Guardar informe</button>
+  </div>
+</form>
+
+@if (mensaje()) {
+  <div class="toast" role="status">{{ mensaje() }}</div>
+}

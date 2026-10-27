@@ -1,0 +1,22 @@
+<header class="page-header"><h1>Agenda de turnos</h1></header>
+
+<nav class="table-tabs" aria-label="Filtrar turnos">
+  @for (f of filtros; track f) {
+    <button type="button" [class.active]="filtro() === f" [attr.aria-pressed]="filtro() === f" (click)="filtro.set(f)">{{ f }}</button>
+  }
+</nav>
+
+<div class="turnos-table">
+  @for (turno of turnos(); track turno.id) {
+    <button type="button" class="turno-row" [routerLink]="['/profesional/turnos', turno.id]">
+      <span class="date-block"><strong>{{ turno.dia }}</strong><small>{{ turno.mes }}</small></span>
+      <strong class="turno-time">{{ turno.hora }}</strong>
+      <span class="turno-person"><strong>{{ turno.nombre }}</strong><small>DNI {{ turno.dni }}</small></span>
+      <span class="turno-specialty">{{ turno.tipo }}</span>
+      <span class="status" [class.pending]="turno.estado === 'Pendiente'" [class.confirmed]="turno.estado === 'Confirmado'">{{ turno.estado }}</span>
+      <span class="row-arrow">›</span>
+    </button>
+  } @empty {
+    <p class="no-results">No hay turnos para mostrar.</p>
+  }
+</div>

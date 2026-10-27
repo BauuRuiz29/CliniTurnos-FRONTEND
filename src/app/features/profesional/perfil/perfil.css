@@ -1,0 +1,56 @@
+.profile {
+  display: grid;
+  grid-template-columns: 160px minmax(0, 1fr);
+  gap: 30px;
+}
+.profile__photo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #52617d;
+  font-size: 11px;
+}
+.profile__photo img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 30px;
+  max-width: 700px;
+}
+.profile-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: #283958;
+  font-weight: 600;
+}
+.profile-form input {
+  padding: 10px 12px;
+  border: 1px solid #dfe6f0;
+  border-radius: 5px;
+  background: #fff;
+  color: #263754;
+  font-weight: 400;
+}
+.profile-form__actions {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+@media (max-width: 750px) {
+  .profile {
+    grid-template-columns: 1fr;
+  }
+  .profile-form {
+    grid-template-columns: 1fr;
+  }
+  .profile-form > span {
+    display: none;
+  }
+}

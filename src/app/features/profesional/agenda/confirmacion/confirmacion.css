@@ -1,0 +1,67 @@
+:host {
+  display: block;
+  max-width: 900px;
+}
+
+.confirmation-status {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+.confirmation-status h1 {
+  margin: 0 0 5px;
+  color: #152345;
+  font-size: 21px;
+}
+.confirmation-status p {
+  margin: 0;
+  color: #52627e;
+}
+.confirmation-icon {
+  display: grid;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 10px;
+  font-size: 22px;
+}
+.confirmation-icon--reprogramado {
+  background: #fff4df;
+  color: #d18a17;
+}
+.confirmation-icon--cancelado {
+  background: #fde8e8;
+  color: #dc2626;
+}
+
+.confirmation-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.confirmation-message {
+  margin: 16px 0;
+  padding: 13px 15px;
+  border-radius: 5px;
+  font-size: 11px;
+}
+.confirmation-message--reprogramado {
+  background: #fff8e8;
+  color: #9a6510;
+}
+.confirmation-message--cancelado {
+  background: #fdeeee;
+  color: #b42318;
+}
+
+.confirmation-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.confirmation-actions > button {
+  min-width: 130px;
+}

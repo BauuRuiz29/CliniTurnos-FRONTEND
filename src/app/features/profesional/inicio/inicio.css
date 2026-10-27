@@ -1,0 +1,183 @@
+.welcome-header {
+  min-height: 35px;
+  margin-bottom: 28px;
+}
+.welcome-header h1 {
+  margin: 0;
+  color: #152345;
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.welcome-header p {
+  margin: 7px 0 0;
+  color: #667590;
+  font-size: 12px;
+}
+.wave {
+  font-size: 17px;
+}
+
+/* RESUMEN */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 130px;
+  padding: 17px 16px 14px;
+  border-radius: 8px;
+  color: #fff;
+}
+.stat-card > span {
+  min-height: 25px;
+  font-size: 11px;
+  line-height: 1.4;
+}
+.stat-card > strong {
+  margin: 3px 0 10px;
+  font-size: 31px;
+  line-height: 1;
+}
+.stat-card > button {
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  text-align: left;
+  font-size: 10px;
+}
+.stat-card.blue {
+  background: linear-gradient(135deg, #1470f4, #0753ce);
+}
+.stat-card.green {
+  background: linear-gradient(135deg, #13b99a, #079b80);
+}
+.stat-card.teal {
+  background: linear-gradient(135deg, #10b0ac, #079897);
+}
+
+/* PRÓXIMOS TURNOS */
+.appointment-row {
+  display: grid;
+  grid-template-columns: 26px 65px minmax(150px, 1.3fr) minmax(100px, .9fr) auto 18px;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 64px;
+  padding: 10px 15px;
+  border: 0;
+  border-bottom: 1px solid #e8edf4;
+  background: #fff;
+  color: #1c2c4c;
+  text-align: left;
+}
+.appointment-row:last-child {
+  border-bottom: 0;
+}
+.appointment-row:hover {
+  background: #f9fbff;
+}
+.calendar-icon {
+  color: #0862e8;
+}
+.calendar-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.appointment-time {
+  font-size: 13px;
+}
+.appointment-person {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+.appointment-person strong {
+  overflow: hidden;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.appointment-person small {
+  color: #71809a;
+  font-size: 10px;
+}
+.appointment-specialty {
+  color: #4c5d7b;
+  font-size: 11px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
+  .stats-grid {
+    gap: 10px;
+  }
+  .stat-card {
+    padding: 13px 11px;
+  }
+  .appointment-row {
+    grid-template-columns: 22px 52px minmax(110px, 1.2fr) minmax(70px, .8fr) auto 12px;
+    gap: 7px;
+    padding-inline: 9px;
+  }
+}
+@media (max-width: 750px) {
+  .welcome-header h1 {
+    font-size: 19px;
+  }
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    min-height: 115px;
+    padding: 14px;
+  }
+  .stat-card > strong {
+    font-size: 27px;
+  }
+  .appointment-row {
+    grid-template-columns: 22px 48px minmax(100px, 1fr) auto 12px;
+    gap: 7px;
+  }
+  .appointment-specialty {
+    display: none;
+  }
+}
+@media (max-width: 480px) {
+  .welcome-header h1 {
+    font-size: 16px;
+  }
+  .stat-card > span {
+    font-size: 10px;
+  }
+  .appointment-row {
+    grid-template-columns: 18px 43px minmax(0, 1fr) auto 9px;
+    gap: 5px;
+    padding-inline: 6px;
+  }
+  .appointment-person strong {
+    font-size: 10px;
+  }
+  .appointment-person small {
+    font-size: 9px;
+  }
+  .appointment-row .status {
+    padding: 4px 5px;
+    font-size: 9px;
+  }
+}

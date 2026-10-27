@@ -1,0 +1,36 @@
+<header class="page-header"><h1>Pacientes</h1></header>
+
+<div class="search-toolbar">
+  <label class="search-field">
+    <span aria-hidden="true">⌕</span>
+    <input placeholder="Buscar paciente por nombre, DNI o teléfono" aria-label="Buscar paciente" [value]="busqueda()" (input)="buscar($any($event.target).value)"/>
+  </label>
+  <button type="button" class="button-secondary" (click)="buscar('')">× Limpiar</button>
+</div>
+
+<div class="patients-table" role="table" aria-label="Pacientes">
+  <div class="patients-row patients-table-head" role="row">
+    <strong role="columnheader">Paciente</strong><strong role="columnheader">DNI</strong><strong role="columnheader">Teléfono</strong>
+    <strong role="columnheader">Última consulta</strong><strong role="columnheader">Acciones</strong>
+  </div>
+  @for (paciente of visibles(); track paciente.dni) {
+    <div class="patients-row" role="row">
+      <span class="patient-name-cell" role="cell"><span class="patient-avatar">{{ paciente.iniciales }}</span><strong>{{ paciente.nombre }}</strong></span>
+      <span role="cell">{{ paciente.dni }}</span><span role="cell">{{ paciente.telefono }}</span><span role="cell">{{ paciente.fecha }}</span>
+      <span role="cell">
+        <button type="button" class="view-button" [attr.aria-label]="'Ver perfil de ' + paciente.nombre" [routerLink]="['/profesional/turnos', turnoDe(paciente.dni)]">⊙</button>
+      </span>
+    </div>
+  } @empty {
+    <p class="no-results">No se encontraron pacientes.</p>
+  }
+</div>
+
+<nav class="pagination" aria-label="Páginas">
+  <button type="button" aria-label="Página anterior" (click)="pagina.set(pagina() > 1 ? pagina() - 1 : 1)">‹</button>
+  @for (n of [1, 2, 3]; track n) {
+    <button type="button" [class.current]="pagina() === n" [attr.aria-current]="pagina() === n ? 'page' : null" (click)="pagina.set(n)">{{ n }}</button>
+  }
+  <span>…</span>
+  <button type="button" aria-label="Página siguiente" (click)="pagina.set(pagina() + 1)">›</button>
+</nav>

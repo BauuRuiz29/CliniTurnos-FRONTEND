@@ -1,0 +1,43 @@
+<header class="page-header"><h1>Mi perfil</h1></header>
+
+<nav class="table-tabs" aria-label="Secciones del perfil">
+  @for (p of pestanas; track p) {
+    <button type="button" [class.active]="pestana() === p" [attr.aria-pressed]="pestana() === p" (click)="pestana.set(p)">{{ p }}</button>
+  }
+</nav>
+
+@switch (pestana()) {
+  @case ('Mis datos') {
+    <div class="profile">
+      <div class="profile__photo">
+        <img src="doctor-avatar.png" alt="Foto de perfil" width="110" height="110">
+        <span>Foto de perfil</span>
+      </div>
+      <form class="profile-form">
+        <label>Nombre completo<input [value]="profesional.nombreCompleto" disabled></label>
+        <label>Especialidad<input [value]="profesional.especialidad" disabled></label>
+        <label>DNI<input [value]="profesional.dni" disabled></label>
+        <label>Subespecialidad (opcional)<input [value]="profesional.subespecialidad" disabled></label>
+        <label>Fecha de nacimiento<input [value]="profesional.fechaNacimiento" disabled></label>
+        <label>Matrícula profesional<input [value]="profesional.matricula" disabled></label>
+        <label>Sexo<input [value]="profesional.sexo" disabled></label>
+        <div class="profile-form__actions"><button type="button" class="button-secondary" disabled>Editar datos</button></div>
+      </form>
+    </div>
+  }
+  @case ('Contacto') {
+    <form class="profile-form">
+      <label>Teléfono celular<input [value]="profesional.telefono" disabled></label>
+      <label>Correo electrónico<input [value]="profesional.email" disabled></label>
+      <label>Teléfono alternativo (opcional)<input [value]="profesional.telefonoAlternativo" disabled></label>
+      <span></span>
+      <label>Dirección<input [value]="profesional.direccion" disabled></label>
+      <label>Ciudad<input [value]="profesional.ciudad" disabled></label>
+      <span></span>
+      <div class="profile-form__actions"><button type="button" class="button-secondary" disabled>Editar contacto</button></div>
+    </form>
+  }
+  @case ('Disponibilidad') {
+    <app-disponibilidad />
+  }
+}

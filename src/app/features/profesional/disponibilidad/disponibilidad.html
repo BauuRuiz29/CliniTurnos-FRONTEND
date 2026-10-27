@@ -1,0 +1,28 @@
+<div class="availability">
+  <div class="day-selector">
+    <label for="dia-seleccionado">Seleccioná el día</label>
+    <select id="dia-seleccionado" (change)="dia.set($any($event.target).value)">
+      @for (d of dias; track d) {
+        <option [value]="d" [selected]="d === dia()">{{ d }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="availability-table" role="table" aria-label="Horarios de atención">
+    <div class="availability-row availability-head" role="row">
+      <strong role="columnheader">Horario</strong><strong role="columnheader">Duración</strong><strong role="columnheader">Estado</strong>
+    </div>
+    @for (horario of horariosDelDia(); track horario.desde) {
+      <div class="availability-row" role="row">
+        <span role="cell">{{ horario.desde }} - {{ horario.hasta }}</span>
+        <span role="cell">{{ horario.duracion }} min</span>
+        <span role="cell">
+          <button type="button" class="switch" [class.on]="horario.activo" role="switch" [attr.aria-checked]="horario.activo"
+            [attr.aria-label]="'Horario de ' + horario.desde + ' a ' + horario.hasta" (click)="alternar(horario)"><span></span></button>
+        </span>
+      </div>
+    } @empty {
+      <p class="no-results">No hay horarios cargados para este día.</p>
+    }
+  </div>
+</div>
