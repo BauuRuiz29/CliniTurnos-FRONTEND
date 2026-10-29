@@ -8,6 +8,11 @@
     <input #buscador type="search" placeholder="Buscar estudios por nombre..." aria-label="Buscar estudios por nombre" (input)="busqueda.set(buscador.value)">
   </div>
 
+  <p class="laboratory-warning" role="note">
+    <span aria-hidden="true">⚠</span>
+    Los turnos de laboratorio se sacan de manera presencial, presentando la receta física.
+  </p>
+
   @if (error()) {
     <p role="alert">No pudimos cargar los estudios. Intentá de nuevo más tarde.</p>
   } @else if (cargando()) {
@@ -21,7 +26,9 @@
             <strong>{{ estudio.nombre }}</strong>
             <p>{{ estudio.descripcion }}</p>
           </div>
-          <a class="laboratory-reserve" [routerLink]="['/paciente/reservar-estudio', estudio.id]">Reservar turno</a>
+          @if (estudio.duracionMin !== null) {
+            <span class="laboratory-chip">Duracion: {{ estudio.duracionMin }} min</span>
+          }
         </article>
       } @empty {
         <p class="laboratory-empty">No encontramos estudios con ese criterio.</p>

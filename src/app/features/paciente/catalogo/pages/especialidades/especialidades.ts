@@ -11,7 +11,7 @@ const IMAGENES: Record<string, string> = {
   'Traumatología': 'traumatologia.png',
   'Pediatría': 'pediatria.png',
 };
-const IMAGEN_POR_DEFECTO = 'especialidad.png';
+const IMAGEN_POR_DEFECTO = 'clinica-medica.png';
 
 @Component({
   imports: [RouterLink],
