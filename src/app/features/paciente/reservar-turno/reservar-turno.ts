@@ -3,7 +3,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
-import { DiaCalendario, HorarioSlot, VENTANA_DIAS, armarMes, horariosDelDia, sumarDias, tituloMes } from '../../../shared/utils/calendario';
+import { SelectorTurno } from '../../../shared/ui/selector-turno/selector-turno';
+import { horariosDelDia } from '../../../shared/utils/calendario';
 import { fechaLarga } from '../../../shared/utils/fechas';
 import {
   Disponibilidad,
@@ -18,7 +19,7 @@ const SIN_DISPONIBILIDAD: Disponibilidad = { horarios: [], bloqueos: [], slots: 
 /** Reserva de turno de consulta con un profesional ya elegido [R06, CU04, Rnf 08]. */
 @Component({
   selector: 'app-reservar-turno',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, SelectorTurno],
   styleUrl: './reservar-turno.css',
   templateUrl: './reservar-turno.html',
 })
@@ -27,14 +28,9 @@ export class ReservarTurno {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
 
-  private readonly ahora = new Date();
-  private readonly limite = sumarDias(this.ahora, VENTANA_DIAS);
-
   readonly profesional = signal<ProfesionalReserva | null>(null);
   readonly disponibilidad = signal(SIN_DISPONIBILIDAD);
   readonly paso = signal<1 | 2>(1);
-  readonly mes = signal({ anio: this.ahora.getFullYear(), mes: this.ahora.getMonth() });
-  readonly fecha = signal<string | null>(null);
   readonly slot = signal<Slot | null>(null);
   readonly confirmando = signal(false);
   readonly error = signal<string | null>(null);
@@ -44,41 +40,19 @@ export class ReservarTurno {
 
   readonly comentario =new FormControl('', { nonNullable: true, validators: Validators.maxLength(255) });
 
-  readonly tituloMes = computed(() => tituloMes(this.mes().anio, this.mes().mes));
-  readonly dias = computed(() => armarMes(this.mes().anio, this.mes().mes, this.ahora, this.disponibilidad()));
-  readonly horarios = computed(() => {
-    const fecha = this.fecha();
-    return fecha ? horariosDelDia(fecha, this.ahora, this.disponibilidad()) : [];
-  });
   readonly especialidades = computed(() => (this.profesional()?.especialidades ?? []).map((e) => e.nombre).join(' · '));
   readonly fechaElegida = computed(() => {
-    const fecha = this.fecha();
-    return fecha ? fechaLarga(fecha) : '';
+    const slot = this.slot();
+    return slot ? fechaLarga(slot.fecha) : '';
   });
-  readonly hayAnterior = computed(() => this.indiceMes() > this.ahora.getFullYear() * 12 + this.ahora.getMonth());
-  readonly haySiguiente = computed(() => this.indiceMes() < this.limite.getFullYear() * 12 + this.limite.getMonth());
 
   constructor() {
     inject(ActivatedRoute).paramMap.pipe(takeUntilDestroyed()).subscribe((params) => this.cargar(Number(params.get('profesionalId'))));
   }
 
-  cambiarMes(delta: number): void {
-    this.mes.update(({ anio, mes }) => {
-      const d = new Date(anio, mes + delta, 1);
-      return { anio: d.getFullYear(), mes: d.getMonth() };
-    });
-  }
-
-  elegirDia(dia: DiaCalendario): void {
-    if (!dia.habilitado) return;
-    this.fecha.set(dia.fecha);
-    this.slot.set(null);
-    this.error.set(null);
-  }
-
-  elegirHorario(horario: HorarioSlot): void {
-    if (!horario.habilitado) return;
-    this.slot.set(horario.slot);
+  // Lo emite app-selector-turno al elegir día (null) u horario.
+  elegirSlot(slot: Slot | null): void {
+    this.slot.set(slot);
     this.error.set(null);
   }
 
@@ -129,10 +103,6 @@ export class ReservarTurno {
           this.recargar(profesional.id);
         },
       });
-  }
-
-  private indiceMes(): number {
-    return this.mes().anio * 12 + this.mes().mes;
   }
 
   private cargar(id: number): void {

@@ -68,10 +68,9 @@ describe('ReservarTurno', () => {
     return fixture.componentInstance;
   }
 
+  // Lo que emite app-selector-turno al elegir el primer horario (el selector se prueba aparte).
   function elegirPrimerHorario(c: ReservarTurno) {
-    c.mes.set({ anio: manana.getFullYear(), mes: manana.getMonth() });
-    c.elegirDia(c.dias().find((d) => d?.fecha === FECHA)!);
-    c.elegirHorario(c.horarios()[0]);
+    c.elegirSlot(c.disponibilidad().slots[0]);
     c.continuar();
   }
 
@@ -85,13 +84,12 @@ describe('ReservarTurno', () => {
     expect(navigate).toHaveBeenCalledWith(['/paciente/especialidades']);
   });
 
-  it('muestra los horarios del día y no deja elegir uno reservado', () => {
+  it('elegir otro horario borra el error anterior', () => {
     const c = crear('1');
-    c.mes.set({ anio: manana.getFullYear(), mes: manana.getMonth() });
-    c.elegirDia(c.dias().find((d) => d?.fecha === FECHA)!);
-    expect(c.horarios().map((h) => h.habilitado)).toEqual([true, false]);
-    c.elegirHorario(c.horarios()[1]);
-    expect(c.slot()).toBeNull();
+    c.error.set('El horario elegido ya no está disponible. Elegí otro.');
+    c.elegirSlot(c.disponibilidad().slots[0]);
+    expect(c.error()).toBeNull();
+    expect(c.fechaElegida()).not.toBe('');
   });
 
   it('confirma: vuelve a pedir disponibilidad, reserva y navega con el turno', () => {
@@ -126,7 +124,7 @@ describe('ReservarTurno', () => {
     expect(c.error()).toContain('ya no está disponible');
     expect(c.paso()).toBe(1);
     expect(c.slot()).toBeNull();
-    expect(c.horarios()[0].habilitado).toBe(false);
+    expect(c.disponibilidad().slots[0].estado).toBe(EstadoTurno.RESERVADO);
     expect(navigate).not.toHaveBeenCalled();
   });
 
