@@ -1,31 +1,66 @@
-import { Component, computed, signal } from '@angular/core';
-import { NOTIFICACIONES, NotificacionProfesional } from '../data-access/datos-prototipo';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
+import { haceCuanto } from '../../../shared/utils/fechas';
+import { NotificacionProfesional, NotificacionesRepository, TipoNotificacionProfesional } from './data-access/notificaciones.repository';
 
-type FiltroNotificaciones = 'Todas' | 'Leídas' | 'No leídas';
+const FILTROS = ['Todas', 'Leídas', 'No leídas'] as const;
+type Filtro = (typeof FILTROS)[number];
 
-const SIMBOLO: Record<NotificacionProfesional['icono'], string> = { calendar: '▦', clock: '◷', file: '▤' };
+const SIMBOLO: Record<TipoNotificacionProfesional, string> = {
+  TURNO_ASIGNADO: '▦',
+  TURNO_REPROGRAMADO: '◷',
+  TURNO_CANCELADO: '▦',
+  INFORME_PENDIENTE: '▤',
+};
 
-/** Notificaciones del profesional [R15, R18]. */
+/** Avisos de turnos nuevos, reprogramados e informes pendientes [R15, R18]. */
 @Component({
   selector: 'app-profesional-notificaciones',
   styleUrl: './notificaciones.css',
   templateUrl: './notificaciones.html',
 })
 export class Notificaciones {
-  readonly filtros: FiltroNotificaciones[] = ['Todas', 'Leídas', 'No leídas'];
-  readonly filtro = signal<FiltroNotificaciones>('Todas');
-  private readonly notificaciones = signal(NOTIFICACIONES.map((n) => ({ ...n })));
+  private readonly repo = inject(NotificacionesRepository);
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly recurso = rxResource({ stream: () => this.repo.listar(), defaultValue: [] });
+  // Las que se marcaron en esta visita, para no volver a pedir la lista.
+  private readonly leidasAhora = signal<ReadonlySet<number>>(new Set());
+
+  readonly filtros = FILTROS;
+  readonly filtro = signal<Filtro>('Todas');
+  readonly cargando = this.recurso.isLoading;
+  readonly error = this.recurso.error;
 
   readonly visibles = computed(() => {
     const filtro = this.filtro();
-    return this.notificaciones().filter((n) => filtro === 'Todas' || n.leida === (filtro === 'Leídas'));
+    return (this.recurso.hasValue() ? this.recurso.value() : [])
+      .filter((n) => filtro === 'Todas' || this.leida(n) === (filtro === 'Leídas'))
+      .sort((a, b) => b.fechaEnvio.localeCompare(a.fechaEnvio));
   });
 
-  simbolo(n: NotificacionProfesional): string {
-    return SIMBOLO[n.icono];
+  leida(n: NotificacionProfesional): boolean {
+    return n.leida || this.leidasAhora().has(n.id);
   }
 
-  marcarLeida(id: number): void {
-    this.notificaciones.update((lista) => lista.map((n) => (n.id === id ? { ...n, leida: true } : n)));
+  simbolo(n: NotificacionProfesional): string {
+    return SIMBOLO[n.tipo];
+  }
+
+  cuando(n: NotificacionProfesional): string {
+    return haceCuanto(n.fechaEnvio);
+  }
+
+  /** La marca como leída y, si es de un turno, abre su detalle. */
+  abrir(n: NotificacionProfesional): void {
+    if (!this.leida(n)) {
+      this.repo
+        .marcarLeida(n.id)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(() => this.leidasAhora.update((ids) => new Set(ids).add(n.id)));
+    }
+    if (n.tipo === TipoNotificacionProfesional.INFORME_PENDIENTE) void this.router.navigate(['/profesional/agenda'], { queryParams: { filtro: 'Pendientes' } });
+    else if (n.turnoId !== null) void this.router.navigate(['/profesional/turnos', n.turnoId]);
   }
 }

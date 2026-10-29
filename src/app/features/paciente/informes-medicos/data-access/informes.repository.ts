@@ -1,26 +1,32 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LugarAtencion } from '../../../../core/models/lugar-atencion';
-import { InformesMockRepository } from './informes.repository.mock';
+import { InformesHttpRepository } from './informes.repository.http';
 
-// Informe de un turno pasado: tabla `consultas` + profesional/especialidad del turno + `documentos_clinicos` adjuntos.
+// Informe de una consulta finalizada: `consultas` + nombre del profesional + especialidad del turno + adjuntos.
 export interface InformeMedico {
   id: number; // consulta_id
   turnoId: number;
-  fecha: string; // yyyy-MM-dd, de fecha_consulta
-  profesional: { id: number; nombre: string }; // nombre con título: "Dr. Juan García"
-  especialidad: string;
-  lugar: LugarAtencion;
-  diagnostico: string | null;
+  fecha: string; // yyyy-MM-dd, del turno
+  profesional: string; // nombre y apellido, sin título
+  especialidad: string | null; // null: el turno no tiene especialidad
+  diagnostico: string;
   planTratamiento: string | null;
   indicaciones: string | null;
-  adjuntos: { id: number; titulo: string }[]; // documento_id, titulo
+  adjuntos: AdjuntoInformeMedico[];
+}
+
+export interface AdjuntoInformeMedico {
+  id: number; // documento_id
+  titulo: string;
+  url: string | null; // archivo_url: de donde se descarga
 }
 
 /** Informes médicos del paciente [R10]. El back solo devuelve los del paciente de la sesión [Rnf 01]. */
-@Injectable({ providedIn: 'root', useClass: InformesMockRepository })
+@Injectable({ providedIn: 'root', useClass: InformesHttpRepository })
 export abstract class InformesRepository {
+  /** Solo informes cargados: un turno cerrado con el informe pendiente todavía no aparece. */
   abstract listar(): Observable<InformeMedico[]>;
   /** null si no existe o no es del paciente. */
   abstract obtener(id: number): Observable<InformeMedico | null>;
+  abstract descargar(adjunto: AdjuntoInformeMedico): Observable<Blob>;
 }

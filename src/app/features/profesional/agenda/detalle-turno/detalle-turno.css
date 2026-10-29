@@ -1,8 +1,12 @@
 .detail-page-header {
   justify-content: flex-start;
 }
-.detail-page-header h1 {
+.detail-page-header__title {
   flex: 1;
+}
+.detail-page-header__title p {
+  margin: 4px 0 0;
+  color: #667590;
 }
 
 /* PACIENTE */
@@ -50,16 +54,6 @@
   gap: 13px;
   min-width: 0;
 }
-.clinical-note {
-  min-height: 70px;
-  margin: 0;
-  padding: 11px;
-  border: 1px solid #edf1f6;
-  border-radius: 4px;
-  color: #66748d;
-  font-size: 11px;
-  line-height: 1.6;
-}
 .additional-info {
   display: flex;
   justify-content: space-between;
@@ -69,6 +63,20 @@
 }
 .additional-info span {
   color: #5b6983;
+}
+.additional-info strong {
+  text-align: right;
+}
+.ficha-cargando {
+  margin: 0;
+  color: #6c7a94;
+}
+.detail-error {
+  margin: 15px 0 0;
+  padding: 10px 14px;
+  border-radius: 5px;
+  background: #fdeeee;
+  color: #b42318;
 }
 
 /* ACCIONES */
@@ -82,6 +90,50 @@
 }
 .turn-actions__cancel {
   color: #dc2626;
+}
+.turn-actions button:disabled {
+  color: #b4bccb;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+.turn-actions__note {
+  margin: 0;
+  color: #6c7a94;
+  font-size: 11px;
+  text-align: center;
+}
+
+/* DIÁLOGO DE CANCELACIÓN */
+.confirm-dialog {
+  max-width: 420px;
+  padding: 22px;
+  border: 1px solid #e1e8f1;
+  border-radius: 8px;
+  color: #17264b;
+}
+.confirm-dialog::backdrop {
+  background: rgb(15 23 42 / 45%);
+}
+.confirm-dialog h2 {
+  margin: 0 0 10px;
+  font-size: 16px;
+}
+.confirm-dialog p {
+  margin: 0 0 18px;
+  color: #52627e;
+  line-height: 1.5;
+}
+.confirm-dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.confirm-dialog .button-danger {
+  border-color: #c81e1e;
+  background: #dc2626;
+}
+.confirm-dialog .button-danger:hover {
+  background: #c81e1e;
 }
 
 @media (max-width: 1100px) {

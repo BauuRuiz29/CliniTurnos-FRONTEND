@@ -1,40 +1,94 @@
-<header class="page-header detail-page-header">
-  <button type="button" class="back-button" [routerLink]="['/profesional/turnos', turnoId]" aria-label="Volver al turno">←</button>
-  <h1>Completar informe médico</h1>
-</header>
-
-<form class="medical-form" (submit)="guardar($event)">
-  <label for="diagnostico">Diagnóstico</label>
-  <input id="diagnostico" name="diagnostico" [value]="diagnostico()" (input)="diagnostico.set($any($event.target).value)"/>
-
-  <label for="tratamiento">Plan de tratamiento</label>
-  <textarea id="tratamiento" name="tratamiento" rows="3" [value]="tratamiento()" (input)="tratamiento.set($any($event.target).value)"></textarea>
-
-  <label for="indicaciones">Indicaciones</label>
-  <textarea id="indicaciones" name="indicaciones" rows="2" [value]="indicaciones()" (input)="indicaciones.set($any($event.target).value)"></textarea>
-
-  <span class="field-label" id="estudios-label">Estudios solicitados</span>
-  <div class="study-chips" role="group" aria-labelledby="estudios-label">
-    @for (estudio of estudios(); track estudio) {
-      <span>{{ estudio }} <button type="button" [attr.aria-label]="'Quitar ' + estudio" (click)="quitarEstudio(estudio)">×</button></span>
-    }
-    <button type="button" class="text-link add-study" (click)="agregarEstudio()">＋ Agregar</button>
-  </div>
-
-  <span class="field-label">Archivos adjuntos</span>
-  @if (archivo()) {
-    <div class="file-attachment">
-      <span class="file-icon">▤</span><span>{{ archivo() }}</span><small>Adjunto</small>
-      <button type="button" aria-label="Quitar archivo" (click)="archivo.set('')">×</button>
+@if (turno(); as turno) {
+  <header class="page-header detail-page-header">
+    <button type="button" class="back-button" [routerLink]="['/profesional/turnos', turno.id]" aria-label="Volver al turno">←</button>
+    <div class="report__title">
+      <h1>{{ soloLectura() ? 'Informe médico' : 'Completar informe médico' }}</h1>
+      <p>{{ nombre() }} · {{ fecha() }} · {{ turno.horaInicio }} hs</p>
     </div>
-  }
-  <label class="file-picker">＋ Agregar archivo<input type="file" (change)="seleccionarArchivo($event)" accept=".pdf,.png,.jpg,.jpeg"/></label>
+  </header>
 
-  <div class="form-footer">
-    <button type="button" class="button-secondary" [routerLink]="['/profesional/turnos', turnoId]">Cancelar</button>
-    <button type="submit" class="button-primary">Guardar informe</button>
-  </div>
-</form>
+  @if (error(); as e) {
+    <p class="report__error" role="alert">{{ e }}</p>
+  }
+  @if (pendiente()) {
+    <p class="report__pendiente" role="status">El turno ya está cerrado. Completá el diagnóstico para cargar el informe.</p>
+  }
+
+  <form class="medical-form" [formGroup]="form" (submit)="guardar($event)" novalidate>
+    <label for="diagnostico">Diagnóstico</label>
+    <input id="diagnostico" formControlName="diagnostico" [attr.aria-invalid]="invalido('diagnostico')" aria-describedby="diagnostico-error"/>
+    @if (invalido('diagnostico')) {
+      <span id="diagnostico-error" class="field-error">
+        {{ form.controls.diagnostico.hasError('required') ? 'Completá el diagnóstico.' : 'Máximo 1000 caracteres.' }}
+      </span>
+    }
+
+    <label for="tratamiento">Plan de tratamiento</label>
+    <textarea id="tratamiento" rows="3" formControlName="planTratamiento" [attr.aria-invalid]="invalido('planTratamiento')"></textarea>
+    @if (invalido('planTratamiento')) { <span class="field-error">Máximo 1000 caracteres.</span> }
+
+    <label for="indicaciones">Indicaciones</label>
+    <textarea id="indicaciones" rows="3" formControlName="indicaciones" [attr.aria-invalid]="invalido('indicaciones')"></textarea>
+    @if (invalido('indicaciones')) { <span class="field-error">Máximo 1000 caracteres.</span> }
+
+    <div class="report__columns">
+      @if (!soloLectura()) {
+        <div>
+          <span class="field-label" id="estudios-label">Estudios solicitados</span>
+          <div class="study-chips" role="group" aria-labelledby="estudios-label">
+            @for (estudio of estudios(); track estudio) {
+              <span>{{ estudio }} <button type="button" [attr.aria-label]="'Quitar ' + estudio" (click)="quitarEstudio(estudio)">×</button></span>
+            }
+          </div>
+          <div class="study-input">
+            <input type="text" [formControl]="nuevoEstudio" placeholder="Ej.: Hemograma completo" aria-label="Estudio solicitado"
+              (keydown.enter)="$event.preventDefault(); agregarEstudio()"/>
+            <button type="button" class="text-link add-study" [disabled]="!nuevoEstudio.value.trim()" (click)="agregarEstudio()">＋ Agregar</button>
+          </div>
+        </div>
+      }
+
+      <div>
+        <span class="field-label">Archivos adjuntos</span>
+        @if (informe(); as i) {
+          @for (adjunto of i.adjuntos; track adjunto.id) {
+            <div class="file-attachment">
+              <span class="file-icon">▤</span>
+              <button type="button" class="file-download" [disabled]="descargando() === adjunto.id" (click)="descargar(adjunto)"
+                [attr.aria-label]="'Descargar ' + adjunto.titulo">{{ adjunto.titulo }}</button>
+              <small>{{ descargando() === adjunto.id ? 'Descargando...' : 'Descargar' }}</small>
+              @if (!soloLectura()) {
+                <button type="button" [attr.aria-label]="'Quitar ' + adjunto.titulo" (click)="quitarAdjunto(adjunto.id)">×</button>
+              }
+            </div>
+          } @empty {
+            <p class="report__empty">Sin archivos adjuntos.</p>
+          }
+        }
+        @if (!soloLectura()) {
+          <label class="file-picker">
+            {{ subiendo() ? 'Subiendo...' : '＋ Agregar archivo' }}
+            <input type="file" [disabled]="subiendo()" (change)="adjuntar($event)" accept=".pdf,.png,.jpg,.jpeg"/>
+          </label>
+        }
+      </div>
+    </div>
+
+    <div class="form-footer">
+      @if (soloLectura()) {
+        <button type="button" class="button-secondary" routerLink="/profesional/agenda">Volver a la agenda</button>
+      } @else {
+        <button type="button" class="button-secondary" [routerLink]="['/profesional/turnos', turno.id]">Cancelar</button>
+        @if (!informe()?.finalizada) {
+          <button type="button" class="button-secondary" [disabled]="guardando()" (click)="cerrarSinInforme()">Cerrar turno sin informe</button>
+        }
+        <button type="submit" class="button-primary" [disabled]="guardando()">{{ guardando() ? 'Guardando...' : 'Guardar informe' }}</button>
+      }
+    </div>
+  </form>
+} @else {
+  <p class="estado-carga">Cargando informe...</p>
+}
 
 @if (mensaje()) {
   <div class="toast" role="status">{{ mensaje() }}</div>

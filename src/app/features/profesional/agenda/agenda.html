@@ -7,16 +7,21 @@
 </nav>
 
 <div class="turnos-table">
-  @for (turno of turnos(); track turno.id) {
-    <button type="button" class="turno-row" [routerLink]="['/profesional/turnos', turno.id]">
-      <span class="date-block"><strong>{{ turno.dia }}</strong><small>{{ turno.mes }}</small></span>
-      <strong class="turno-time">{{ turno.hora }}</strong>
-      <span class="turno-person"><strong>{{ turno.nombre }}</strong><small>DNI {{ turno.dni }}</small></span>
-      <span class="turno-specialty">{{ turno.tipo }}</span>
-      <span class="status" [class.pending]="turno.estado === 'Pendiente'" [class.confirmed]="turno.estado === 'Confirmado'">{{ turno.estado }}</span>
-      <span class="row-arrow">›</span>
-    </button>
-  } @empty {
-    <p class="no-results">No hay turnos para mostrar.</p>
+  @if (cargando()) {
+    <p class="estado-carga">Cargando turnos...</p>
+  } @else if (error()) {
+    <p class="estado-carga estado-carga--error" role="alert">No pudimos cargar tu agenda. Intentá de nuevo.</p>
+  } @else {
+    @for (turno of turnos(); track turno.id) {
+      <div class="turno-row">
+        <span class="date-block"><strong>{{ dia(turno) }}</strong><small>{{ mes(turno) }}</small></span>
+        <strong class="turno-time">{{ turno.horaInicio }} hs</strong>
+        <span class="turno-person"><strong>{{ nombre(turno) }}</strong><small>{{ turno.paciente.tipoIdentificacion }} {{ turno.paciente.numIdentificacion }}</small></span>
+        <span [class]="claseEstado(turno)">{{ estado(turno) }}</span>
+        <button type="button" [class]="'button-secondary turno-action turno-action--' + accion(turno).variante" [routerLink]="accion(turno).ruta">{{ accion(turno).texto }}</button>
+      </div>
+    } @empty {
+      <p class="no-results">No hay turnos para mostrar.</p>
+    }
   }
 </div>

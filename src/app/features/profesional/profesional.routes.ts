@@ -25,6 +25,10 @@ export const PROFESIONAL_ROUTES: Routes = [
 				loadComponent: () => import('./atencion/completar-informe/completar-informe').then(m => m.CompletarInforme),
 			},
 			{
+				path: 'turnos/:turnoId/reprogramar',
+				loadComponent: () => import('./agenda/reprogramar/reprogramar').then(m => m.Reprogramar),
+			},
+			{
 				path: 'turnos/:turnoId/reprogramado',
 				data: { tipo: 'reprogramado' },
 				loadComponent: () => import('./agenda/confirmacion/confirmacion').then(m => m.Confirmacion),

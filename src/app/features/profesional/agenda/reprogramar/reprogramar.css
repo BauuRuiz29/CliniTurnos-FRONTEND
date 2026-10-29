@@ -1,0 +1,60 @@
+:host {
+  display: block;
+  max-width: 900px;
+}
+
+.detail-page-header {
+  justify-content: flex-start;
+}
+.reschedule__title {
+  flex: 1;
+}
+.reschedule__title p {
+  margin: 4px 0 0;
+  color: #667590;
+}
+
+.reschedule__current {
+  margin-bottom: 18px;
+}
+.reschedule__current p {
+  margin: 0;
+  color: #52627e;
+}
+
+.reschedule__error {
+  margin: 0 0 15px;
+  padding: 10px 14px;
+  border-radius: 5px;
+  background: #fdeeee;
+  color: #b42318;
+}
+
+.reschedule__footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 18px;
+  margin-top: 18px;
+  border-top: 1px solid #e6ebf3;
+}
+.reschedule__footer p {
+  flex: 1;
+  margin: 0;
+  color: #52627e;
+}
+.reschedule__footer button {
+  min-width: 120px;
+}
+
+@media (max-width: 480px) {
+  .reschedule__footer {
+    flex-wrap: wrap;
+  }
+  .reschedule__footer p {
+    flex-basis: 100%;
+  }
+  .reschedule__footer button {
+    flex: 1;
+  }
+}

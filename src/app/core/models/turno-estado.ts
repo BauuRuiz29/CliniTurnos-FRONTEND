@@ -11,6 +11,17 @@ export const TRANSICIONES_TURNO: Record<EstadoTurno, readonly EstadoTurno[]> = {
   AUSENTE: [],
 };
 
+/** Texto para mostrar el estado en pantalla. */
+export const ESTADO_TURNO_TEXTO: Record<EstadoTurno, string> = {
+  DISPONIBLE: 'Disponible',
+  BLOQUEADO: 'Bloqueado',
+  RESERVADO: 'Reservado',
+  EN_CURSO: 'En curso',
+  FINALIZADO: 'Finalizado',
+  CANCELADO: 'Cancelado',
+  AUSENTE: 'Ausente',
+};
+
 export function puedeTransicionar(desde: EstadoTurno, hasta: EstadoTurno): boolean {
   return TRANSICIONES_TURNO[desde].includes(hasta);
 }

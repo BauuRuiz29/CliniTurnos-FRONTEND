@@ -16,41 +16,31 @@
   object-fit: cover;
 }
 
-.profile-form {
+/* Datos de solo lectura con el mismo aspecto que los campos del prototipo. */
+.profile-data {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px 30px;
   max-width: 700px;
+  margin: 0;
 }
-.profile-form label {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
+.profile-data dt {
+  margin-bottom: 7px;
   color: #283958;
   font-weight: 600;
 }
-.profile-form input {
+.profile-data dd {
+  margin: 0;
   padding: 10px 12px;
   border: 1px solid #dfe6f0;
   border-radius: 5px;
-  background: #fff;
+  background: #f8fafc;
   color: #263754;
-  font-weight: 400;
-}
-.profile-form__actions {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
 }
 
 @media (max-width: 750px) {
-  .profile {
+  .profile,
+  .profile-data {
     grid-template-columns: 1fr;
-  }
-  .profile-form {
-    grid-template-columns: 1fr;
-  }
-  .profile-form > span {
-    display: none;
   }
 }

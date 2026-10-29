@@ -1,28 +1,65 @@
+@if (error(); as e) {
+  <p class="availability__error" role="alert">{{ e }}</p>
+}
+
 <div class="availability">
   <div class="day-selector">
     <label for="dia-seleccionado">Seleccioná el día</label>
     <select id="dia-seleccionado" (change)="dia.set($any($event.target).value)">
-      @for (d of dias; track d) {
-        <option [value]="d" [selected]="d === dia()">{{ d }}</option>
+      @for (d of dias; track d.valor) {
+        <option [value]="d.valor" [selected]="d.valor === dia()">{{ d.texto }}</option>
       }
     </select>
   </div>
 
-  <div class="availability-table" role="table" aria-label="Horarios de atención">
+  <div class="availability-table" role="table" [attr.aria-label]="'Horarios de atención del ' + textoDia(dia())">
     <div class="availability-row availability-head" role="row">
       <strong role="columnheader">Horario</strong><strong role="columnheader">Duración</strong><strong role="columnheader">Estado</strong>
     </div>
-    @for (horario of horariosDelDia(); track horario.desde) {
-      <div class="availability-row" role="row">
-        <span role="cell">{{ horario.desde }} - {{ horario.hasta }}</span>
-        <span role="cell">{{ horario.duracion }} min</span>
-        <span role="cell">
-          <button type="button" class="switch" [class.on]="horario.activo" role="switch" [attr.aria-checked]="horario.activo"
-            [attr.aria-label]="'Horario de ' + horario.desde + ' a ' + horario.hasta" (click)="alternar(horario)"><span></span></button>
-        </span>
-      </div>
-    } @empty {
-      <p class="no-results">No hay horarios cargados para este día.</p>
+    @if (horarios() === null) {
+      <p class="estado-carga">Cargando horarios...</p>
+    } @else {
+      @for (horario of horariosDelDia(); track horario.id) {
+        <div class="availability-row" role="row">
+          <span role="cell">{{ horario.horaDesde }} - {{ horario.horaHasta }}</span>
+          <span role="cell">{{ horario.duracionTurnosMin }} min</span>
+          <span role="cell">
+            <button type="button" class="switch" [class.on]="horario.activo" role="switch" [attr.aria-checked]="horario.activo"
+              [disabled]="guardando() === horario.id"
+              [attr.aria-label]="'Atender de ' + horario.horaDesde + ' a ' + horario.horaHasta" (click)="alternar(horario)"><span></span></button>
+          </span>
+        </div>
+      } @empty {
+        <p class="no-results">No hay horarios cargados para este día.</p>
+      }
     }
   </div>
 </div>
+
+<section class="blocks" aria-labelledby="bloqueos-titulo">
+  <h2 id="bloqueos-titulo">Fechas bloqueadas</h2>
+  <p class="blocks__hint">Bloqueá días u horarios en los que no vas a atender (vacaciones, congresos, trámites).</p>
+
+  <form class="blocks__form" [formGroup]="form" (submit)="bloquear($event)" novalidate>
+    <label>Desde<input type="datetime-local" formControlName="fechaDesde" [min]="ahora"></label>
+    <label>Hasta<input type="datetime-local" formControlName="fechaHasta" [min]="ahora"></label>
+    <label class="blocks__motivo">Motivo (opcional)<input formControlName="motivo" maxlength="255"></label>
+    <button type="submit" class="button-primary" [disabled]="bloqueando()">{{ bloqueando() ? 'Bloqueando...' : 'Bloquear' }}</button>
+  </form>
+  @if (errorRango; as e) {
+    <p class="field-error" role="alert">{{ e }}</p>
+  } @else if (form.touched && (form.controls.fechaDesde.invalid || form.controls.fechaHasta.invalid)) {
+    <p class="field-error" role="alert">Completá desde y hasta.</p>
+  }
+
+  <ul class="blocks__list">
+    @for (b of bloqueos() ?? []; track b.id) {
+      <li>
+        <span><strong>{{ fechaHora(b.fechaDesde) }} → {{ fechaHora(b.fechaHasta) }}</strong>@if (b.motivo) { · {{ b.motivo }} }</span>
+        <button type="button" class="text-link" [attr.aria-label]="'Quitar bloqueo desde ' + fechaHora(b.fechaDesde)" (click)="desbloquear(b)">Quitar</button>
+      </li>
+    } @empty {
+      <li class="blocks__empty">No tenés fechas bloqueadas.</li>
+    }
+  </ul>
+</section>

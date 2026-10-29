@@ -1,42 +1,83 @@
-@if (turno; as turno) {
+@if (turno(); as turno) {
   <header class="page-header detail-page-header">
     <button type="button" class="back-button" routerLink="/profesional/agenda" aria-label="Volver a la agenda">←</button>
-    <h1>Detalle del turno</h1>
+    <div class="detail-page-header__title">
+      <h1>Detalle del turno</h1>
+      <p>{{ mensaje() }}</p>
+    </div>
   </header>
 
   <div class="patient-heading">
-    <span class="patient-avatar large">{{ iniciales }}</span>
+    <span class="patient-avatar large">{{ iniciales() }}</span>
     <div class="patient-heading-info">
-      <h2>{{ turno.nombre }}</h2>
-      <p>DNI {{ turno.dni }} · {{ turno.edad }} años</p>
+      <h2>{{ nombre() }}</h2>
+      <p>{{ turno.paciente.tipoIdentificacion }} {{ turno.paciente.numIdentificacion }} · {{ edad() }} años</p>
     </div>
-    <span class="status" [class.pending]="turno.estado === 'Pendiente'" [class.confirmed]="turno.estado === 'Confirmado'">{{ turno.estado }}</span>
+    <span [class]="estadoClase()">{{ estadoTexto() }}</span>
   </div>
+
+  @if (error(); as e) {
+    <p class="detail-error" role="alert">{{ e }}</p>
+  }
 
   <div class="patient-details">
     <div class="patient-facts">
-      <div class="fact"><span>▦</span><div><strong>Fecha y hora</strong><p>21/05/2024 · {{ turno.hora }} hs</p></div></div>
-      <div class="fact"><span>♧</span><div><strong>Especialidad</strong><p>{{ turno.tipo }}</p></div></div>
-      <div class="fact"><span>◷</span><div><strong>Motivo de consulta</strong><p>{{ turno.motivo }}</p></div></div>
-      <div class="fact"><span>♙</span><div><strong>Obra social</strong><p>{{ turno.obraSocial }}</p></div></div>
-      <div class="fact"><span>⌕</span><div><strong>Teléfono</strong><p>{{ turno.telefono }}</p></div></div>
-      <div class="fact"><span>✉</span><div><strong>Email</strong><p>{{ turno.email }}</p></div></div>
+      <div class="fact"><span>▦</span><div><strong>Fecha y hora</strong><p>{{ fecha() }} · {{ turno.horaInicio }} hs</p></div></div>
+      @if (turno.especialidad) {
+        <div class="fact"><span>♧</span><div><strong>Especialidad</strong><p>{{ turno.especialidad }}</p></div></div>
+      }
+      <div class="fact"><span>♙</span><div><strong>Obra social</strong><p>{{ turno.paciente.obraSocial ?? 'Sin obra social' }}</p></div></div>
+      <div class="fact"><span>⌕</span><div><strong>Teléfono celular</strong><p>{{ turno.paciente.telefono ?? '-' }}</p></div></div>
+      <div class="fact"><span>✉</span><div><strong>Correo electrónico</strong><p>{{ turno.paciente.correo }}</p></div></div>
     </div>
 
     <div class="record-side">
-      <article class="inner-card"><h3>Notas / Comentarios</h3><p class="clinical-note">{{ turno.notas }}</p></article>
       <article class="inner-card">
         <h3>Información adicional</h3>
-        <div class="additional-info"><span>Alergias</span><strong>Penicilina</strong></div>
-        <div class="additional-info"><span>Medicamentos</span><strong>Enalapril 10mg</strong></div>
+        <div class="additional-info"><span>Comentarios</span><strong>{{ turno.comentario ?? '-' }}</strong></div>
+        @if (ficha.hasValue() && ficha.value(); as f) {
+          <div class="additional-info"><span>Alergias</span><strong>{{ f.alergias.join(', ') || '-' }}</strong></div>
+          <div class="additional-info"><span>Medicación habitual</span><strong>{{ f.medicaciones.join(', ') || '-' }}</strong></div>
+        } @else if (ficha.error()) {
+          <p class="field-error">No pudimos cargar la ficha del paciente.</p>
+        } @else {
+          <p class="ficha-cargando">Cargando ficha...</p>
+        }
       </article>
-      <button type="button" class="button-primary" [routerLink]="['/profesional/turnos', turno.id, 'informe']">Comenzar consulta</button>
+
+      @if (reservado()) {
+        <button type="button" class="button-primary" [disabled]="procesando()" (click)="comenzarConsulta()">
+          {{ procesando() ? 'Iniciando...' : 'Comenzar consulta' }}
+        </button>
+      } @else if (enCurso()) {
+        <button type="button" class="button-primary" [routerLink]="['/profesional/turnos', turno.id, 'informe']">Completar informe</button>
+      } @else if (finalizado()) {
+        <button type="button" class="button-primary" [routerLink]="['/profesional/turnos', turno.id, 'informe']">Ver informe</button>
+      }
       <button type="button" class="button-secondary" routerLink="/profesional/agenda">Volver</button>
-      <!-- TODO Fase B: reprogramar = elegir franja nueva; cancelar = respetar la ventana de 24 h [R12] -->
-      <div class="turn-actions">
-        <button type="button" class="text-link turn-actions__reschedule" [routerLink]="['/profesional/turnos', turno.id, 'reprogramado']">Reprogramar turno</button>
-        <button type="button" class="text-link turn-actions__cancel" [routerLink]="['/profesional/turnos', turno.id, 'cancelado']">Cancelar turno</button>
-      </div>
+
+      @if (reservado()) {
+        <div class="turn-actions">
+          <button type="button" class="text-link turn-actions__reschedule" [disabled]="!modificable()" [routerLink]="['/profesional/turnos', turno.id, 'reprogramar']">Reprogramar turno</button>
+          <button type="button" class="text-link turn-actions__cancel" [disabled]="!modificable()" (click)="pedirCancelacion()">Cancelar turno</button>
+        </div>
+        @if (!modificable()) {
+          <p class="turn-actions__note">Solo se puede reprogramar o cancelar hasta {{ ventanaHoras }} h antes del turno.</p>
+        }
+      }
     </div>
   </div>
+
+  <dialog #confirmarCancelacion class="confirm-dialog" aria-labelledby="titulo-cancelacion" (cancel)="cerrarDialogo()">
+    <h2 id="titulo-cancelacion">¿Cancelar el turno?</h2>
+    <p>{{ nombre() }} · {{ fecha() }} · {{ turno.horaInicio }} hs. La franja vuelve a quedar disponible.</p>
+    <div class="confirm-dialog__actions">
+      <button type="button" class="button-secondary" (click)="cerrarDialogo()">Volver</button>
+      <button type="button" class="button-primary button-danger" [disabled]="procesando()" (click)="cancelar()">
+        {{ procesando() ? 'Cancelando...' : 'Sí, cancelar' }}
+      </button>
+    </div>
+  </dialog>
+} @else {
+  <p class="estado-carga">Cargando turno...</p>
 }

@@ -1,0 +1,45 @@
+<div class="booking-date-time">
+  <div class="calendar">
+    <div class="calendar__header">
+      <button type="button" aria-label="Mes anterior" [disabled]="!hayAnterior()" (click)="cambiarMes(-1)">‹</button>
+      <strong aria-live="polite">{{ tituloMes() }}</strong>
+      <button type="button" aria-label="Mes siguiente" [disabled]="!haySiguiente()" (click)="cambiarMes(1)">›</button>
+    </div>
+    <div class="calendar__week" aria-hidden="true"><span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span></div>
+    <div class="calendar__days">
+      @for (dia of dias(); track $index) {
+        @if (dia) {
+          <button
+            type="button"
+            [class.selected]="fecha() === dia.fecha"
+            [attr.aria-label]="dia.etiqueta + (dia.habilitado ? '' : ', sin turnos')"
+            [attr.aria-pressed]="fecha() === dia.fecha"
+            [attr.aria-disabled]="!dia.habilitado"
+            (click)="elegirDia(dia)"
+          >{{ dia.numero }}</button>
+        } @else {
+          <span aria-hidden="true"></span>
+        }
+      }
+    </div>
+  </div>
+  <div class="time-selection">
+    <h4>Seleccioná el horario</h4>
+    @if (fecha()) {
+      <div class="time-grid">
+        @for (h of horarios(); track h.slot.turnoId) {
+          <button
+            type="button"
+            [class.selected]="slot()?.turnoId === h.slot.turnoId"
+            [attr.aria-label]="h.slot.horaInicio + ' hs.' + (h.habilitado ? '' : ', no disponible')"
+            [attr.aria-pressed]="slot()?.turnoId === h.slot.turnoId"
+            [attr.aria-disabled]="!h.habilitado"
+            (click)="elegirHorario(h)"
+          >{{ h.slot.horaInicio }}</button>
+        }
+      </div>
+    } @else {
+      <p>Elegí un día en el calendario.</p>
+    }
+  </div>
+</div>

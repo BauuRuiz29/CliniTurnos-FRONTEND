@@ -1,19 +1,19 @@
 <header class="welcome-header">
-  <h1>Hola, {{ profesional.nombre }} <span class="wave">👋</span></h1>
-  <p>Gestioná tu agenda y pacientes</p>
+  <h1>¡Hola, {{ saludo() }}! <span class="wave">👋</span></h1>
+  <p>Gestioná tu agenda de manera simple</p>
 </header>
 
 <div class="stats-grid">
   <article class="stat-card blue">
-    <span>Turnos de hoy</span><strong>{{ resumen.turnos }}</strong>
+    <span>Turnos de hoy</span><strong>{{ turnosHoy() }}</strong>
     <button type="button" routerLink="/profesional/agenda">Ver agenda</button>
   </article>
   <article class="stat-card green">
-    <span>Turnos pendientes</span><strong>{{ pendientes }}</strong>
+    <span>Turnos pendientes</span><strong>{{ pendientesHoy() }}</strong>
   </article>
   <article class="stat-card teal">
-    <span>Informes pendientes</span><strong>{{ resumen.informesPendientes }}</strong>
-    <button type="button" routerLink="/profesional/agenda">Ver pendientes</button>
+    <span>Informes pendientes</span><strong>{{ informesPendientes() }}</strong>
+    <button type="button" routerLink="/profesional/agenda" [queryParams]="{ filtro: 'Pendientes' }">Ver pendientes</button>
   </article>
 </div>
 
@@ -23,16 +23,23 @@
 </div>
 
 <div class="panel">
-  @for (turno of proximos; track turno.id) {
-    <button type="button" class="appointment-row" [routerLink]="['/profesional/turnos', turno.id]">
-      <span class="calendar-icon">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg>
-      </span>
-      <strong class="appointment-time">{{ turno.hora }}</strong>
-      <span class="appointment-person"><strong>{{ turno.nombre }}</strong><small>DNI {{ turno.dni }}</small></span>
-      <span class="appointment-specialty">{{ turno.tipo }}</span>
-      <span class="status pending">{{ turno.estado }}</span>
-      <span class="row-arrow">›</span>
-    </button>
+  @if (cargando()) {
+    <p class="estado-carga">Cargando turnos...</p>
+  } @else if (error()) {
+    <p class="estado-carga estado-carga--error" role="alert">No pudimos cargar tus turnos. Intentá de nuevo.</p>
+  } @else {
+    @for (turno of proximos(); track turno.id) {
+      <div class="appointment-row">
+        <span class="calendar-icon">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg>
+        </span>
+        <strong class="appointment-time">{{ turno.horaInicio }} hs</strong>
+        <span class="appointment-person"><strong>{{ nombre(turno) }}</strong><small>{{ turno.paciente.tipoIdentificacion }} {{ turno.paciente.numIdentificacion }}</small></span>
+        <span [class]="claseEstado(turno)">{{ estado(turno) }}</span>
+        <button type="button" class="button-secondary appointment-action" [routerLink]="accion(turno).ruta">{{ accion(turno).texto }}</button>
+      </div>
+    } @empty {
+      <p class="estado-carga">No tenés más turnos pendientes para hoy.</p>
+    }
   }
 </div>

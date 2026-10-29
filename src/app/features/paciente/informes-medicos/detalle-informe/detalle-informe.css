@@ -34,3 +34,48 @@
 a.detail-action {
   text-decoration: none;
 }
+
+.adjuntos {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.adjunto {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #075de2;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  text-decoration: underline;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.adjunto:disabled {
+  cursor: progress;
+}
+
+.adjunto:focus-visible {
+  outline: 2px solid #075de2;
+  outline-offset: 2px;
+}
+
+.adjunto small {
+  margin-left: 6px;
+  color: #718096;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.detalle-aviso,
+.detalle-error {
+  margin: 10px 0 0;
+  font-size: 12px;
+}
+
+.detalle-aviso { color: #718096; }
+.detalle-error { color: #dc2626; }

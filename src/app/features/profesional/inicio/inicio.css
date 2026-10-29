@@ -66,7 +66,7 @@
 /* PRÓXIMOS TURNOS */
 .appointment-row {
   display: grid;
-  grid-template-columns: 26px 65px minmax(150px, 1.3fr) minmax(100px, .9fr) auto 18px;
+  grid-template-columns: 26px 70px minmax(150px, 1fr) auto 130px;
   align-items: center;
   gap: 12px;
   width: 100%;
@@ -81,8 +81,10 @@
 .appointment-row:last-child {
   border-bottom: 0;
 }
-.appointment-row:hover {
-  background: #f9fbff;
+.appointment-action {
+  width: 100%;
+  color: #075de2;
+  border-color: #b9d0f7;
 }
 .calendar-icon {
   color: #0862e8;
@@ -115,10 +117,6 @@
   color: #71809a;
   font-size: 10px;
 }
-.appointment-specialty {
-  color: #4c5d7b;
-  font-size: 11px;
-}
 
 /* RESPONSIVE */
 @media (max-width: 1100px) {
@@ -129,7 +127,7 @@
     padding: 13px 11px;
   }
   .appointment-row {
-    grid-template-columns: 22px 52px minmax(110px, 1.2fr) minmax(70px, .8fr) auto 12px;
+    grid-template-columns: 22px 60px minmax(110px, 1fr) auto 120px;
     gap: 7px;
     padding-inline: 9px;
   }
@@ -151,10 +149,10 @@
     font-size: 27px;
   }
   .appointment-row {
-    grid-template-columns: 22px 48px minmax(100px, 1fr) auto 12px;
+    grid-template-columns: 22px 55px minmax(100px, 1fr) 110px;
     gap: 7px;
   }
-  .appointment-specialty {
+  .appointment-row .status {
     display: none;
   }
 }
@@ -166,7 +164,7 @@
     font-size: 10px;
   }
   .appointment-row {
-    grid-template-columns: 18px 43px minmax(0, 1fr) auto 9px;
+    grid-template-columns: 18px 48px minmax(0, 1fr) 100px;
     gap: 5px;
     padding-inline: 6px;
   }
@@ -174,10 +172,6 @@
     font-size: 10px;
   }
   .appointment-person small {
-    font-size: 9px;
-  }
-  .appointment-row .status {
-    padding: 4px 5px;
     font-size: 9px;
   }
 }

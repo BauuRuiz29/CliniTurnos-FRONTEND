@@ -1,6 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { TURNOS } from '../../data-access/datos-prototipo';
+import { fechaLarga } from '../../../../shared/utils/fechas';
+import { of } from 'rxjs';
+import { AgendaRepository, TurnoProfesional } from '../data-access/agenda.repository';
+import { nombrePaciente } from '../turno-vista';
 
 type TipoConfirmacion = 'reprogramado' | 'cancelado';
 
@@ -30,7 +34,7 @@ const PAGINAS: Record<TipoConfirmacion, PaginaConfirmacion> = {
   },
 };
 
-/** Resultado de reprogramar o cancelar un turno [R12]. */
+/** Resultado de reprogramar (muestra el turno nuevo) o cancelar un turno [R12]. */
 @Component({
   imports: [RouterLink],
   selector: 'app-profesional-confirmacion',
@@ -38,12 +42,23 @@ const PAGINAS: Record<TipoConfirmacion, PaginaConfirmacion> = {
   templateUrl: './confirmacion.html',
 })
 export class Confirmacion {
+  private readonly repo = inject(AgendaRepository);
+  private readonly router = inject(Router);
   private readonly snapshot = inject(ActivatedRoute).snapshot;
+  private readonly id = Number(this.snapshot.paramMap.get('turnoId'));
+
   readonly tipo: TipoConfirmacion = this.snapshot.data['tipo'];
   readonly pagina = PAGINAS[this.tipo];
-  readonly turno = TURNOS.find((t) => t.id === Number(this.snapshot.paramMap.get('turnoId')));
+  // Al cancelar llega por navigation state (sobrevive al F5 vía history.state): el back pudo haber liberado la franja.
+  private readonly cancelado: TurnoProfesional | undefined = (this.router.currentNavigation()?.extras.state ?? history.state)?.['turno'];
+  readonly turno = rxResource({ stream: () => (this.cancelado ? of(this.cancelado) : this.repo.obtener(this.id)) });
+  readonly nombre = computed(() => (this.turno.value() ? nombrePaciente(this.turno.value()!.paciente) : ''));
+  readonly fecha = computed(() => (this.turno.value() ? fechaLarga(this.turno.value()!.fecha) : ''));
 
   constructor() {
-    if (!this.turno) void inject(Router).navigate(['/profesional/agenda']);
+    // Sin turno no hay nada que confirmar (entrada directa por URL).
+    effect(() => {
+      if (this.turno.hasValue() && !this.turno.value()) void this.router.navigate(['/profesional/agenda']);
+    });
   }
 }

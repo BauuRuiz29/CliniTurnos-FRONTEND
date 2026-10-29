@@ -1,0 +1,34 @@
+@if (turno(); as turno) {
+  <header class="page-header detail-page-header">
+    <button type="button" class="back-button" [routerLink]="['/profesional/turnos', turno.id]" aria-label="Volver al turno">←</button>
+    <div class="reschedule__title">
+      <h1>Reprogramar turno</h1>
+      <p>Elegí la nueva fecha y horario. El turno actual se cancela al confirmar.</p>
+    </div>
+  </header>
+
+  <div class="inner-card reschedule__current">
+    <h3>Turno actual</h3>
+    <p><strong>{{ nombre() }}</strong> · {{ fechaActual() }} · {{ turno.horaInicio }} hs</p>
+  </div>
+
+  @if (error(); as e) {
+    <p class="reschedule__error" role="alert">{{ e }}</p>
+  }
+
+  <app-selector-turno [disponibilidad]="disponibilidad()" [(slot)]="slot" />
+
+  <div class="reschedule__footer">
+    <p aria-live="polite">
+      @if (slot(); as s) {
+        Nuevo turno: <strong>{{ fechaNueva() }} · {{ s.horaInicio }} hs</strong>
+      }
+    </p>
+    <button type="button" class="button-secondary" [routerLink]="['/profesional/turnos', turno.id]">Cancelar</button>
+    <button type="button" class="button-primary" [disabled]="!slot() || confirmando()" (click)="confirmar()">
+      {{ confirmando() ? 'Reprogramando...' : 'Confirmar' }}
+    </button>
+  </div>
+} @else {
+  <p class="estado-carga">Cargando turno...</p>
+}

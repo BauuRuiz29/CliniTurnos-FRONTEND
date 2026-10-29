@@ -5,9 +5,9 @@ import { InformeMedico, InformesRepository } from '../data-access/informes.repos
 import { DetalleInforme } from './detalle-informe';
 
 const base: InformeMedico = {
-  id: 1, turnoId: 4, fecha: '2026-10-01', profesional: { id: 3, nombre: 'Dr. Pablo Sánchez' }, especialidad: 'Traumatología',
-  lugar: { nombre: 'Clínica Centro', direccion: '' }, diagnostico: 'Tendinitis', planTratamiento: null, indicaciones: 'Reposo',
-  adjuntos: [{ id: 1, titulo: 'Orden de kinesiología' }],
+  id: 1, turnoId: 4, fecha: '2026-10-01', profesional: 'Pablo Sánchez', especialidad: 'Traumatología',
+  diagnostico: 'Tendinitis', planTratamiento: null, indicaciones: 'Reposo',
+  adjuntos: [{ id: 1, titulo: 'Orden de kinesiología', url: 'http://api.test/media/orden.pdf' }],
 };
 
 describe('DetalleInforme', () => {
@@ -16,7 +16,7 @@ describe('DetalleInforme', () => {
       imports: [DetalleInforme],
       providers: [
         provideRouter([]),
-        { provide: InformesRepository, useValue: { listar: () => of([]), obtener: () => of(informe) } },
+        { provide: InformesRepository, useValue: { listar: () => of([]), obtener: () => of(informe), descargar: () => of(new Blob(['x'])) } },
         { provide: ActivatedRoute, useValue: { paramMap: of(convertToParamMap({ informeId: '1' })) } },
       ],
     });
@@ -36,5 +36,16 @@ describe('DetalleInforme', () => {
     expect(texto).toContain('Sin datos');
     expect(texto).toContain('Reposo');
     expect(texto).toContain('Orden de kinesiología');
+  });
+
+  it('cada adjunto se puede descargar y, si es uno solo, también desde Acciones', () => {
+    const { el } = crear(base);
+    expect(el.querySelector('button.adjunto')?.getAttribute('aria-label')).toBe('Descargar Orden de kinesiología');
+    const accion = [...el.querySelectorAll<HTMLButtonElement>('.detail-action')].find((b) => b.textContent?.includes('Descargar'));
+    expect(accion?.disabled).toBe(false);
+  });
+
+  it('sin adjuntos avisa que no hay archivos', () => {
+    expect(crear({ ...base, adjuntos: [] }).el.textContent).toContain('no tiene archivos adjuntos');
   });
 });

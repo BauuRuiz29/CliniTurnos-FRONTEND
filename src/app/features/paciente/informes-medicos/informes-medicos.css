@@ -61,6 +61,12 @@
   font-size: 13px;
 }
 
+.informes-error {
+  margin: 0 0 12px;
+  color: #dc2626;
+  font-size: 13px;
+}
+
 .report .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;

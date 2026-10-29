@@ -3,6 +3,10 @@
 		<div><h2>Informes médicos</h2><p>Accedé a tus informes médicos</p></div>
 	</div>
 
+	@if (errorDescarga()) {
+		<p class="informes-error" role="alert">No pudimos descargar el archivo. Intentá de nuevo.</p>
+	}
+
 	@if (error()) {
 		<p role="alert">No pudimos cargar tus informes. Intentá de nuevo más tarde.</p>
 	} @else if (cargando()) {
@@ -12,10 +16,15 @@
 			@for (i of informes(); track i.id) {
 				<article class="report">
 					<div class="report-icon">▤</div>
-					<div><strong>Informe - {{ fecha(i) }}</strong><span>{{ i.profesional.nombre }} - {{ i.especialidad }}</span><small>{{ i.lugar.nombre }}</small></div>
+					<div><strong>Informe - {{ fecha(i) }}</strong><span>{{ i.profesional }}@if (i.especialidad) { - {{ i.especialidad }} }</span></div>
 					<button type="button" class="btn btn--outline" [routerLink]="['/paciente/informes', i.id]">Ver detalles</button>
-					<!-- shortcut: sin back no hay archivo que descargar; habilitar cuando exista el endpoint del PDF. -->
-					<button type="button" class="btn btn--outline" disabled title="Disponible próximamente">Descargar</button>
+					<!-- Se descargan los archivos adjuntos: con uno solo, directo; con varios, se elige en el detalle. -->
+					@if (i.adjuntos.length === 1) {
+						<button type="button" class="btn btn--outline" [disabled]="descargando() === i.adjuntos[0].id" (click)="descargar(i.adjuntos[0])"
+							[attr.aria-label]="'Descargar ' + i.adjuntos[0].titulo">{{ descargando() === i.adjuntos[0].id ? 'Descargando...' : 'Descargar' }}</button>
+					} @else if (i.adjuntos.length > 1) {
+						<button type="button" class="btn btn--outline" [routerLink]="['/paciente/informes', i.id]">Descargar ({{ i.adjuntos.length }})</button>
+					}
 				</article>
 			} @empty {
 				<p class="informes-vacio">Todavía no tenés informes médicos.</p>

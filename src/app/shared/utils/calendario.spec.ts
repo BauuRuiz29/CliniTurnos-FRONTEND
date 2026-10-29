@@ -1,6 +1,6 @@
-import { EstadoTurno } from '../../../core/models/enums';
+import { EstadoTurno } from '../../core/models/enums';
 import { armarMes, horariosDelDia } from './calendario';
-import { Disponibilidad, HorarioMedico, Slot } from './data-access/reservar-turno.repository';
+import { Disponibilidad, HorarioMedico, Slot } from '../../core/models/disponibilidad';
 
 // Lunes 19/10/2026, 09:00.
 const AHORA = new Date(2026, 9, 19, 9, 0);

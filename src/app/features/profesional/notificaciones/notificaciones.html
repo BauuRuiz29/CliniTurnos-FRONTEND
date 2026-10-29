@@ -7,14 +7,20 @@
 </nav>
 
 <div class="notifications-list">
-  @for (n of visibles(); track n.id) {
-    <button type="button" class="notification-row" [class.unread]="!n.leida" (click)="marcarLeida(n.id)">
-      <span class="notification-symbol" aria-hidden="true">{{ simbolo(n) }}</span>
-      <span class="notification-body"><strong>{{ n.titulo }}</strong><small>{{ n.texto }}</small></span>
-      <span class="notification-time">{{ n.tiempo }}</span>
-      @if (!n.leida) { <span class="unread-dot" aria-label="No leída"></span> }
-    </button>
-  } @empty {
-    <p class="no-results">No hay notificaciones para mostrar.</p>
+  @if (cargando()) {
+    <p class="estado-carga">Cargando notificaciones...</p>
+  } @else if (error()) {
+    <p class="estado-carga estado-carga--error" role="alert">No pudimos cargar tus notificaciones. Intentá de nuevo.</p>
+  } @else {
+    @for (n of visibles(); track n.id) {
+      <button type="button" class="notification-row" [class.unread]="!leida(n)" (click)="abrir(n)">
+        <span class="notification-symbol" aria-hidden="true">{{ simbolo(n) }}</span>
+        <span class="notification-body"><strong>{{ n.asunto }}</strong><small>{{ n.mensaje }}</small></span>
+        <span class="notification-time">{{ cuando(n) }}</span>
+        @if (!leida(n)) { <span class="unread-dot" aria-label="No leída"></span> } @else { <span></span> }
+      </button>
+    } @empty {
+      <p class="no-results">No hay notificaciones para mostrar.</p>
+    }
   }
 </div>

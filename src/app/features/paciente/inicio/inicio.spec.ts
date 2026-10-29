@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { EstadoTurno } from '../../../core/models/enums';
-import { TurnoPaciente } from '../turnos/data-access/turnos.repository';
+import { of } from 'rxjs';
+import { InformesRepository } from '../informes-medicos/data-access/informes.repository';
+import { TurnoPaciente, TurnosRepository } from '../turnos/data-access/turnos.repository';
 import { Inicio, reservadosFuturos } from './inicio';
 
 describe('Inicio', () => {
@@ -11,7 +13,11 @@ describe('Inicio', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Inicio],
-      providers: [provideRouter([])],
+      providers: [
+        provideRouter([]),
+        { provide: TurnosRepository, useValue: { listar: () => of([]) } },
+        { provide: InformesRepository, useValue: { listar: () => of([{ id: 1 }, { id: 2 }]) } },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Inicio);
@@ -21,6 +27,10 @@ describe('Inicio', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('cuenta los informes disponibles del paciente [R10]', () => {
+    expect(component.informesDisponibles()).toBe(2);
   });
 
   it('cuenta y ordena solo los RESERVADO futuros [R07]', () => {

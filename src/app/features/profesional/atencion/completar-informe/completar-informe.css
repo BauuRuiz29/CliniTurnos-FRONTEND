@@ -1,8 +1,34 @@
 .detail-page-header {
   justify-content: flex-start;
 }
-.detail-page-header h1 {
+.report__title {
   flex: 1;
+}
+.report__title p {
+  margin: 4px 0 0;
+  color: #667590;
+}
+.report__error {
+  margin: 0 0 15px;
+  padding: 10px 14px;
+  border-radius: 5px;
+  background: #fdeeee;
+  color: #b42318;
+}
+.report__columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  margin-top: 5px;
+}
+.report__columns > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.report__empty {
+  margin: 0;
+  color: #6c7a94;
 }
 
 .medical-form {
@@ -28,6 +54,13 @@
   background: #fff;
   color: #263754;
   font-size: 12px;
+}
+.medical-form :is(input, textarea):disabled {
+  background: #f8fafc;
+  color: #263754;
+}
+.medical-form [aria-invalid=true] {
+  border-color: #dc2626;
 }
 .medical-form textarea {
   resize: vertical;
@@ -62,6 +95,27 @@
 .add-study {
   margin-left: 6px;
 }
+.study-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.study-input input {
+  flex: 1;
+  min-width: 0;
+}
+.add-study:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.report__pendiente {
+  margin: 0 0 15px;
+  padding: 10px 14px;
+  border-radius: 5px;
+  background: #fff6e5;
+  color: #8a5300;
+}
 
 /* ADJUNTOS */
 .file-attachment {
@@ -81,7 +135,25 @@
   margin-left: auto;
   color: #71809a;
 }
-.medical-form > .file-picker {
+.file-download {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #075de2;
+  font: inherit;
+  text-align: left;
+  text-decoration: underline;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.file-download:disabled {
+  cursor: progress;
+}
+.file-download:focus-visible {
+  outline: 2px solid #075de2;
+  outline-offset: 2px;
+}
+.file-picker {
   position: relative;
   align-self: flex-start;
   color: #075de2;
@@ -101,6 +173,7 @@
 
 .form-footer {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   gap: 10px;
   padding-top: 15px;
@@ -112,8 +185,12 @@
 }
 
 @media (max-width: 480px) {
+  /* Con tres botones (cancelar, cerrar sin informe, guardar) el principal pasa a su propia fila. */
   .form-footer > button {
-    flex: 1;
+    flex: 1 1 calc(50% - 5px);
     min-width: 0;
+  }
+  .form-footer > .button-primary {
+    flex-basis: 100%;
   }
 }

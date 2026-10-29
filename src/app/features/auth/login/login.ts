@@ -33,7 +33,16 @@ export class Login {
 
     this.auth.login(this.login.trim(), this.password).subscribe({
       // Tokens guardados y roles cargados desde /users/me/ (lo hace AuthService)
-      next: (usuario) => this.router.navigateByUrl(rutaInicio(rolPrincipal(usuario.roles))),
+      next: (usuario) => {
+        const rol = rolPrincipal(usuario.roles);
+        if (rol === null) {
+          // Credenciales válidas pero sin rol en usuarios_roles: no tiene área a la que entrar.
+          this.auth.logout();
+          this.errorMessage.set('Tu usuario no tiene un rol asignado. Contactá a la clínica.');
+          return;
+        }
+        void this.router.navigateByUrl(rutaInicio(rol));
+      },
       error: (err: unknown) => this.errorMessage.set(mensajeDeError(err)),
     });
   }

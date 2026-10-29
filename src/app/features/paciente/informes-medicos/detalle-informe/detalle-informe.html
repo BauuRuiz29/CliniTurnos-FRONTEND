@@ -9,24 +9,29 @@
         <section class="detail-header">
           <div>
             <h2>Informe médico</h2>
-            <p>{{ i.profesional.nombre }} - {{ i.especialidad }}</p>
+            <p>{{ i.profesional }}@if (i.especialidad) { - {{ i.especialidad }} }</p>
 
             <dl class="detalle-resumen">
               <div><dt>Fecha</dt><dd>{{ fecha() }}</dd></div>
-              <div><dt>Lugar</dt><dd>{{ i.lugar.nombre }}</dd></div>
             </dl>
           </div>
         </section>
 
         <section class="detail-card">
           <h3>Informe de la consulta</h3>
-          <div class="detail-row"><div class="detail-label"><span>♡</span><strong>Diagnóstico</strong></div><p>{{ i.diagnostico ?? 'Sin datos' }}</p></div>
+          <div class="detail-row"><div class="detail-label"><span>♡</span><strong>Diagnóstico</strong></div><p>{{ i.diagnostico }}</p></div>
           <div class="detail-row"><div class="detail-label"><span>▤</span><strong>Plan de tratamiento</strong></div><p>{{ i.planTratamiento ?? 'Sin datos' }}</p></div>
           <div class="detail-row" [class.detail-row--last]="!i.adjuntos.length"><div class="detail-label"><span>i</span><strong>Indicaciones</strong></div><p>{{ i.indicaciones ?? 'Sin datos' }}</p></div>
           @if (i.adjuntos.length) {
             <div class="detail-row detail-row--last">
               <div class="detail-label"><span>□</span><strong>Archivos adjuntos</strong></div>
-              <p>@for (a of i.adjuntos; track a.id) { <strong>{{ a.titulo }}</strong> }</p>
+              <p class="adjuntos">
+                @for (a of i.adjuntos; track a.id) {
+                  <button type="button" class="adjunto" [disabled]="descargando() === a.id" (click)="descargar(a)" [attr.aria-label]="'Descargar ' + a.titulo">
+                    ↓ {{ a.titulo }}@if (descargando() === a.id) { <small>Descargando...</small> }
+                  </button>
+                }
+              </p>
             </div>
           }
         </section>
@@ -38,7 +43,15 @@
         <section class="detail-side-card">
           <h3>Acciones</h3>
           <a class="detail-action detail-action--blue" [routerLink]="['/paciente/turnos', i.turnoId]"><span class="detail-action__icon">▣</span><span><strong>Ver turno</strong><small>Turno de esta consulta</small></span></a>
-          <button type="button" class="detail-action detail-action--blue" disabled><span class="detail-action__icon">↓</span><span><strong>Descargar</strong><small>Disponible próximamente</small></span></button>
+          <!-- Con un solo adjunto se descarga directo; con varios, cada uno desde "Archivos adjuntos". -->
+          @if (i.adjuntos.length === 1) {
+            <button type="button" class="detail-action detail-action--blue" [disabled]="descargando() !== null" (click)="descargar(i.adjuntos[0])"><span class="detail-action__icon">↓</span><span><strong>Descargar</strong><small>{{ i.adjuntos[0].titulo }}</small></span></button>
+          } @else if (i.adjuntos.length > 1) {
+            <p class="detalle-aviso">Descargá cada archivo desde "Archivos adjuntos".</p>
+          } @else {
+            <p class="detalle-aviso">Este informe no tiene archivos adjuntos.</p>
+          }
+          @if (errorDescarga()) { <p class="detalle-error" role="alert">No pudimos descargar el archivo. Intentá de nuevo.</p> }
         </section>
       </aside>
     </div>

@@ -12,7 +12,7 @@
 }
 .patients-row {
   display: grid;
-  grid-template-columns: minmax(190px, 1.5fr) minmax(90px, .8fr) minmax(110px, 1fr) minmax(110px, 1fr) 55px;
+  grid-template-columns: minmax(190px, 1.5fr) minmax(90px, .8fr) minmax(110px, 1fr) minmax(110px, 1fr) 95px;
   align-items: center;
   gap: 12px;
   min-width: 680px;
@@ -48,10 +48,16 @@
   font-size: 9px;
 }
 .view-button {
-  border: 0;
-  background: transparent;
-  color: #526581;
-  font-size: 19px;
+  width: 100%;
+  color: #075de2;
+  border-color: #b9d0f7;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
 }
 
 .pagination {
@@ -70,6 +76,10 @@
   border-radius: 4px;
   background: transparent;
   color: #344867;
+}
+.pagination button:disabled {
+  color: #c7cfdc;
+  cursor: default;
 }
 .pagination button.current {
   background: #0861e5;

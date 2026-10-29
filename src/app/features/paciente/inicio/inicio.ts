@@ -3,6 +3,7 @@ import { formatDate } from '@angular/common';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { EstadoTurno } from '../../../core/models/enums';
+import { InformesRepository } from '../informes-medicos/data-access/informes.repository';
 import { ESTADO_TURNO_TEXTO, TurnoPaciente, TurnosRepository } from '../turnos/data-access/turnos.repository';
 
 /** Dashboard del paciente: próximo turno y turnos reservados [R07]. */
@@ -23,8 +24,9 @@ export class Inicio {
   readonly proximo = computed(() => this.reservados()[0]);
   readonly proximos = computed(() => this.reservados().slice(0, 3));
 
-  // shortcut: fijo hasta conectar InformesRepository (lo hace otra sesión), ahí pasa a computed.
-  readonly informesDisponibles = 3;
+  private readonly informesRepo = inject(InformesRepository);
+  private readonly informes = rxResource({ stream: () => this.informesRepo.listar(), defaultValue: [] });
+  readonly informesDisponibles = computed(() => (this.informes.hasValue() ? this.informes.value().length : 0));
 
   estado(t: TurnoPaciente): string {
     return ESTADO_TURNO_TEXTO[t.estado];

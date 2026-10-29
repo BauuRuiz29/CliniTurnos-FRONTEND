@@ -5,7 +5,7 @@
 }
 .turno-row {
   display: grid;
-  grid-template-columns: 48px 70px minmax(130px, 1.3fr) minmax(90px, .9fr) auto 18px;
+  grid-template-columns: 48px 70px minmax(130px, 1fr) auto 140px;
   align-items: center;
   gap: 13px;
   width: 100%;
@@ -20,8 +20,18 @@
 .turno-row:last-child {
   border-bottom: 0;
 }
-.turno-row:hover {
-  background: #f9fbff;
+.turno-action {
+  width: 100%;
+  color: #075de2;
+  border-color: #b9d0f7;
+}
+.turno-action--informe {
+  color: #0a8f8c;
+  border-color: #9ddbd9;
+}
+.turno-action--ver-informe {
+  color: #07886a;
+  border-color: #a6e3c9;
 }
 .date-block {
   display: flex;
@@ -55,18 +65,21 @@
   color: #71809a;
   font-size: 10px;
 }
-.turno-specialty {
-  color: #50607a;
-  font-size: 11px;
-}
 
+@media (max-width: 1100px) {
+  .turno-row {
+    grid-template-columns: 40px 58px minmax(0, 1fr) auto 120px;
+    gap: 8px;
+    padding-inline: 10px;
+  }
+}
 @media (max-width: 750px) {
   .turno-row {
-    grid-template-columns: 40px 53px minmax(100px, 1fr) auto 12px;
+    grid-template-columns: 40px 58px minmax(100px, 1fr) 120px;
     gap: 8px;
     padding-inline: 8px;
   }
-  .turno-specialty {
+  .turno-row .status {
     display: none;
   }
 }

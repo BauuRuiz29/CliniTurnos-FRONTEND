@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
-import { EstadoTurno } from '../../../core/models/enums';
-import { fechaLarga } from '../../../shared/utils/fechas';
-import type { DiaSemana, Disponibilidad, Slot } from './data-access/reservar-turno.repository';
+import { EstadoTurno } from '../../core/models/enums';
+import { fechaLarga } from './fechas';
+import type { DiaSemana, Disponibilidad, Slot } from '../../core/models/disponibilidad';
 
 //para pedir turnos 
 export const VENTANA_DIAS = 30;
