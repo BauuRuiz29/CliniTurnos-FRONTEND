@@ -1,4 +1,3 @@
-import { Rol } from '../models/enums';
 import { decodificarJwt, jwtVencido } from './jwt';
 
 const base64Url = (obj: object) =>
@@ -7,12 +6,8 @@ const base64Url = (obj: object) =>
 const crearToken = (payload: object) => `${base64Url({ alg: 'HS256' })}.${base64Url(payload)}.firma`;
 
 describe('jwt', () => {
-  it('lee rol y exp del payload', () => {
-    expect(decodificarJwt(crearToken({ rol: Rol.MEDICO, exp: 100 }))).toEqual({ rol: Rol.MEDICO, exp: 100 });
-  });
-
-  it('ignora un rol que no existe', () => {
-    expect(decodificarJwt(crearToken({ rol: 'SUPERUSER' }))?.rol).toBeUndefined();
+  it('lee exp del payload', () => {
+    expect(decodificarJwt(crearToken({ exp: 100, user_id: '3' }))).toEqual({ exp: 100 });
   });
 
   it('devuelve null si el token está mal formado', () => {

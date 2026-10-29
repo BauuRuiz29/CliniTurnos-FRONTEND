@@ -3,7 +3,8 @@ import { AbstractControl, NonNullableFormBuilder, ReactiveFormsModule, Validatio
 import { Router, RouterLink } from '@angular/router';
 import { Genero, TipoDocumento } from '../../../core/models/enums';
 import { GENEROS, PATRON_TELEFONO, hoyIso, noFutura } from '../../../shared/utils/formularios';
-import { RegistroPaciente, RegistroRepository } from '../data-access/registro.repository';
+import { HttpErrorResponse } from '@angular/common/http';
+import { RegistroInvalidoError, RegistroPaciente, RegistroRepository } from '../data-access/registro.repository';
 
 type Campo = keyof Registro['form']['controls'];
 
@@ -81,11 +82,34 @@ export class Registro {
     this.enviando.set(true);
     this.repo.registrar(datos as RegistroPaciente).subscribe({
       next: () => this.registrado.set(true),
-      error: (err) => {
+      error: (err: unknown) => {
         this.enviando.set(false);
-        this.errorMessage.set(err?.error?.detail || 'No pudimos crear tu cuenta. Intentá de nuevo.');
+        if (err instanceof RegistroInvalidoError) {
+          this.mostrarErroresDelServidor(err);
+          return;
+        }
+        this.errorMessage.set(
+          err instanceof HttpErrorResponse && err.status === 0
+            ? 'No pudimos conectarnos con el servidor. Intentá más tarde.'
+            : 'No pudimos crear tu cuenta. Intentá de nuevo.',
+        );
       },
     });
+  }
+
+  /** Mensaje del back para el campo (login o documento ya usados, contraseña débil...). Se borra al editarlo. */
+  errorServidor(campo: Campo): string | null {
+    return this.form.controls[campo].getError('servidor') ?? null;
+  }
+
+  private mostrarErroresDelServidor(err: RegistroInvalidoError): void {
+    for (const [campo, mensaje] of Object.entries(err.campos)) {
+      const control = this.form.controls[campo as Campo];
+      control.setErrors({ ...control.errors, servidor: mensaje });
+      control.markAsTouched();
+    }
+    const sinCampo = err.generales.length ? err.generales : [];
+    this.errorMessage.set(sinCampo.length ? sinCampo.join(' ') : 'Revisá los datos marcados.');
   }
 
   irLogin(): void {

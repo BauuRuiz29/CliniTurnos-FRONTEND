@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { of, throwError } from 'rxjs';
+import { RegistroInvalidoError, RegistroRepository } from '../data-access/registro.repository';
 import { Registro } from './registro';
 
 const DATOS_VALIDOS = {
@@ -18,13 +20,14 @@ const DATOS_VALIDOS = {
 };
 
 describe('Registro', () => {
+  const repo = { registrar: vi.fn(() => of<void>(undefined)) };
   let component: Registro;
   let fixture: ComponentFixture<Registro>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Registro],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), { provide: RegistroRepository, useValue: repo }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Registro);
@@ -62,5 +65,15 @@ describe('Registro', () => {
   it('rechaza fechas de nacimiento futuras', () => {
     component.form.setValue({ ...DATOS_VALIDOS, fechaNacimiento: '2999-01-01' });
     expect(component.form.controls.fechaNacimiento.hasError('fechaFutura')).toBe(true);
+  });
+
+  it('muestra en cada campo el error que devuelve el back', () => {
+    repo.registrar.mockReturnValueOnce(throwError(() => new RegistroInvalidoError({ login: 'Este login ya está en uso.' }, [])));
+    component.form.setValue(DATOS_VALIDOS);
+    component.crearCuenta();
+    expect(component.errorServidor('login')).toBe('Este login ya está en uso.');
+    expect(component.form.controls.login.invalid).toBe(true);
+    component.form.controls.login.setValue('otro');
+    expect(component.errorServidor('login')).toBeNull();
   });
 });

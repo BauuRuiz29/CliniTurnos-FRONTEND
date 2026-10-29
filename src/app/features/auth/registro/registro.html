@@ -54,13 +54,13 @@
         <div class="login-field">
           <label for="nombre">Nombre</label>
           <input id="nombre" type="text" formControlName="nombre" autocomplete="given-name" [attr.aria-invalid]="invalido('nombre')">
-          @if (invalido('nombre')) { <p class="registro-error">Ingresá tu nombre (máx. 50 caracteres).</p> }
+          @if (errorServidor('nombre'); as e) { <p class="registro-error" role="alert">{{ e }}</p> } @else if (invalido('nombre')) { <p class="registro-error">Ingresá tu nombre (máx. 50 caracteres).</p> }
         </div>
 
         <div class="login-field">
           <label for="apellido">Apellido</label>
           <input id="apellido" type="text" formControlName="apellido" autocomplete="family-name" [attr.aria-invalid]="invalido('apellido')">
-          @if (invalido('apellido')) { <p class="registro-error">Ingresá tu apellido (máx. 50 caracteres).</p> }
+          @if (errorServidor('apellido'); as e) { <p class="registro-error" role="alert">{{ e }}</p> } @else if (invalido('apellido')) { <p class="registro-error">Ingresá tu apellido (máx. 50 caracteres).</p> }
         </div>
 
         <div class="login-field">
@@ -75,7 +75,7 @@
         <div class="login-field">
           <label for="numIdentificacion">N° de documento</label>
           <input id="numIdentificacion" type="text" formControlName="numIdentificacion" [attr.aria-invalid]="invalido('numIdentificacion') || errorDeGrupo('dniInvalido', 'numIdentificacion')">
-          @if (invalido('numIdentificacion')) {
+          @if (errorServidor('numIdentificacion'); as e) { <p class="registro-error" role="alert">{{ e }}</p> } @else if (invalido('numIdentificacion')) {
             <p class="registro-error">Ingresá tu número de documento.</p>
           } @else if (errorDeGrupo('dniInvalido', 'numIdentificacion')) {
             <p class="registro-error">El DNI tiene 7 u 8 números, sin puntos.</p>
@@ -85,7 +85,7 @@
         <div class="login-field">
           <label for="fechaNacimiento">Fecha de nacimiento</label>
           <input id="fechaNacimiento" type="date" formControlName="fechaNacimiento" [max]="hoy" autocomplete="bday" [attr.aria-invalid]="invalido('fechaNacimiento')">
-          @if (invalido('fechaNacimiento')) { <p class="registro-error">Ingresá una fecha válida.</p> }
+          @if (errorServidor('fechaNacimiento'); as e) { <p class="registro-error" role="alert">{{ e }}</p> } @else if (invalido('fechaNacimiento')) { <p class="registro-error">Ingresá una fecha válida.</p> }
         </div>
 
         <div class="login-field">
@@ -96,31 +96,31 @@
               <option [value]="genero.valor">{{ genero.texto }}</option>
             }
           </select>
-          @if (invalido('genero')) { <p class="registro-error">Seleccioná una opción.</p> }
+          @if (errorServidor('genero'); as e) { <p class="registro-error" role="alert">{{ e }}</p> } @else if (invalido('genero')) { <p class="registro-error">Seleccioná una opción.</p> }
         </div>
 
         <div class="login-field">
           <label for="telefono">Teléfono</label>
           <input id="telefono" type="tel" formControlName="telefono" autocomplete="tel" placeholder="+54 11 1234 5678" [attr.aria-invalid]="invalido('telefono')">
-          @if (invalido('telefono')) { <p class="registro-error">Ingresá un teléfono válido.</p> }
+          @if (errorServidor('telefono'); as e) { <p class="registro-error" role="alert">{{ e }}</p> } @else if (invalido('telefono')) { <p class="registro-error">Ingresá un teléfono válido.</p> }
         </div>
 
         <div class="login-field">
           <label for="correo">Correo electrónico</label>
           <input id="correo" type="email" formControlName="correo" autocomplete="email" placeholder="tu@email.com" [attr.aria-invalid]="invalido('correo')">
-          @if (invalido('correo')) { <p class="registro-error">Ingresá un correo válido.</p> }
+          @if (errorServidor('correo'); as e) { <p class="registro-error" role="alert">{{ e }}</p> } @else if (invalido('correo')) { <p class="registro-error">Ingresá un correo válido.</p> }
         </div>
 
         <div class="login-field registro-grid__full">
           <label for="login">Usuario</label>
           <input id="login" type="text" formControlName="login" autocomplete="username" [attr.aria-invalid]="invalido('login')">
-          @if (invalido('login')) { <p class="registro-error">Elegí un usuario (máx. 50 caracteres).</p> }
+          @if (errorServidor('login'); as e) { <p class="registro-error" role="alert">{{ e }}</p> } @else if (invalido('login')) { <p class="registro-error">Elegí un usuario (máx. 50 caracteres).</p> }
         </div>
 
         <div class="login-field">
           <label for="password">Contraseña</label>
           <input id="password" type="password" formControlName="password" autocomplete="new-password" placeholder="••••••••" [attr.aria-invalid]="invalido('password')">
-          @if (invalido('password')) { <p class="registro-error">Mínimo 8 caracteres.</p> }
+          @if (errorServidor('password'); as e) { <p class="registro-error" role="alert">{{ e }}</p> } @else if (invalido('password')) { <p class="registro-error">Mínimo 8 caracteres.</p> }
         </div>
 
         <div class="login-field">

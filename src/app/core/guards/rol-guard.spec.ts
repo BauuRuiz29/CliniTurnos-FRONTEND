@@ -1,40 +1,42 @@
 import { TestBed } from '@angular/core/testing';
 import { PartialMatchRouteSnapshot, Route, Router, UrlTree, provideRouter } from '@angular/router';
-import { AuthService } from '../auth/auth.service';
+import { Observable, firstValueFrom, isObservable, of } from 'rxjs';
+import { AuthService, UsuarioSesion } from '../auth/auth.service';
 import { Rol } from '../models/enums';
 import { rolGuard } from './rol-guard';
 
 describe('rolGuard', () => {
-  let logueado: boolean;
-  let rol: Rol | null;
+  let usuario: UsuarioSesion | null;
 
-  const ejecutar = (...roles: Rol[]) =>
-    TestBed.runInInjectionContext(() => rolGuard(...roles)({} as Route, [], {} as PartialMatchRouteSnapshot));
+  const ejecutar = async (...roles: Rol[]) => {
+    const r = TestBed.runInInjectionContext(() => rolGuard(...roles)({} as Route, [], {} as PartialMatchRouteSnapshot));
+    const valor = isObservable(r) ? await firstValueFrom(r as Observable<boolean | UrlTree>) : await r;
+    return valor instanceof UrlTree ? TestBed.inject(Router).serializeUrl(valor) : valor;
+  };
 
   beforeEach(() => {
-    logueado = true;
-    rol = Rol.PACIENTE;
+    usuario = { id: 1, nombre: 'Ana', apellido: 'Paz', genero: null, roles: [Rol.PACIENTE] };
     TestBed.configureTestingModule({
-      providers: [
-        provideRouter([]),
-        { provide: AuthService, useValue: { isLoggedIn: () => logueado, getRol: () => rol } },
-      ],
+      providers: [provideRouter([]), { provide: AuthService, useValue: { sesion: () => of(usuario) } }],
     });
   });
 
-  it('permite el acceso si el rol está permitido', () => {
-    expect(ejecutar(Rol.PACIENTE)).toBe(true);
+  it('permite el acceso si el usuario tiene el rol', async () => {
+    expect(await ejecutar(Rol.PACIENTE)).toBe(true);
   });
 
-  it('redirige a /login si no hay sesión', () => {
-    logueado = false;
-    const resultado = ejecutar(Rol.PACIENTE) as UrlTree;
-    expect(TestBed.inject(Router).serializeUrl(resultado)).toBe('/login');
+  it('redirige a /login si no hay sesión', async () => {
+    usuario = null;
+    expect(await ejecutar(Rol.PACIENTE)).toBe('/login');
   });
 
-  it('redirige a / si el rol no está permitido', () => {
-    rol = Rol.MEDICO;
-    const resultado = ejecutar(Rol.PACIENTE) as UrlTree;
-    expect(TestBed.inject(Router).serializeUrl(resultado)).toBe('/');
+  it('con otro rol manda al inicio de su área', async () => {
+    usuario = { ...usuario!, roles: [Rol.MEDICO] };
+    expect(await ejecutar(Rol.PACIENTE)).toBe('/profesional');
+  });
+
+  it('alcanza con uno de los roles del usuario', async () => {
+    usuario = { ...usuario!, roles: [Rol.PACIENTE, Rol.MEDICO] };
+    expect(await ejecutar(Rol.MEDICO)).toBe(true);
   });
 });

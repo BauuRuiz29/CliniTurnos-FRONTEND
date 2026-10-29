@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Genero, TipoDocumento } from '../../../core/models/enums';
-import { RegistroMockRepository } from './registro.repository.mock';
+import { RegistroHttpRepository } from './registro.repository.http';
 
-//Campos de `usuarios` + `pacientes`  
+//Campos de `usuarios` + `pacientes`
 export interface RegistroPaciente {
   nombre: string;
   apellido: string;
@@ -17,9 +17,10 @@ export interface RegistroPaciente {
   password: string;
 }
 
-//Alta de pacientes. 
+export { RegistroInvalidoError } from './registro.errores';
 
-@Injectable({ providedIn: 'root', useClass: RegistroMockRepository })
+/** Alta de pacientes [R01]. Falla con `RegistroInvalidoError` si el back rechaza algún dato. */
+@Injectable({ providedIn: 'root', useClass: RegistroHttpRepository })
 export abstract class RegistroRepository {
   abstract registrar(datos: RegistroPaciente): Observable<void>;
 }

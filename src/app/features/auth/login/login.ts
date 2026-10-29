@@ -1,7 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../../core/auth/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService, rolPrincipal } from '../../../core/auth/auth.service';
 import { rutaInicio } from '../../../core/auth/inicio-por-rol';
 
 @Component({
@@ -31,16 +32,9 @@ export class Login {
     }
 
     this.auth.login(this.login.trim(), this.password).subscribe({
-      // Token ya quedó guardado en localStorage (lo hace AuthService); el rol sale del token
-      next: () => this.router.navigateByUrl(rutaInicio(this.auth.getRol())),
-      // Si falla (401, 400, red, etc.)
-      error: (err) => {
-        this.errorMessage.set(
-          err?.error?.detail ||
-          err?.error?.non_field_errors?.[0] ||
-          'Usuario o contraseña incorrectos'
-        );
-      },
+      // Tokens guardados y roles cargados desde /users/me/ (lo hace AuthService)
+      next: (usuario) => this.router.navigateByUrl(rutaInicio(rolPrincipal(usuario.roles))),
+      error: (err: unknown) => this.errorMessage.set(mensajeDeError(err)),
     });
   }
 
@@ -48,4 +42,12 @@ export class Login {
     this.router.navigate(['/']);
   }
 
+}
+
+// 401: credenciales incorrectas ({ detail }). 400: usuario dado de baja ({ non_field_errors }). 0: back caído.
+function mensajeDeError(err: unknown): string {
+  if (!(err instanceof HttpErrorResponse)) return 'No pudimos iniciar sesión. Intentá de nuevo.';
+  if (err.status === 0) return 'No pudimos conectarnos con el servidor. Intentá más tarde.';
+  if (err.status === 401) return 'Usuario o contraseña incorrectos.';
+  return err.error?.non_field_errors?.[0] || err.error?.detail || 'No pudimos iniciar sesión. Intentá de nuevo.';
 }
