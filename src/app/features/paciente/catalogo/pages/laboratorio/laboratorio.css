@@ -55,19 +55,26 @@
   font-size: 13px;
   line-height: 1.45;
 }
-.laboratory-reserve {
-  padding: 7px 16px;
-  border: 1px solid #1464d8;
-  border-radius: 7px;
+.laboratory-chip {
+  padding: 5px 12px;
+  border: 1px solid #b7d0f7;
+  border-radius: 999px;
   background: #eaf2ff;
   color: #1464d8;
   font-size: 13px;
-  text-decoration: none;
   white-space: nowrap;
 }
-.laboratory-reserve:hover,
-.laboratory-reserve:focus-visible {
-  background: #dbe8ff;
+.laboratory-warning {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border: 1px solid #f0c36d;
+  border-radius: 8px;
+  background: #fff7e0;
+  color: #7a4b00;
+  font-size: 14px;
 }
 .laboratory-empty {
   margin: 0;
@@ -83,8 +90,8 @@
     width: 44px;
     height: 44px;
   }
-  .laboratory-reserve {
-    grid-column: 1 / -1;
-    text-align: center;
+  .laboratory-chip {
+    grid-column: 2;
+    justify-self: start;
   }
 }
