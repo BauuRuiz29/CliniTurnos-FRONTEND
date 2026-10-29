@@ -29,8 +29,8 @@ export class CatalogoFacade {
     const texto = normalizar(busqueda);
     return profesionales.filter(
       (p) =>
-        (especialidadId === null || p.especialidadId === especialidadId) &&
-        normalizar(`${p.titulo} ${p.nombre} ${p.apellido} ${p.especialidad}`).includes(texto),
+        (especialidadId === null || p.especialidades.some((e) => e.id === especialidadId)) &&
+        normalizar(`${p.nombre} ${p.apellido} ${p.especialidades.map((e) => e.nombre).join(' ')}`).includes(texto),
     );
   }
 

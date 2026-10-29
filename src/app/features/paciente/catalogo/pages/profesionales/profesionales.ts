@@ -3,6 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import { CatalogoFacade } from '../../data-access/catalogo.facade';
+import { Profesional } from '../../data-access/catalogo.models';
 
 @Component({
   imports: [RouterLink],
@@ -35,4 +36,7 @@ export class Profesionales {
       this.especialidadActiva()?.id ?? null,
     ),
   );
+
+  readonly nombreCompleto = (p: Profesional) => `${p.nombre} ${p.apellido}`;
+  readonly textoEspecialidades = (p: Profesional) => p.especialidades.map((e) => e.nombre).join(' · ');
 }

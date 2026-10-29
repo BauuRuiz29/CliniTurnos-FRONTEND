@@ -27,7 +27,7 @@
 			@for (profesional of profesionales(); track profesional.id) {
 				<article class="professional-card">
 					<div class="doctor-avatar">{{ profesional.nombre[0] }}{{ profesional.apellido[0] }}</div>
-					<div><h3>{{ profesional.titulo }} {{ profesional.nombre }} {{ profesional.apellido }}</h3><p>{{ profesional.especialidad }}</p></div>
+					<div><h3>{{ nombreCompleto(profesional) }}</h3><p>{{ textoEspecialidades(profesional) }}</p></div>
 					<button type="button" class="btn btn--outline" [routerLink]="['/paciente/reservar-turno', profesional.id]">Ver horarios</button>
 				</article>
 			} @empty {

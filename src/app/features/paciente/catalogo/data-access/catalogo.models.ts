@@ -1,5 +1,5 @@
-// Modelos de dominio del catálogo. Campos tomados del maquetado:
-// TODO: alinear nombres y tipos con db-cliniturnos cuando se conecte el back.
+// Modelos de dominio del catálogo. Especialidad y Profesional ya están alineados con la API.
+// TODO: TipoEstudio sigue el maquetado (el back no tiene categoría ni preparación).
 
 export interface Especialidad {
   id: number;
@@ -7,13 +7,12 @@ export interface Especialidad {
   descripcion: string;
 }
 
+/** Un profesional puede tener varias especialidades (`profesional_especialidades`). */
 export interface Profesional {
   id: number;
-  titulo: "Dr." | "Dra."; 
   nombre: string;
   apellido: string;
-  especialidadId: number;
-  especialidad: string;
+  especialidades: Pick<Especialidad, 'id' | 'nombre'>[];
 }
 
 /** Estudio que se puede solicitar (catálogo), no el estudio de un paciente. */

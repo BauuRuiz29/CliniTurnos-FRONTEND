@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
+import { CatalogoRepository } from '../../data-access/catalogo.repository';
+import { CatalogoMockRepository } from '../../data-access/catalogo.repository.mock';
 import { Profesionales } from './profesionales';
 
 async function crear(queryParams: Record<string, string>): Promise<ComponentFixture<Profesionales>> {
@@ -8,6 +10,7 @@ async function crear(queryParams: Record<string, string>): Promise<ComponentFixt
     imports: [Profesionales],
     providers: [
       provideRouter([]),
+      { provide: CatalogoRepository, useClass: CatalogoMockRepository },
       { provide: ActivatedRoute, useValue: { queryParamMap: of(convertToParamMap(queryParams)) } },
     ],
   }).compileComponents();

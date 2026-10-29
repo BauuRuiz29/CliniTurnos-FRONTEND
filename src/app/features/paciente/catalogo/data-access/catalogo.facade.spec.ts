@@ -2,9 +2,12 @@ import { ApplicationRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { CatalogoFacade } from './catalogo.facade';
 import { Profesional, TipoEstudio } from './catalogo.models';
+import { CatalogoRepository } from './catalogo.repository';
+import { CatalogoMockRepository } from './catalogo.repository.mock';
 
-const garcia: Profesional = { id: 1, titulo: 'Dr.', nombre: 'Juan', apellido: 'García', especialidadId: 1, especialidad: 'Cardiología' };
-const lopez: Profesional = { id: 2, titulo: 'Dra.', nombre: 'María', apellido: 'López', especialidadId: 2, especialidad: 'Dermatología' };
+const garcia: Profesional = { id: 1, nombre: 'Juan', apellido: 'García', especialidades: [{ id: 1, nombre: 'Cardiología' }] };
+const lopez: Profesional = { id: 2, nombre: 'María', apellido: 'López', especialidades: [{ id: 2, nombre: 'Dermatología' }] };
+const fernandez: Profesional = { id: 3, nombre: 'Laura', apellido: 'Fernández', especialidades: [{ id: 5, nombre: 'Pediatría' }, { id: 6, nombre: 'Clínica médica' }] };
 
 const hemograma: TipoEstudio = { id: 1, nombre: 'Hemograma completo', descripcion: '', categoria: 'Hematología', preparacion: null };
 const glucemia: TipoEstudio = { id: 2, nombre: 'Glucemia', descripcion: '', categoria: 'Bioquímica', preparacion: null };
@@ -13,6 +16,7 @@ describe('CatalogoFacade', () => {
   let facade: CatalogoFacade;
 
   beforeEach(() => {
+    TestBed.configureTestingModule({ providers: [{ provide: CatalogoRepository, useClass: CatalogoMockRepository }] });
     facade = TestBed.inject(CatalogoFacade);
   });
 
@@ -25,6 +29,11 @@ describe('CatalogoFacade', () => {
   it('filtra profesionales por especialidad y lo combina con la búsqueda', () => {
     expect(facade.filtrarProfesionales([garcia, lopez], '', 2)).toEqual([lopez]);
     expect(facade.filtrarProfesionales([garcia, lopez], 'garcia', 2)).toEqual([]);
+  });
+
+  it('un profesional con varias especialidades aparece en cualquiera de ellas', () => {
+    expect(facade.filtrarProfesionales([garcia, fernandez], '', 6)).toEqual([fernandez]);
+    expect(facade.filtrarProfesionales([garcia, fernandez], 'pediatria', null)).toEqual([fernandez]);
   });
 
   it('filtra estudios por categoría y por nombre', () => {

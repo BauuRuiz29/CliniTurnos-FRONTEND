@@ -17,9 +17,9 @@ const ESPECIALIDADES: Especialidad[] = [
 ];
 
 const PROFESIONALES: Profesional[] = [
-  { id: 1, titulo: 'Dr.', nombre: 'Juan', apellido: 'García', especialidadId: 1, especialidad: 'Cardiología' },
-  { id: 2, titulo: 'Dra.', nombre: 'María', apellido: 'López', especialidadId: 2, especialidad: 'Dermatología' },
-  { id: 3, titulo: 'Dr.', nombre: 'Pablo', apellido: 'Sánchez', especialidadId: 5, especialidad: 'Traumatología' },
+  { id: 1, nombre: 'Juan', apellido: 'García', especialidades: [{ id: 1, nombre: 'Cardiología' }] },
+  { id: 2, nombre: 'María', apellido: 'López', especialidades: [{ id: 2, nombre: 'Dermatología' }] },
+  { id: 3, nombre: 'Pablo', apellido: 'Sánchez', especialidades: [{ id: 5, nombre: 'Traumatología' }] },
 ];
 
 const TIPOS_ESTUDIO: TipoEstudio[] = [
