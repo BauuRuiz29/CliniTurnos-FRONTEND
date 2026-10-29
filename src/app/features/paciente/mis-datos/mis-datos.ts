@@ -1,17 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { FormArray, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Genero, TipoDocumento } from '../../../core/models/enums';
 import { GENEROS, PATRON_TELEFONO, hoyIso, noFutura } from '../../../shared/utils/formularios';
-import {
-  Alergia,
-  DatosPaciente,
-  DatosPacienteEditables,
-  Medicacion,
-  MisDatosRepository,
-  SEVERIDADES,
-  Severidad,
-} from './data-access/mis-datos.repository';
+import { DatosPaciente, DatosPacienteEditables, MisDatosRepository, textoSeveridad } from './data-access/mis-datos.repository';
 import { ObrasSocialesRepository } from './data-access/obras-sociales.repository';
 
 type Campo = keyof MisDatos['form']['controls'];
@@ -31,11 +23,14 @@ const CAMPOS_FIJOS = ['login', 'tipoIdentificacion', 'numIdentificacion'] as con
 export class MisDatos {
   private readonly repo = inject(MisDatosRepository);
   private readonly fb = inject(NonNullableFormBuilder);
-  private original?: DatosPaciente;
+  private readonly original = signal<DatosPaciente | null>(null);
 
   readonly generos = GENEROS;
   readonly gruposSanguineos = GRUPOS_SANGUINEOS;
-  readonly severidades = SEVERIDADES;
+  readonly textoSeveridad = textoSeveridad;
+  // De la historia clínica: el paciente las ve pero no las edita (las cargan médicos o admin).
+  readonly alergias = computed(() => this.original()?.alergias ?? []);
+  readonly medicaciones = computed(() => this.original()?.medicaciones ?? []);
   readonly hoy = hoyIso();
   readonly obrasSociales = toSignal(inject(ObrasSocialesRepository).listar(), { initialValue: [] });
 
@@ -54,8 +49,6 @@ export class MisDatos {
     grupoSanguineo: [''],
     contactoEmergenciaNombre: ['', Validators.maxLength(50)],
     contactoEmergenciaNumero: ['', [Validators.maxLength(50), Validators.pattern(PATRON_TELEFONO)]],
-    alergias: this.fb.array<ReturnType<MisDatos['filaAlergia']>>([]),
-    medicaciones: this.fb.array<ReturnType<MisDatos['filaMedicacion']>>([]),
   });
 
   readonly cargando = signal(true);
@@ -68,7 +61,7 @@ export class MisDatos {
     this.form.disable();
     this.repo.obtener().subscribe({
       next: (datos) => {
-        this.original = datos;
+        this.original.set(datos);
         this.restaurar();
         this.cargando.set(false);
       },
@@ -93,18 +86,6 @@ export class MisDatos {
     this.editando.set(true);
   }
 
-  agregarAlergia(): void {
-    this.form.controls.alergias.push(this.filaAlergia());
-  }
-
-  agregarMedicacion(): void {
-    this.form.controls.medicaciones.push(this.filaMedicacion());
-  }
-
-  quitar(lista: FormArray, i: number): void {
-    lista.removeAt(i);
-  }
-
   cancelar(): void {
     this.errorMessage.set('');
     this.restaurar();
@@ -124,19 +105,12 @@ export class MisDatos {
       grupoSanguineo: v.grupoSanguineo || null,
       contactoEmergenciaNombre: v.contactoEmergenciaNombre?.trim() || null,
       contactoEmergenciaNumero: v.contactoEmergenciaNumero?.trim() || null,
-      alergias: v.alergias!.map((a) => ({ id: a.id ?? undefined, descripcion: a.descripcion!.trim(), severidad: a.severidad || null })),
-      medicaciones: v.medicaciones!.map((m) => ({
-        id: m.id ?? undefined,
-        medicamento: m.medicamento!.trim(),
-        dosis: m.dosis?.trim() || null,
-        frecuencia: m.frecuencia?.trim() || null,
-      })),
     } as DatosPacienteEditables;
 
     this.guardando.set(true);
     this.repo.guardar(cambios).subscribe({
       next: (datos) => {
-        this.original = datos;
+        this.original.set(datos);
         this.guardando.set(false);
         this.restaurar();
         this.guardado.set(true);
@@ -149,40 +123,14 @@ export class MisDatos {
   }
 
   private restaurar(): void {
-    const o = this.original!;
-    // reset no cambia el largo de los FormArray: se rearman con las filas originales.
-    const { alergias, medicaciones } = this.form.controls;
-    alergias.clear();
-    o.alergias.forEach((a) => alergias.push(this.filaAlergia(a)));
-    medicaciones.clear();
-    o.medicaciones.forEach((m) => medicaciones.push(this.filaMedicacion(m)));
+    const o = this.original()!;
     this.form.reset({
       ...o,
       grupoSanguineo: o.grupoSanguineo ?? '',
       contactoEmergenciaNombre: o.contactoEmergenciaNombre ?? '',
       contactoEmergenciaNumero: o.contactoEmergenciaNumero ?? '',
-      alergias: o.alergias.map((a) => ({ ...a, severidad: a.severidad ?? '' })),
-      medicaciones: o.medicaciones.map((m) => ({ ...m, dosis: m.dosis ?? '', frecuencia: m.frecuencia ?? '' })),
     });
     this.form.disable();
     this.editando.set(false);
-  }
-
-  // Largos máximos del DER (alergias / medicaciones_habituales).
-  private filaAlergia(a?: Alergia) {
-    return this.fb.group({
-      id: [a?.id],
-      descripcion: [a?.descripcion ?? '', [Validators.required, Validators.maxLength(100)]],
-      severidad: [(a?.severidad ?? '') as Severidad | ''],
-    });
-  }
-
-  private filaMedicacion(m?: Medicacion) {
-    return this.fb.group({
-      id: [m?.id],
-      medicamento: [m?.medicamento ?? '', [Validators.required, Validators.maxLength(100)]],
-      dosis: [m?.dosis ?? '', Validators.maxLength(50)],
-      frecuencia: [m?.frecuencia ?? '', Validators.maxLength(50)],
-    });
   }
 }

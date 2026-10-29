@@ -118,73 +118,47 @@
 				</div>
 			</fieldset>
 
-			<!-- R03: alergias y medicación habitual, listas de la historia clínica -->
-			<fieldset class="data-grupo" formArrayName="alergias">
-				<legend>Alergias <span>(opcional)</span></legend>
-				@for (fila of form.controls.alergias.controls; track fila; let i = $index) {
-					<div class="data-fila" [formGroupName]="i">
+			<!-- R03: alergias y medicación habitual de la historia clínica. Solo lectura: las cargan médicos o admin. -->
+			<fieldset class="data-grupo">
+				<legend>Alergias</legend>
+				@for (alergia of alergias(); track alergia.id; let i = $index) {
+					<div class="data-fila">
 						<div class="data-field">
 							<label [for]="'alergia-' + i">Alergia</label>
-							<input [id]="'alergia-' + i" type="text" formControlName="descripcion" placeholder="Ej.: penicilina"
-								[attr.aria-invalid]="fila.controls.descripcion.invalid && fila.controls.descripcion.touched">
-							@if (fila.controls.descripcion.invalid && fila.controls.descripcion.touched) {
-								<p class="data-error">Ingresá la alergia (máx. 100 caracteres).</p>
-							}
+							<input [id]="'alergia-' + i" type="text" [value]="alergia.descripcion" disabled>
 						</div>
 						<div class="data-field">
 							<label [for]="'severidad-' + i">Severidad</label>
-							<select [id]="'severidad-' + i" formControlName="severidad">
-								<option value="">No especificada</option>
-								@for (s of severidades; track s.valor) {
-									<option [value]="s.valor">{{ s.texto }}</option>
-								}
-							</select>
+							<input [id]="'severidad-' + i" type="text" [value]="textoSeveridad(alergia.severidad)" disabled>
 						</div>
-						@if (editando()) {
-							<button type="button" class="btn btn--outline data-quitar" (click)="quitar(form.controls.alergias, i)" [attr.aria-label]="'Quitar alergia ' + (i + 1)">Quitar</button>
-						}
 					</div>
 				} @empty {
-					@if (!editando()) { <p class="data-estado">No registraste alergias.</p> }
-				}
-				@if (editando()) {
-					<button type="button" class="btn btn--outline data-agregar" (click)="agregarAlergia()">+ Agregar alergia</button>
+					<p class="data-estado">No tenés alergias registradas.</p>
 				}
 			</fieldset>
 
-			<fieldset class="data-grupo" formArrayName="medicaciones">
-				<legend>Medicación habitual <span>(opcional)</span></legend>
-				@for (fila of form.controls.medicaciones.controls; track fila; let i = $index) {
-					<div class="data-fila data-fila--med" [formGroupName]="i">
+			<fieldset class="data-grupo">
+				<legend>Medicación habitual</legend>
+				@for (med of medicaciones(); track med.id; let i = $index) {
+					<div class="data-fila data-fila--med">
 						<div class="data-field">
 							<label [for]="'medicamento-' + i">Medicamento</label>
-							<input [id]="'medicamento-' + i" type="text" formControlName="medicamento"
-								[attr.aria-invalid]="fila.controls.medicamento.invalid && fila.controls.medicamento.touched">
-							@if (fila.controls.medicamento.invalid && fila.controls.medicamento.touched) {
-								<p class="data-error">Ingresá el medicamento (máx. 100 caracteres).</p>
-							}
+							<input [id]="'medicamento-' + i" type="text" [value]="med.medicamento" disabled>
 						</div>
 						<div class="data-field">
 							<label [for]="'dosis-' + i">Dosis</label>
-							<input [id]="'dosis-' + i" type="text" formControlName="dosis" placeholder="Ej.: 10 mg"
-								[attr.aria-invalid]="fila.controls.dosis.invalid && fila.controls.dosis.touched">
-							@if (fila.controls.dosis.invalid && fila.controls.dosis.touched) { <p class="data-error">Máximo 50 caracteres.</p> }
+							<input [id]="'dosis-' + i" type="text" [value]="med.dosis ?? '—'" disabled>
 						</div>
 						<div class="data-field">
 							<label [for]="'frecuencia-' + i">Frecuencia</label>
-							<input [id]="'frecuencia-' + i" type="text" formControlName="frecuencia" placeholder="Ej.: cada 12 h"
-								[attr.aria-invalid]="fila.controls.frecuencia.invalid && fila.controls.frecuencia.touched">
-							@if (fila.controls.frecuencia.invalid && fila.controls.frecuencia.touched) { <p class="data-error">Máximo 50 caracteres.</p> }
+							<input [id]="'frecuencia-' + i" type="text" [value]="med.frecuencia ?? '—'" disabled>
 						</div>
-						@if (editando()) {
-							<button type="button" class="btn btn--outline data-quitar" (click)="quitar(form.controls.medicaciones, i)" [attr.aria-label]="'Quitar medicación ' + (i + 1)">Quitar</button>
-						}
 					</div>
 				} @empty {
-					@if (!editando()) { <p class="data-estado">No registraste medicación habitual.</p> }
+					<p class="data-estado">No tenés medicación habitual registrada.</p>
 				}
 				@if (editando()) {
-					<button type="button" class="btn btn--outline data-agregar" (click)="agregarMedicacion()">+ Agregar medicación</button>
+					<p class="data-ayuda">Tus alergias y tu medicación las registra el equipo médico de la clínica.</p>
 				}
 			</fieldset>
 

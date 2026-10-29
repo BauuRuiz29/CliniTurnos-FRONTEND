@@ -101,56 +101,23 @@ describe('MisDatos', () => {
   });
 
   describe('alergias y medicación [R03]', () => {
-    it('carga las filas bloqueadas', () => {
-      expect(component.form.controls.alergias.length).toBe(1);
-      expect(component.form.controls.medicaciones.getRawValue()[0].medicamento).toBe('Enalapril');
-      expect(component.form.controls.alergias.disabled).toBe(true);
+    it('se muestran de solo lectura, también al editar', () => {
+      component.editar();
+      fixture.detectChanges();
+      const el = fixture.nativeElement as HTMLElement;
+      const alergia = el.querySelector<HTMLInputElement>('#alergia-0')!;
+      expect(alergia.value).toBe('Penicilina');
+      expect(alergia.disabled).toBe(true);
+      expect(el.querySelector<HTMLInputElement>('#severidad-0')!.value).toBe('Grave');
+      expect(el.querySelector<HTMLInputElement>('#medicamento-0')!.value).toBe('Enalapril');
+      expect(el.querySelector<HTMLInputElement>('#frecuencia-0')!.value).toBe('—');
     });
 
-    it('agrega y quita filas', () => {
+    it('no se mandan al guardar', () => {
       component.editar();
-      component.agregarAlergia();
-      component.agregarMedicacion();
-      expect(component.form.controls.alergias.length).toBe(2);
-      expect(component.form.controls.medicaciones.at(1).enabled).toBe(true);
-
-      component.quitar(component.form.controls.alergias, 0);
-      expect(component.form.controls.alergias.getRawValue()[0].descripcion).toBe('');
-    });
-
-    it('no guarda una fila nueva vacía', () => {
-      component.editar();
-      component.agregarAlergia();
       component.guardar();
-      expect(repo.guardados).toEqual([]);
-    });
-
-    it('guarda las listas completas, sin id las nuevas y opcionales vacíos como null', () => {
-      component.editar();
-      component.quitar(component.form.controls.medicaciones, 0);
-      component.agregarMedicacion();
-      component.form.controls.medicaciones.at(0).patchValue({ medicamento: ' Ibuprofeno ', dosis: '400 mg' });
-      component.agregarAlergia();
-      component.form.controls.alergias.at(1).patchValue({ descripcion: 'Maní' });
-      component.guardar();
-
-      const guardado = repo.guardados[0];
-      expect(guardado.alergias).toEqual([
-        { id: 1, descripcion: 'Penicilina', severidad: 'GRAVE' },
-        { id: undefined, descripcion: 'Maní', severidad: null },
-      ]);
-      expect(guardado.medicaciones).toEqual([{ id: undefined, medicamento: 'Ibuprofeno', dosis: '400 mg', frecuencia: null }]);
-      expect(component.form.controls.medicaciones.length).toBe(1);
-      expect(component.form.disabled).toBe(true);
-    });
-
-    it('cancelar vuelve a las filas originales', () => {
-      component.editar();
-      component.quitar(component.form.controls.alergias, 0);
-      component.agregarMedicacion();
-      component.cancelar();
-      expect(component.form.controls.alergias.getRawValue()[0].descripcion).toBe('Penicilina');
-      expect(component.form.controls.medicaciones.length).toBe(1);
+      expect(repo.guardados[0]).not.toHaveProperty('alergias');
+      expect(repo.guardados[0]).not.toHaveProperty('medicaciones');
     });
   });
 

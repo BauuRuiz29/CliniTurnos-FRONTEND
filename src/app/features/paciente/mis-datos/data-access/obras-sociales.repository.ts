@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ObrasSocialesMockRepository } from './obras-sociales.repository.mock';
+import { ObrasSocialesHttpRepository } from './obras-sociales.repository.http';
 
 // Tabla `obras_sociales` del DER.
 export interface ObraSocial {
@@ -8,7 +8,7 @@ export interface ObraSocial {
   nombre: string;
 }
 
-@Injectable({ providedIn: 'root', useClass: ObrasSocialesMockRepository })
+@Injectable({ providedIn: 'root', useClass: ObrasSocialesHttpRepository })
 export abstract class ObrasSocialesRepository {
   abstract listar(): Observable<ObraSocial[]>;
 }

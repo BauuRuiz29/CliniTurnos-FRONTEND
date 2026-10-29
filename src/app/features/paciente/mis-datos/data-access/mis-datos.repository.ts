@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Genero, TipoDocumento } from '../../../../core/models/enums';
-import { MisDatosMockRepository } from './mis-datos.repository.mock';
+import { MisDatosHttpRepository } from './mis-datos.repository.http';
 
-// Campos de `usuarios` + `pacientes` del DER. Los opcionales son nullable en la base.
+// GET /users/me/ (usuario + `paciente` anidado) y las listas de su historia clínica.
 export interface DatosPaciente {
   nombre: string;
   apellido: string;
@@ -22,35 +22,36 @@ export interface DatosPaciente {
   medicaciones: Medicacion[]; // solo las activas: las inactivas no se muestran
 }
 
-export type Severidad = 'LEVE' | 'MODERADA' | 'GRAVE';
+// Valores conocidos para mostrar; en el back la severidad es texto libre.
+const TEXTO_SEVERIDAD: Record<string, string> = { LEVE: 'Leve', MODERADA: 'Moderada', GRAVE: 'Grave' };
 
-export const SEVERIDADES: { valor: Severidad; texto: string }[] = [
-  { valor: 'LEVE', texto: 'Leve' },
-  { valor: 'MODERADA', texto: 'Moderada' },
-  { valor: 'GRAVE', texto: 'Grave' },
-];
+export function textoSeveridad(severidad: string | null): string {
+  if (!severidad) return 'No especificada';
+  return TEXTO_SEVERIDAD[severidad] ?? severidad;
+}
 
-// Tablas `alergias` y `medicaciones_habituales` (1-N de historias_clinicas). Sin id = fila nueva.
+// Tablas `alergias` y `medicaciones_habituales` de la historia clínica. Solo las cargan médicos o admin.
 export interface Alergia {
-  id?: number;
+  id: number;
   descripcion: string;
-  severidad: Severidad | null;
+  severidad: string | null;
 }
 
 export interface Medicacion {
-  id?: number;
+  id: number;
   medicamento: string;
   dosis: string | null;
   frecuencia: string | null;
 }
 
-// Lo que el paciente puede modificar: usuario y documento identifican la cuenta y la historia clínica.
-export type DatosPacienteEditables = Omit<DatosPaciente, 'login' | 'tipoIdentificacion' | 'numIdentificacion'>;
+// Lo que el paciente puede modificar por PATCH /users/me/. Usuario y documento identifican la cuenta;
+// alergias y medicación son de solo lectura para el paciente.
+export type DatosPacienteEditables = Omit<DatosPaciente, 'login' | 'tipoIdentificacion' | 'numIdentificacion' | 'alergias' | 'medicaciones'>;
 
 /** Datos del paciente logueado [R03, CU03]. */
-@Injectable({ providedIn: 'root', useClass: MisDatosMockRepository })
+@Injectable({ providedIn: 'root', useClass: MisDatosHttpRepository })
 export abstract class MisDatosRepository {
   abstract obtener(): Observable<DatosPaciente>;
-  /** Las listas van completas: una medicación que ya no viene se marca inactiva. Devuelve los datos guardados (con ids nuevos). */
+  /** Devuelve los datos como quedaron guardados. */
   abstract guardar(datos: DatosPacienteEditables): Observable<DatosPaciente>;
 }
