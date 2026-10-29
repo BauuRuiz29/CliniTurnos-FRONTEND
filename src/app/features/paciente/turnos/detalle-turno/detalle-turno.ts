@@ -2,7 +2,7 @@ import { Component, DestroyRef, ElementRef, computed, inject, signal, viewChild 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { VENTANA_CANCELACION_HORAS } from '../../../../core/config/tokens';
-import { EstadoTurno } from '../../../../core/models/enums';
+import { EstadoTurno, TipoTurno } from '../../../../core/models/enums';
 import { dentroDeVentanaCancelacion, puedeTransicionar } from '../../../../core/models/turno-estado';
 import { fechaLarga } from '../../../../shared/utils/fechas';
 import { ESTADO_TURNO_TEXTO, TurnoPaciente, TurnosRepository } from '../data-access/turnos.repository';
@@ -40,6 +40,8 @@ export class DetalleTurno {
   readonly fecha = computed(() => (this.turno() ? fechaLarga(this.turno()!.fecha) : ''));
   readonly reservado = computed(() => this.turno()?.estado === EstadoTurno.RESERVADO);
   readonly finalizado = computed(() => this.turno()?.estado === EstadoTurno.FINALIZADO);
+  // Los turnos de estudio no tienen profesional: no hay agenda a la cual reprogramar [R20].
+  readonly esEstudio = computed(() => this.turno()?.tipoTurno === TipoTurno.ESTUDIO);
   // Cancelar y reprogramar comparten regla: reprogramar es cancelar + reservar otro [AGENTS §4.2].
   readonly modificable = computed(() => {
     const t = this.turno();

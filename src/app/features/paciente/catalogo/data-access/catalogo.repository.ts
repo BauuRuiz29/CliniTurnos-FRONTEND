@@ -10,6 +10,7 @@ import { CatalogoHttpRepository } from './catalogo.repository.http';
 @Injectable({ providedIn: 'root', useClass: CatalogoHttpRepository })
 export abstract class CatalogoRepository {
   abstract getEspecialidades(): Observable<Especialidad[]>;
-  abstract getProfesionales(): Observable<Profesional[]>;
+  /** Con `fecha` (yyyy-MM-dd), solo los que tienen turnos libres ese día [R05]. */
+  abstract getProfesionales(fecha?: string): Observable<Profesional[]>;
   abstract getTiposEstudio(): Observable<TipoEstudio[]>;
 }

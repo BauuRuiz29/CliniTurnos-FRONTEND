@@ -10,11 +10,12 @@ interface TurnoResumen {
   especialidad: string | null;
   fecha: string; // yyyy-MM-dd
   horaInicio: string; // HH:mm
+  estudio?: string; // solo en turnos de estudio: no tienen profesional [R20]
 }
 
 const PAGINAS_DE_TURNO = ['turno-confirmado', 'turno-reprogramado', 'turno-cancelado'];
 
-type ConfirmationType = 'turno-confirmado' | 'turno-reprogramado' | 'turno-cancelado' | 'informe-disponible' | 'estudio-disponible' | 'correo-enviado';
+type ConfirmationType = 'turno-confirmado' | 'turno-reprogramado' | 'turno-cancelado';
 
 interface ConfirmationDetail {
   label: string;
@@ -32,7 +33,6 @@ interface ConfirmationPage {
   details: ConfirmationDetail[];
   message: string;
   messageClass: string;
-  checks?: string[];
   actions: { label: string; route: string; variant: 'primary' | 'outline' }[];
 }
 
@@ -55,7 +55,7 @@ export class Confirmacion {
   private readonly detallesTurno: ConfirmationDetail[] = this.turno
     ? [
         ...(this.turno.especialidad ? [{ label: 'Especialidad', value: this.turno.especialidad }] : []),
-        { label: 'Profesional', value: this.turno.profesional },
+        this.turno.estudio ? { label: 'Estudio', value: this.turno.estudio } : { label: 'Profesional', value: this.turno.profesional },
         { label: 'Fecha', value: fechaLarga(this.turno.fecha) }, { label: 'Hora', value: `${this.turno.horaInicio} hs.` },
       ]
     : [];
@@ -83,30 +83,6 @@ export class Confirmacion {
       details: this.detallesTurno,
       message: 'Podés reservar un nuevo turno cuando lo necesites.', messageClass: 'warning',
       actions: [{ label: 'Reservar nuevo turno', route: '/paciente/especialidades', variant: 'outline' }, { label: 'Ir al inicio', route: '/paciente/inicio', variant: 'primary' }],
-    },
-    'informe-disponible': {
-      icon: '▤', iconClass: 'success', title: 'Informe disponible', description: 'Tu informe médico ya está disponible.', cardTitle: 'Detalle del informe',
-      details: [
-        { label: 'Especialidad', value: 'Traumatología' }, { label: 'Profesional', value: 'Dr. Pablo Sánchez' },
-        { label: 'Fecha de consulta', value: '18 de mayo de 2026' }, { label: 'Tipo de informe', value: 'Informe médico' },
-      ],
-      message: 'Podés descargarlo desde la sección Informes médicos.', messageClass: 'success',
-      actions: [{ label: 'Ir a informes médicos', route: '/paciente/informes', variant: 'outline' }, { label: 'Ir al inicio', route: '/paciente/inicio', variant: 'primary' }],
-    },
-    'estudio-disponible': {
-      icon: '⚗', iconClass: 'purple', title: 'Estudio disponible', description: 'El resultado de tu estudio ya está disponible.', cardTitle: 'Detalle del estudio',
-      details: [
-        { label: 'Estudio', value: 'Hemograma completo' }, { label: 'Fecha', value: '20 de mayo de 2026' },
-        { label: 'Laboratorio', value: 'Laboratorio Central' }, { label: 'Estado', value: 'Disponible', badge: true },
-      ],
-      message: 'Podés consultarlo desde la sección Informes médicos.', messageClass: 'purple',
-      actions: [{ label: 'Ir a informes médicos', route: '/paciente/informes', variant: 'outline' }, { label: 'Ir al inicio', route: '/paciente/inicio', variant: 'primary' }],
-    },
-    'correo-enviado': {
-      icon: '✉', iconClass: 'blue', title: 'Confirmación enviada', description: 'Te enviamos la información a tu correo electrónico.', cardTitle: '¿Qué incluye el correo?',
-      details: [], checks: ['Detalle del turno', 'Preparación (si corresponde)', 'Indicaciones importantes', 'Datos del lugar de atención'],
-      message: 'Correo enviado a: juan.perez@email.com', messageClass: 'blue',
-      actions: [{ label: 'Ir al inicio', route: '/paciente/inicio', variant: 'primary' }],
     },
   };
 

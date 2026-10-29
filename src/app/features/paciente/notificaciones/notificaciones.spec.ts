@@ -1,6 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { of } from 'rxjs';
+import { Notificacion } from '../../../core/models/notificacion';
+import { NotificacionesRepository } from '../../../core/notificaciones/notificaciones';
 import { Notificaciones } from './notificaciones';
+
+const LISTA: Notificacion[] = [
+  { id: 1, turnoId: 5, tipo: 'CANCELACION', asunto: 'Turno cancelado', mensaje: '', fecha: '2026-10-20T10:00:00Z' },
+  { id: 2, turnoId: null, tipo: 'RECORDATORIO', asunto: 'Recordatorio', mensaje: '', fecha: '2026-10-26T10:00:00Z' },
+];
 
 describe('Notificaciones', () => {
   let component: Notificaciones;
@@ -9,7 +17,7 @@ describe('Notificaciones', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Notificaciones],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), { provide: NotificacionesRepository, useValue: { listar: () => of(LISTA) } }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Notificaciones);
@@ -18,21 +26,11 @@ describe('Notificaciones', () => {
   });
 
   it('lista las notificaciones de la más nueva a la más vieja', () => {
-    const fechas = component.visibles().map((n) => n.fechaEnvio);
-    expect(fechas.length).toBeGreaterThan(0);
-    expect(fechas).toEqual([...fechas].sort().reverse());
+    expect(component.visibles().map((n) => n.id)).toEqual([2, 1]);
   });
 
-  it('filtra informes y turnos', () => {
-    component.filtro.set('Informes');
-    expect(component.visibles().every((n) => n.tipo === 'INFORME_DISPONIBLE')).toBe(true);
-    component.filtro.set('Turnos');
-    expect(component.visibles().some((n) => n.tipo === 'INFORME_DISPONIBLE')).toBe(false);
-  });
-
-  it('el informe lleva a informes y el resto al turno', () => {
-    const [informe] = component.visibles().filter((n) => n.tipo === 'INFORME_DISPONIBLE');
-    expect(component.destino(informe)).toEqual(['/paciente/informes']);
-    expect(component.destino({ ...informe, tipo: 'TURNO_CANCELADO', turnoId: 5 })).toEqual(['/paciente/turnos', 5]);
+  it('lleva al turno si tiene uno', () => {
+    expect(component.destino(LISTA[0])).toEqual(['/paciente/turnos', 5]);
+    expect(component.destino(LISTA[1])).toBeNull();
   });
 });

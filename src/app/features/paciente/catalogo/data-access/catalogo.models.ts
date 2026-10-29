@@ -1,5 +1,4 @@
-// Modelos de dominio del catálogo. Especialidad y Profesional ya están alineados con la API.
-// TODO: TipoEstudio sigue el maquetado (el back no tiene categoría ni preparación).
+// Modelos de dominio del catálogo, alineados con la API.
 
 export interface Especialidad {
   id: number;
@@ -20,6 +19,5 @@ export interface TipoEstudio {
   id: number;
   nombre: string;
   descripcion: string;
-  categoria: string;
-  preparacion: string | null;
+  duracionMin: number | null; // tipos_estudio.duracion_min
 }

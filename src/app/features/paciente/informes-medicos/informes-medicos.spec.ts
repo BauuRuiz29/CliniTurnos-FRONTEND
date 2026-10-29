@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { Observable, of, throwError } from 'rxjs';
-import { InformesMockRepository } from './data-access/informes.repository.mock';
 import { InformeMedico, InformesRepository } from './data-access/informes.repository';
 import { InformesMedicos } from './informes-medicos';
 
@@ -9,16 +8,21 @@ const informe = (id: number, fecha: string, adjuntos: InformeMedico['adjuntos'] 
   id, turnoId: id, fecha, profesional: 'Juan García', especialidad: 'Cardiología', diagnostico: 'HTA', planTratamiento: null, indicaciones: null, adjuntos,
 });
 
+const ESTUDIOS = [
+  { id: 1, nombre: 'Glucemia', fechaSolicitud: '2026-02-01', estado: 'SOLICITADO' as const },
+  { id: 2, nombre: 'TSH', fechaSolicitud: '2026-04-01', estado: 'INFORMADO' as const },
+];
+
 const ADJUNTO = { id: 7, titulo: 'ecg.pdf', url: 'http://api.test/media/ecg.pdf' };
 
 describe('InformesMedicos', () => {
   let descargar: ReturnType<typeof vi.fn>;
 
-  async function crear(listar: () => Observable<InformeMedico[]>) {
+  async function crear(listar: () => Observable<InformeMedico[]>, estudios: typeof ESTUDIOS = []) {
     descargar = vi.fn(() => of(new Blob(['x'])));
     TestBed.configureTestingModule({
       imports: [InformesMedicos],
-      providers: [provideRouter([]), { provide: InformesRepository, useValue: { listar, obtener: () => of(null), descargar } }],
+      providers: [provideRouter([]), { provide: InformesRepository, useValue: { listar, obtener: () => of(null), descargar, listarEstudios: () => of(estudios) } }],
     });
     const fixture = TestBed.createComponent(InformesMedicos);
     await fixture.whenStable();
@@ -51,14 +55,10 @@ describe('InformesMedicos', () => {
     TestBed.resetTestingModule();
     expect((await crear(() => throwError(() => new Error()))).nativeElement.textContent).toContain('No pudimos cargar');
   });
-});
 
-describe('InformesMockRepository', () => {
-  it('obtiene por id y devuelve null si no existe', async () => {
-    const repo = new InformesMockRepository();
-    const lista = await new Promise<InformeMedico[]>((r) => repo.listar().subscribe(r));
-    expect(lista.length).toBeGreaterThan(0);
-    expect(await new Promise((r) => repo.obtener(lista[0].id).subscribe(r))).toEqual(lista[0]);
-    expect(await new Promise((r) => repo.obtener(999).subscribe(r))).toBeNull();
+  it('lista los estudios con su estado, el más reciente primero [R10, R20]', async () => {
+    const fixture = await crear(() => of([]), ESTUDIOS);
+    const textos = [...(fixture.nativeElement as HTMLElement).querySelectorAll('.estudio-estado')].map((s) => s.textContent);
+    expect(textos).toEqual(['Informado', 'Solicitado']);
   });
 });

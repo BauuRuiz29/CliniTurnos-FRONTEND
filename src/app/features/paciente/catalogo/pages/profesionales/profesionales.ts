@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
+import { hoyIso } from '../../../../../shared/utils/formularios';
 import { CatalogoFacade } from '../../data-access/catalogo.facade';
 import { Profesional } from '../../data-access/catalogo.models';
 
@@ -13,7 +14,10 @@ import { Profesional } from '../../data-access/catalogo.models';
 })
 export class Profesionales {
   private readonly facade = inject(CatalogoFacade);
-  private readonly recurso = this.facade.profesionales();
+  /** Día elegido en el filtro (yyyy-MM-dd); vacío = sin filtro [R05]. */
+  readonly fecha = signal('');
+  readonly hoy = hoyIso();
+  private readonly recurso = this.facade.profesionales(this.fecha);
   private readonly especialidades = this.facade.especialidades();
   private readonly especialidadParam = toSignal(
     inject(ActivatedRoute).queryParamMap.pipe(map((q) => Number(q.get('especialidad')))),

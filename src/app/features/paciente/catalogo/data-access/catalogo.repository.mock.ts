@@ -23,14 +23,11 @@ const PROFESIONALES: Profesional[] = [
 ];
 
 const TIPOS_ESTUDIO: TipoEstudio[] = [
-  { id: 1, nombre: 'Hemograma completo', descripcion: 'Evalúa los componentes de la sangre: glóbulos rojos, glóbulos blancos y plaquetas.', categoria: 'Hematología', preparacion: null },
-  { id: 2, nombre: 'Glucemia', descripcion: 'Mide la cantidad de glucosa en sangre.', categoria: 'Bioquímica', preparacion: null },
-  { id: 3, nombre: 'Examen de orina completo', descripcion: 'Análisis físico, químico y microscópico de orina.', categoria: 'Orina', preparacion: 'Primera orina de la mañana' },
-  { id: 4, nombre: 'TSH', descripcion: 'Evalúa el funcionamiento de la glándula tiroides.', categoria: 'Hormonales', preparacion: null },
-  { id: 5, nombre: 'PCR (Proteína C Reactiva)', descripcion: 'Marcador de inflamación en el organismo.', categoria: 'Inmunología', preparacion: null },
-  { id: 6, nombre: 'VDRL', descripcion: 'Detección de sífilis.', categoria: 'Serología', preparacion: null },
-  { id: 7, nombre: 'Urocultivo', descripcion: 'Detecta infecciones urinarias.', categoria: 'Microbiología', preparacion: 'Antes del antibiótico' },
-  { id: 8, nombre: 'Perfil lipídico', descripcion: 'Colesterol total, HDL, LDL y triglicéridos.', categoria: 'Bioquímica', preparacion: 'Ayuno de 12 horas' },
+  { id: 1, nombre: 'Hemograma completo', descripcion: 'Evalúa los componentes de la sangre, como glóbulos rojos, blancos y plaquetas.', duracionMin: 15 },
+  { id: 2, nombre: 'Glucemia', descripcion: 'Mide el nivel de glucosa en sangre para detectar alteraciones metabólicas.', duracionMin: 10 },
+  { id: 3, nombre: 'Examen de orina completo', descripcion: 'Analiza la composición de la orina para detectar infecciones o enfermedades.', duracionMin: 10 },
+  { id: 4, nombre: 'TSH', descripcion: 'Evalúa el funcionamiento de la glándula tiroides mediante la hormona TSH.', duracionMin: 15 },
+  { id: 5, nombre: 'Urocultivo', descripcion: 'Identifica bacterias causantes de infecciones urinarias.', duracionMin: 10 },
 ];
 //#endregion
 

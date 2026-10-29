@@ -93,4 +93,22 @@ describe('ReservarTurnoHttpRepository', () => {
     http.expectOne(`${API}/turnos/turnos/70/reservar/`).flush({ error: 'El turno no está disponible' }, { status: 400, statusText: 'Bad Request' });
     await expect(r).rejects.toBeInstanceOf(SlotNoDisponibleError);
   });
+
+  it('ofrece solo los slots ESTUDIO libres y habilita los días que tienen [R20]', async () => {
+    const d = firstValueFrom(repo.obtenerDisponibilidadEstudios());
+    http
+      .expectOne((r) => r.url === `${API}/turnos/turnos/` && r.params.get('estado') === 'DISPONIBLE')
+      .flush([slot({ id: 90, profesional: null, tipo_turno: 'ESTUDIO' }), slot({ id: 70 })]);
+    const disp = await d;
+    expect(disp.slots.map((s) => s.turnoId)).toEqual([90]);
+    expect(disp.horarios.map((h) => h.diaSemana)).toEqual(['LUNES']); // 2026-11-02 es lunes
+  });
+
+  it('reserva el estudio mandando el tipo para que el back cree el registro [R20]', async () => {
+    const r = firstValueFrom(repo.reservarEstudio({ turnoId: 90, tipoEstudioId: 3, comentario: 'En ayunas' }));
+    const req = http.expectOne(`${API}/turnos/turnos/90/reservar/`);
+    expect(req.request.body).toEqual({ tipo_estudio_id: 3, comentario: 'En ayunas' });
+    req.flush(slot({ id: 90, profesional: null, profesional_nombre: null, tipo_turno: 'ESTUDIO', estado: 'RESERVADO', especialidad_nombre: 'Laboratorio' }));
+    expect(await r).toEqual({ turnoId: 90, fecha: '2026-11-02', horaInicio: '08:00', profesional: '', especialidad: 'Laboratorio' });
+  });
 });

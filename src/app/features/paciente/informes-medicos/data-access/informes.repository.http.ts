@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, forkJoin, map, throwError } from 'rxjs';
 import { API_URL } from '../../../../core/config/tokens';
-import { EstadoTurno } from '../../../../core/models/enums';
+import { EstadoEstudio, EstadoTurno } from '../../../../core/models/enums';
 import { TurnoDto } from '../../../../core/models/turno.dto';
-import type { AdjuntoInformeMedico, InformeMedico, InformesRepository } from './informes.repository';
+import type { AdjuntoInformeMedico, EstudioPaciente, InformeMedico, InformesRepository } from './informes.repository';
 
 // GET /clinicos/historias-clinicas/: al paciente le devuelve solo la suya, con `informes` = consultas FINALIZADAS.
 interface HistoriaClinicaDto {
@@ -25,6 +25,14 @@ interface DocumentoDto {
   consulta: number | null;
   nombre: string;
   archivo_url: string | null;
+}
+
+// GET /clinicos/estudios/: al paciente le devuelve solo los suyos.
+interface EstudioDto {
+  id: number;
+  tipo_estudio_nombre: string;
+  fecha_solicitud: string; // ISO
+  estado: EstadoEstudio;
 }
 
 /** Informes médicos del paciente contra la API [R10]. */
@@ -67,6 +75,12 @@ export class InformesHttpRepository implements InformesRepository {
   descargar(adjunto: AdjuntoInformeMedico): Observable<Blob> {
     if (!adjunto.url) return throwError(() => new Error('El adjunto no tiene archivo.'));
     return this.http.get(adjunto.url, { responseType: 'blob' });
+  }
+
+  listarEstudios(): Observable<EstudioPaciente[]> {
+    return this.http.get<EstudioDto[]>(`${this.apiUrl}/clinicos/estudios/`).pipe(
+      map((dtos) => dtos.map((e) => ({ id: e.id, nombre: e.tipo_estudio_nombre, fechaSolicitud: e.fecha_solicitud.slice(0, 10), estado: e.estado }))),
+    );
   }
 }
 

@@ -1,0 +1,41 @@
+<header class="page-header"><h1>Profesionales</h1></header>
+
+<div class="admin-toolbar">
+  <label class="search-field">
+    <span aria-hidden="true">⌕</span>
+    <input #buscador type="search" placeholder="Buscar profesionales por nombre o especialidad..." aria-label="Buscar profesionales" (input)="busqueda.set(buscador.value)"/>
+  </label>
+  <a class="button-primary" routerLink="/administrador/profesionales/nuevo">+ Nuevo profesional</a>
+</div>
+
+@if (errorAccion(); as mensaje) {
+  <p class="admin-error" role="alert">{{ mensaje }}</p>
+}
+
+<div class="admin-table" role="table" aria-label="Profesionales" style="--columnas: minmax(170px, 1.4fr) minmax(130px, 1fr) minmax(130px, 1fr) 80px 120px">
+  <div class="admin-row admin-row--head" role="row">
+    <strong role="columnheader">Nombre</strong><strong role="columnheader">Especialidad</strong><strong role="columnheader">Usuario</strong>
+    <strong role="columnheader">Estado</strong><strong role="columnheader"><span class="visually-hidden">Acciones</span></strong>
+  </div>
+  @if (cargando()) {
+    <p class="estado-carga">Cargando profesionales...</p>
+  } @else if (error()) {
+    <p class="estado-carga estado-carga--error" role="alert">No pudimos cargar los profesionales. Intentá de nuevo.</p>
+  } @else {
+    @for (p of visibles(); track p.id) {
+      <div class="admin-row" role="row">
+        <strong role="cell">{{ p.nombre }}</strong>
+        <span role="cell">{{ p.especialidades.join(' · ') || '-' }}</span>
+        <span role="cell">{{ p.login }}</span>
+        <span role="cell"><span [class]="p.activo ? 'status status--activo' : 'status status--inactivo'">{{ p.activo ? 'Activo' : 'Inactivo' }}</span></span>
+        <span role="cell" class="admin-actions">
+          <button type="button" class="button-secondary" [disabled]="procesando() === p.id" (click)="cambiarEstado(p)">
+            {{ p.activo ? 'Dar de baja' : 'Reactivar' }}
+          </button>
+        </span>
+      </div>
+    } @empty {
+      <p class="no-results">No se encontraron profesionales.</p>
+    }
+  }
+</div>

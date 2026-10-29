@@ -31,4 +31,23 @@
 			}
 		</div>
 	}
+
+	<h3 class="estudios-titulo">Mis estudios</h3>
+	@if (errorEstudios()) {
+		<p role="alert">No pudimos cargar tus estudios. Intentá de nuevo más tarde.</p>
+	} @else if (cargandoEstudios()) {
+		<p aria-live="polite">Cargando estudios...</p>
+	} @else {
+		<div class="reports">
+			@for (e of estudios(); track e.id) {
+				<article class="report">
+					<div class="report-icon">⚗</div>
+					<div><strong>{{ e.nombre }}</strong><span>Solicitado el {{ fechaEstudio(e) }}</span></div>
+					<span class="estudio-estado">{{ estadoEstudio(e) }}</span>
+				</article>
+			} @empty {
+				<p class="informes-vacio">Todavía no tenés estudios.</p>
+			}
+		</div>
+	}
 </section>

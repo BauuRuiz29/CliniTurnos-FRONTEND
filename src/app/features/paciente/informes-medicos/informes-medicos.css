@@ -71,3 +71,17 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.estudios-titulo {
+  margin: 28px 0 12px;
+  color: #101f42;
+  font-size: 17px;
+}
+.report .estudio-estado {
+  margin: 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #edf4ff;
+  color: #1464d8;
+  font-size: 11px;
+}

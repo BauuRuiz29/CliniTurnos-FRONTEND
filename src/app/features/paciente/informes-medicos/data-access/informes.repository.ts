@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import type { EstadoEstudio } from '../../../../core/models/enums';
 import { InformesHttpRepository } from './informes.repository.http';
 
 // Informe de una consulta finalizada: `consultas` + nombre del profesional + especialidad del turno + adjuntos.
@@ -21,6 +22,14 @@ export interface AdjuntoInformeMedico {
   url: string | null; // archivo_url: de donde se descarga
 }
 
+// Fila de `estudios` del paciente + nombre del tipo de estudio [R10, R20].
+export interface EstudioPaciente {
+  id: number; // estudio_id
+  nombre: string; // tipos_estudio.nombre
+  fechaSolicitud: string; // yyyy-MM-dd
+  estado: EstadoEstudio;
+}
+
 /** Informes médicos del paciente [R10]. El back solo devuelve los del paciente de la sesión [Rnf 01]. */
 @Injectable({ providedIn: 'root', useClass: InformesHttpRepository })
 export abstract class InformesRepository {
@@ -29,4 +38,6 @@ export abstract class InformesRepository {
   /** null si no existe o no es del paciente. */
   abstract obtener(id: number): Observable<InformeMedico | null>;
   abstract descargar(adjunto: AdjuntoInformeMedico): Observable<Blob>;
+  /** Estudios del paciente de la sesión, en cualquier estado. */
+  abstract listarEstudios(): Observable<EstudioPaciente[]>;
 }

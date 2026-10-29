@@ -8,7 +8,7 @@
 
 	<div class="search-bar">
 		<input #buscador type="text" placeholder="Buscar profesional o especialidad..." aria-label="Buscar profesional o especialidad" (input)="busqueda.set(buscador.value)">
-		<button type="button">Filtros</button>
+		<input #dia type="date" [min]="hoy" aria-label="Filtrar por día con turnos disponibles" (change)="fecha.set(dia.value)">
 	</div>
 
 	@if (especialidadActiva(); as especialidad) {

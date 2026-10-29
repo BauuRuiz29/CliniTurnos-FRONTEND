@@ -18,6 +18,10 @@ export const PACIENTE_ROUTES: Routes = [
 				loadComponent: () => import('./reservar-turno/reservar-turno').then(m => m.ReservarTurno),
 			},
 			{
+				path: 'reservar-estudio/:tipoEstudioId',
+				loadComponent: () => import('./reservar-turno/reservar-turno').then(m => m.ReservarTurno),
+			},
+			{
 				path: 'turnos',
 				loadComponent: () => import('./turnos/turnos').then(m => m.Turnos),
 			},

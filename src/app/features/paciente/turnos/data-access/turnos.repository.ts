@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { EstadoTurno } from '../../../../core/models/enums';
+import { EstadoTurno, TipoTurno } from '../../../../core/models/enums';
 import { TurnosHttpRepository } from './turnos.repository.http';
 
 // Turno del paciente logueado (tabla `turnos` + nombre del profesional y de la especialidad).
@@ -10,6 +10,7 @@ export interface TurnoPaciente {
   horaInicio: string; // HH:mm
   horaFin: string; // HH:mm
   estado: EstadoTurno;
+  tipoTurno: TipoTurno; // ESTUDIO no tiene profesional [R20]
   profesional: { id: number; nombre: string }; // nombre y apellido, sin título
   especialidad: string | null; // null: el turno se generó sin especialidad
   comentario: string | null;

@@ -42,17 +42,11 @@ export const routes: Routes = [
   },
 
   {
-  path: 'administrador',
-    loadComponent: () =>
-      import('./features/administrador/administrador')
-        .then(m => m.AdministradorComponent)
-  },
-
-  {
-  path: 'administrador-formularios',
-    loadComponent: () =>
-      import('./features/administrador-formularios/administrador-formularios')
-        .then(m => m.AdministradorFormulariosComponent)
+    path: 'administrador',
+    canMatch: [rolGuard(Rol.ADMIN)],
+    loadChildren: () =>
+      import('./features/admin/admin.routes')
+        .then(m => m.ADMIN_ROUTES)
   },
 
   {

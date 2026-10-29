@@ -1,0 +1,47 @@
+<header class="page-header"><h1>Especialidades</h1></header>
+
+<div class="admin-toolbar">
+  <label class="search-field">
+    <span aria-hidden="true">⌕</span>
+    <input #buscador type="search" placeholder="Buscar especialidad por nombre..." aria-label="Buscar especialidad" (input)="busqueda.set(buscador.value)"/>
+  </label>
+  <a class="button-primary" routerLink="/administrador/especialidades/nueva">+ Nueva especialidad</a>
+</div>
+
+@if (errorAccion(); as mensaje) {
+  <p class="admin-error" role="alert">{{ mensaje }}</p>
+}
+
+<div class="admin-table" role="table" aria-label="Especialidades" style="--columnas: minmax(140px, 1fr) minmax(240px, 2.5fr) 170px">
+  <div class="admin-row admin-row--head" role="row">
+    <strong role="columnheader">Nombre</strong><strong role="columnheader">Descripción</strong>
+    <strong role="columnheader"><span class="visually-hidden">Acciones</span></strong>
+  </div>
+  @if (cargando()) {
+    <p class="estado-carga">Cargando especialidades...</p>
+  } @else if (error()) {
+    <p class="estado-carga estado-carga--error" role="alert">No pudimos cargar las especialidades. Intentá de nuevo.</p>
+  } @else {
+    @for (e of visibles(); track e.id) {
+      <div class="admin-row" role="row">
+        <strong role="cell">{{ e.nombre }}</strong>
+        <span role="cell">{{ e.descripcion || '-' }}</span>
+        <span role="cell" class="admin-actions">
+          <a class="button-secondary" [routerLink]="['/administrador/especialidades', e.id]" [attr.aria-label]="'Editar ' + e.nombre">Editar</a>
+          <button type="button" class="button-secondary" [attr.aria-label]="'Eliminar ' + e.nombre" (click)="pedirBorrado(e)">Eliminar</button>
+        </span>
+      </div>
+    } @empty {
+      <p class="no-results">No se encontraron especialidades.</p>
+    }
+  }
+</div>
+
+<dialog #confirmarBorrado class="admin-form" aria-labelledby="borrar-titulo">
+  <h2 id="borrar-titulo">¿Eliminar {{ aBorrar()?.nombre }}?</h2>
+  <p>También se quita de los profesionales que la tienen asignada. Esta acción no se puede deshacer.</p>
+  <div class="admin-form-actions">
+    <button type="button" class="button-secondary" (click)="cerrarDialogo()">Cancelar</button>
+    <button type="button" class="button-primary" [disabled]="borrando()" (click)="borrar()">{{ borrando() ? 'Eliminando...' : 'Eliminar' }}</button>
+  </div>
+</dialog>

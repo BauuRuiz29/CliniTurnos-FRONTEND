@@ -1,0 +1,7 @@
+<main class="professional-app">
+	<app-sidebar [items]="menu" ariaLabel="Navegación del administrador" (cerrarSesion)="cerrarSesion()" />
+
+	<section class="workspace">
+		<router-outlet />
+	</section>
+</main>

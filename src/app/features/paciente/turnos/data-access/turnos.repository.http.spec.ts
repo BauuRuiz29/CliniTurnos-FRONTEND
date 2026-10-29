@@ -33,12 +33,12 @@ describe('TurnosHttpRepository', () => {
     const pedidos = http.match((r) => r.url === `${URL}/`);
     expect(pedidos.map((p) => p.request.params.get('estado'))).toEqual(['RESERVADO', 'EN_CURSO', 'FINALIZADO', 'CANCELADO', 'AUSENTE']);
     pedidos[0].flush([dto()]);
-    pedidos[3].flush([dto({ id: 50, estado: 'CANCELADO', especialidad_nombre: null })]);
+    pedidos[3].flush([dto({ id: 50, estado: 'CANCELADO', especialidad_nombre: null, tipo_turno: 'ESTUDIO', profesional: null, profesional_nombre: null })]);
     pedidos.filter((_, i) => i !== 0 && i !== 3).forEach((p) => p.flush([]));
 
     expect(await lista).toEqual([
-      { id: 45, fecha: '2026-11-03', horaInicio: '10:00', horaFin: '10:30', estado: 'RESERVADO', profesional: { id: 1, nombre: 'Juan Manuel García' }, especialidad: 'Cardiología', comentario: null },
-      { id: 50, fecha: '2026-11-03', horaInicio: '10:00', horaFin: '10:30', estado: 'CANCELADO', profesional: { id: 1, nombre: 'Juan Manuel García' }, especialidad: null, comentario: null },
+      { id: 45, fecha: '2026-11-03', horaInicio: '10:00', horaFin: '10:30', estado: 'RESERVADO', tipoTurno: 'CONSULTA', profesional: { id: 1, nombre: 'Juan Manuel García' }, especialidad: 'Cardiología', comentario: null },
+      { id: 50, fecha: '2026-11-03', horaInicio: '10:00', horaFin: '10:30', estado: 'CANCELADO', tipoTurno: 'ESTUDIO', profesional: { id: 0, nombre: 'Estudio' }, especialidad: null, comentario: null },
     ]);
   });
 

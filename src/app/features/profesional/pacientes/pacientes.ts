@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { fechaCorta } from '../../../shared/utils/fechas';
 import { inicialesPaciente } from '../agenda/turno-vista';
 import { PacienteAsignado, PacientesRepository } from './data-access/pacientes.repository';
+import { normalizar } from '../../../shared/utils/texto';
 
 const POR_PAGINA = 5;
 
@@ -50,9 +51,4 @@ export class Pacientes {
   irA(pagina: number): void {
     this.pagina.set(Math.min(Math.max(1, pagina), this.paginas()));
   }
-}
-
-// Sin mayúsculas, espacios de más ni tildes.
-function normalizar(texto: string): string {
-  return texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 }

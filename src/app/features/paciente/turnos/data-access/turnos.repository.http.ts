@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, catchError, forkJoin, map, of, throwError } from 'rxjs';
 import { API_URL } from '../../../../core/config/tokens';
-import { EstadoTurno } from '../../../../core/models/enums';
+import { EstadoTurno, TipoTurno } from '../../../../core/models/enums';
 import { TurnoDto, horaCorta } from '../../../../core/models/turno.dto';
 import type { TurnoPaciente, TurnosRepository } from './turnos.repository';
 
@@ -49,7 +49,8 @@ export function aTurnoPaciente(t: TurnoDto): TurnoPaciente {
     horaInicio: horaCorta(t.fecha_hora_inicio),
     horaFin: horaCorta(t.fecha_hora_fin),
     estado: t.estado,
-    profesional: { id: t.profesional ?? 0, nombre: t.profesional_nombre ?? '' },
+    tipoTurno: t.tipo_turno,
+    profesional: { id: t.profesional ?? 0, nombre: t.profesional_nombre ?? (t.tipo_turno === TipoTurno.ESTUDIO ? 'Estudio' : '') },
     especialidad: t.especialidad_nombre,
     comentario: t.comentario,
   };

@@ -64,4 +64,12 @@ describe('InformesHttpRepository', () => {
     req.flush(new Blob(['%PDF']));
     expect(await archivo).toBeInstanceOf(Blob);
   });
+
+  it('lista los estudios del paciente [R10, R20]', async () => {
+    const estudios = firstValueFrom(repo.listarEstudios());
+    http.expectOne(`${API}/clinicos/estudios/`).flush([
+      { id: 5, tipo_estudio: 3, tipo_estudio_nombre: 'Glucemia', paciente: 8, turno: 90, fecha_solicitud: '2026-11-02T08:00:00-03:00', estado: 'SOLICITADO' },
+    ]);
+    expect(await estudios).toEqual([{ id: 5, nombre: 'Glucemia', fechaSolicitud: '2026-11-02', estado: 'SOLICITADO' }]);
+  });
 });

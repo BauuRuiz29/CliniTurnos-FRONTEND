@@ -7,11 +7,18 @@
     }
   </div>
 
-  @if (profesional(); as p) {
-    <div class="booking-doctor booking-doctor--static">
-      <div class="doctor-avatar">{{ p.nombre[0] }}{{ p.apellido[0] }}</div>
-      <div><strong>{{ p.nombre }} {{ p.apellido }}</strong><span>{{ especialidades() }}</span></div>
-    </div>
+  @if (profesional() || estudio()) {
+    @if (profesional(); as p) {
+      <div class="booking-doctor booking-doctor--static">
+        <div class="doctor-avatar">{{ p.nombre[0] }}{{ p.apellido[0] }}</div>
+        <div><strong>{{ p.nombre }} {{ p.apellido }}</strong><span>{{ especialidades() }}</span></div>
+      </div>
+    } @else if (estudio(); as e) {
+      <div class="booking-doctor booking-doctor--static">
+        <div class="doctor-avatar"><img src="laboratorio.png" alt="" width="24"></div>
+        <div><strong>{{ e.nombre }}</strong><span>{{ e.descripcion }}</span></div>
+      </div>
+    }
 
     <div class="booking-steps">
       <div class="booking-step active"><span>1</span>Fecha y hora</div>
@@ -40,9 +47,13 @@
         <div class="confirmation-grid">
           <div class="confirmation-card">
             <h4>Resumen del turno</h4>
-            <div class="confirmation-row"><span>Profesional</span><strong>{{ p.nombre }} {{ p.apellido }}</strong></div>
-            @if (especialidades()) {
-              <div class="confirmation-row"><span>Especialidad</span><strong>{{ especialidades() }}</strong></div>
+            @if (profesional(); as p) {
+              <div class="confirmation-row"><span>Profesional</span><strong>{{ p.nombre }} {{ p.apellido }}</strong></div>
+              @if (especialidades()) {
+                <div class="confirmation-row"><span>Especialidad</span><strong>{{ especialidades() }}</strong></div>
+              }
+            } @else {
+              <div class="confirmation-row"><span>Estudio</span><strong>{{ estudio()?.nombre }}</strong></div>
             }
             <div class="confirmation-row"><span>Fecha</span><strong>{{ fechaElegida() }}</strong></div>
             <div class="confirmation-row"><span>Horario</span><strong>{{ slot()?.horaInicio }} hs.</strong></div>
@@ -52,7 +63,7 @@
             <div class="confirmation-card">
               <h4>Información adicional</h4>
               <label for="appointment-comment">Comentario (opcional)</label>
-              <textarea id="appointment-comment" maxlength="255" [formControl]="comentario" placeholder="Contanos brevemente el motivo de la consulta..."></textarea>
+              <textarea id="appointment-comment" maxlength="255" [formControl]="comentario" [placeholder]="estudio() ? 'Agregá cualquier dato que quieras informar...' : 'Contanos brevemente el motivo de la consulta...'"></textarea>
               <small>{{ comentario.value.length }}/255</small>
             </div>
           }

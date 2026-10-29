@@ -10,7 +10,7 @@ const enDias = (d: number) => formatDate(Date.now() + d * 86_400_000, 'yyyy-MM-d
 
 const base: TurnoPaciente = {
   id: 1, fecha: enDias(5), horaInicio: '10:30', horaFin: '11:00', estado: EstadoTurno.RESERVADO,
-  profesional: { id: 7, nombre: 'Juan García' }, especialidad: 'Cardiología',
+  tipoTurno: 'CONSULTA', profesional: { id: 7, nombre: 'Juan García' }, especialidad: 'Cardiología',
   comentario: null,
 };
 

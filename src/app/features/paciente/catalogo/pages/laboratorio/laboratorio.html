@@ -1,75 +1,31 @@
-<section class="screen laboratory-screen">
-  <div class="laboratory-breadcrumb">
-    <button type="button" routerLink="/paciente/especialidades" aria-label="Volver a especialidades">←</button>
-    <span>Especialidades</span><strong>›</strong><span>Laboratorio</span><strong>›</strong><b>Estudios disponibles</b>
+<section class="screen">
+  <div class="laboratory-heading">
+    <h2>Laboratorio</h2>
+    <a class="btn btn--outline" routerLink="/paciente/especialidades">↩ Volver</a>
   </div>
 
-  <div class="laboratory-header">
-    <div class="laboratory-title">
-      <div class="laboratory-title__icon"><img src="laboratorio.png" alt="" width="45"></div>
-      <div>
-        <h2>Estudios de laboratorio</h2>
-        <p>Seleccioná el estudio que necesitás. Luego podrás elegir la fecha y hora para realizarlo.</p>
-      </div>
-    </div>
-    <div class="laboratory-important">
-      <span>i</span>
-      <div>
-        <strong>Importante</strong>
-        <p>Algunos estudios requieren preparación previa.</p>
-        <button type="button">Ver indicaciones generales</button>
-      </div>
-    </div>
+  <div class="laboratory-search">
+    <input #buscador type="search" placeholder="Buscar estudios por nombre..." aria-label="Buscar estudios por nombre" (input)="busqueda.set(buscador.value)">
   </div>
 
-  <div class="laboratory-filters">
-    <div class="laboratory-search"><span>⌕</span><input #buscador type="text" placeholder="Buscar estudio por nombre..." aria-label="Buscar estudio" (input)="busqueda.set(buscador.value)"><strong>⌕</strong></div>
-    <button type="button" class="laboratory-select"><small>Categoría</small><span>Todas</span><b>⌄</b></button>
-    <button type="button" class="laboratory-select"><small>Preparación</small><span>Todas</span><b>⌄</b></button>
-  </div>
-
-  <div class="laboratory-content">
-    <aside class="laboratory-categories">
-      <h3>Categorías</h3>
-      @for (category of categories; track category.name) {
-        <button type="button" class="laboratory-category" [class.laboratory-category--active]="categoriaSeleccionada() === category.categoria" [attr.aria-pressed]="categoriaSeleccionada() === category.categoria" (click)="categoriaSeleccionada.set(category.categoria)">
-          <img [src]="category.icon" alt="" [width]="category.width">{{ category.name }}
-        </button>
-      }
-      <div class="laboratory-question">
-        <h4>ⓘ ¿Tenés dudas?</h4>
-        <p>Consultá con tu profesional sobre el estudio que necesitás realizar.</p>
-        <button type="button" routerLink="/paciente/profesionales">Ir a profesionales</button>
-      </div>
-    </aside>
-
+  @if (error()) {
+    <p role="alert">No pudimos cargar los estudios. Intentá de nuevo más tarde.</p>
+  } @else if (cargando()) {
+    <p aria-live="polite">Cargando estudios...</p>
+  } @else {
     <div class="laboratory-list">
-      <div class="laboratory-list__header"><span>Estudio</span><span>Categoría</span><span>Preparación</span><span>Acciones</span></div>
-      @if (error()) {
-        <p role="alert">No pudimos cargar los estudios. Intentá de nuevo más tarde.</p>
-      } @else if (cargando()) {
-        <p aria-live="polite">Cargando estudios...</p>
-      } @else {
-        @for (study of studies(); track study.id) {
-          @let estilo = icono(study.categoria);
-          <article class="laboratory-row">
-            <div class="laboratory-study">
-              <div [class]="'laboratory-study__icon ' + estilo.iconClass">
-                @if (estilo.icon) { <img [src]="estilo.icon" [alt]="study.categoria" [width]="estilo.width"> }
-                @else { ••• }
-              </div>
-              <div><strong>{{ study.nombre }}</strong><p>{{ study.descripcion }}</p></div>
-            </div>
-            <span>{{ study.categoria }}</span>
-            <em class="preparation" [class.preparation--green]="!study.preparacion" [class.preparation--orange]="study.preparacion">{{ study.preparacion ?? 'No requiere' }}</em>
-            <button type="button" class="laboratory-select-button" routerLink="/paciente/reservar-turno">Seleccionar</button>
-          </article>
-        } @empty {
-          <p>No encontramos estudios con ese criterio.</p>
-        }
+      @for (estudio of estudios(); track estudio.id) {
+        <article class="laboratory-row">
+          <div class="laboratory-icon"><img src="laboratorio.png" alt="" width="28"></div>
+          <div class="laboratory-info">
+            <strong>{{ estudio.nombre }}</strong>
+            <p>{{ estudio.descripcion }}</p>
+          </div>
+          <a class="laboratory-reserve" [routerLink]="['/paciente/reservar-estudio', estudio.id]">Reservar turno</a>
+        </article>
+      } @empty {
+        <p class="laboratory-empty">No encontramos estudios con ese criterio.</p>
       }
     </div>
-  </div>
-
-  <div class="laboratory-notice"><span>i</span>La preparación puede variar según cada paciente. Consultá siempre las indicaciones específicas al seleccionar el estudio.</div>
+  }
 </section>

@@ -4,7 +4,6 @@ import { Observable, map } from 'rxjs';
 import { API_URL } from '../../../../core/config/tokens';
 import { Especialidad, Profesional, TipoEstudio } from './catalogo.models';
 import type { CatalogoRepository } from './catalogo.repository';
-import { CatalogoMockRepository } from './catalogo.repository.mock';
 
 // DTOs de /profesionales/ (solo lo que usa el catálogo).
 interface EspecialidadDto {
@@ -19,13 +18,19 @@ interface ProfesionalDto {
   especialidades: { id: number; especialidad: EspecialidadDto }[];
 }
 
-/** Catálogo contra la API [R04, R19]. */
+// GET /clinicos/tipos-estudio/ (el back solo devuelve los activos).
+interface TipoEstudioDto {
+  id: number;
+  nombre: string;
+  descripcion: string | null;
+  duracion_min: number | null;
+}
+
+/** Catálogo contra la API [R04, R19, R20]. */
 @Injectable()
 export class CatalogoHttpRepository implements CatalogoRepository {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = inject(API_URL);
-  // TODO: tipos de estudio quedan en mock (el back no tiene categoría ni preparación).
-  private readonly mock = new CatalogoMockRepository();
 
   getEspecialidades(): Observable<Especialidad[]> {
     return this.http
@@ -33,14 +38,19 @@ export class CatalogoHttpRepository implements CatalogoRepository {
       .pipe(map((dtos) => dtos.map(aEspecialidad)));
   }
 
-  getProfesionales(): Observable<Profesional[]> {
-    return this.http
-      .get<ProfesionalDto[]>(`${this.apiUrl}/profesionales/profesionales/`)
-      .pipe(map((dtos) => dtos.map(aProfesional)));
+  getProfesionales(fecha?: string): Observable<Profesional[]> {
+    const pedido = fecha
+      ? this.http
+          .get<{ profesionales: ProfesionalDto[] }>(`${this.apiUrl}/turnos/turnos/profesionales-disponibles/`, { params: { fecha } })
+          .pipe(map((r) => r.profesionales))
+      : this.http.get<ProfesionalDto[]>(`${this.apiUrl}/profesionales/profesionales/`);
+    return pedido.pipe(map((dtos) => dtos.map(aProfesional)));
   }
 
   getTiposEstudio(): Observable<TipoEstudio[]> {
-    return this.mock.getTiposEstudio();
+    return this.http
+      .get<TipoEstudioDto[]>(`${this.apiUrl}/clinicos/tipos-estudio/`)
+      .pipe(map((dtos) => dtos.map((t) => ({ id: t.id, nombre: t.nombre, descripcion: t.descripcion ?? '', duracionMin: t.duracion_min }))));
   }
 }
 

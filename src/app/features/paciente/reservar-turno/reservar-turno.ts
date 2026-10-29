@@ -12,11 +12,15 @@ import {
   ReservarTurnoRepository,
   Slot,
   SlotNoDisponibleError,
+  TipoEstudioReserva,
 } from './data-access/reservar-turno.repository';
 
 const SIN_DISPONIBILIDAD: Disponibilidad = { horarios: [], bloqueos: [], slots: [] };
 
-/** Reserva de turno de consulta con un profesional ya elegido [R06, CU04, Rnf 08]. */
+/**
+ * Reserva de turno de consulta con un profesional ya elegido [R06, CU04, Rnf 08],
+ * o de estudio con un tipo de estudio ya elegido (`/reservar-estudio/:tipoEstudioId`) [R20].
+ */
 @Component({
   selector: 'app-reservar-turno',
   imports: [ReactiveFormsModule, SelectorTurno],
@@ -29,6 +33,7 @@ export class ReservarTurno {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly profesional = signal<ProfesionalReserva | null>(null);
+  readonly estudio = signal<TipoEstudioReserva | null>(null);
   readonly disponibilidad = signal(SIN_DISPONIBILIDAD);
   readonly paso = signal<1 | 2>(1);
   readonly slot = signal<Slot | null>(null);
@@ -47,7 +52,11 @@ export class ReservarTurno {
   });
 
   constructor() {
-    inject(ActivatedRoute).paramMap.pipe(takeUntilDestroyed()).subscribe((params) => this.cargar(Number(params.get('profesionalId'))));
+    inject(ActivatedRoute).paramMap.pipe(takeUntilDestroyed()).subscribe((params) => {
+      const tipoEstudioId = params.get('tipoEstudioId');
+      if (tipoEstudioId) this.cargarEstudio(Number(tipoEstudioId));
+      else this.cargar(Number(params.get('profesionalId')));
+    });
   }
 
   // Lo emite app-selector-turno al elegir día (null) u horario.
@@ -65,32 +74,32 @@ export class ReservarTurno {
   }
 
   confirmar(): void {
-    const profesional = this.profesional();
     const slot = this.slot();
-    if (!profesional || !slot || this.comentario.invalid || this.confirmando()) return;
+    const estudio = this.estudio();
+    if ((!this.profesional() && !estudio) || !slot || this.comentario.invalid || this.confirmando()) return;
 
     this.confirmando.set(true);
     this.error.set(null);
+    const comentario = this.comentario.value.trim() || null;
     // Se vuelve a pedir la disponibilidad justo antes de reservar [Rnf 08].
-    this.repo
-      .obtenerDisponibilidad(profesional.id)
+    this.pedirDisponibilidad()
       .pipe(
         switchMap((disp) => {
           this.disponibilidad.set(disp);
           if (!horariosDelDia(slot.fecha, new Date(), disp).some((h) => h.habilitado && h.slot.turnoId === slot.turnoId)) {
             throw new SlotNoDisponibleError();
           }
-          return this.repo.reservar({
-            turnoId: slot.turnoId,
-            comentario: this.comentario.value.trim() || null,
-            reprogramaTurnoId: this.reprogramaTurnoId,
-          });
+          return estudio
+            ? this.repo.reservarEstudio({ turnoId: slot.turnoId, tipoEstudioId: estudio.id, comentario })
+            : this.repo.reservar({ turnoId: slot.turnoId, comentario, reprogramaTurnoId: this.reprogramaTurnoId });
         }),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe({
         next: (turno) =>
-          void this.router.navigate([`/paciente/confirmacion/${this.reprogramaTurnoId ? 'turno-reprogramado' : 'turno-confirmado'}`], { state: { turno } }),
+          void this.router.navigate([`/paciente/confirmacion/${this.reprogramaTurnoId ? 'turno-reprogramado' : 'turno-confirmado'}`], {
+            state: { turno: estudio ? { ...turno, estudio: estudio.nombre } : turno },
+          }),
         error: (e: unknown) => {
           this.confirmando.set(false);
           this.error.set(
@@ -100,7 +109,7 @@ export class ReservarTurno {
           );
           this.slot.set(null);
           this.paso.set(1);
-          this.recargar(profesional.id);
+          this.recargar();
         },
       });
   }
@@ -115,13 +124,31 @@ export class ReservarTurno {
           return;
         }
         this.profesional.set(profesional);
-        this.recargar(profesional.id);
+        this.recargar();
       });
   }
 
-  private recargar(profesionalId: number): void {
+  private cargarEstudio(id: number): void {
     this.repo
-      .obtenerDisponibilidad(profesionalId)
+      .obtenerTipoEstudio(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((estudio) => {
+        if (!estudio) {
+          void this.router.navigate(['/paciente/laboratorio']);
+          return;
+        }
+        this.estudio.set(estudio);
+        this.recargar();
+      });
+  }
+
+  private pedirDisponibilidad() {
+    const profesional = this.profesional();
+    return profesional ? this.repo.obtenerDisponibilidad(profesional.id) : this.repo.obtenerDisponibilidadEstudios();
+  }
+
+  private recargar(): void {
+    this.pedirDisponibilidad()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((disp) => this.disponibilidad.set(disp));
   }

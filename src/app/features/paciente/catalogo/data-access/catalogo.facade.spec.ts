@@ -9,8 +9,8 @@ const garcia: Profesional = { id: 1, nombre: 'Juan', apellido: 'García', especi
 const lopez: Profesional = { id: 2, nombre: 'María', apellido: 'López', especialidades: [{ id: 2, nombre: 'Dermatología' }] };
 const fernandez: Profesional = { id: 3, nombre: 'Laura', apellido: 'Fernández', especialidades: [{ id: 5, nombre: 'Pediatría' }, { id: 6, nombre: 'Clínica médica' }] };
 
-const hemograma: TipoEstudio = { id: 1, nombre: 'Hemograma completo', descripcion: '', categoria: 'Hematología', preparacion: null };
-const glucemia: TipoEstudio = { id: 2, nombre: 'Glucemia', descripcion: '', categoria: 'Bioquímica', preparacion: null };
+const hemograma: TipoEstudio = { id: 1, nombre: 'Hemograma completo', descripcion: '', duracionMin: null };
+const glucemia: TipoEstudio = { id: 2, nombre: 'Glucemia', descripcion: '', duracionMin: 10 };
 
 describe('CatalogoFacade', () => {
   let facade: CatalogoFacade;
@@ -36,10 +36,9 @@ describe('CatalogoFacade', () => {
     expect(facade.filtrarProfesionales([garcia, fernandez], 'pediatria', null)).toEqual([fernandez]);
   });
 
-  it('filtra estudios por categoría y por nombre', () => {
-    expect(facade.filtrarTiposEstudio([hemograma, glucemia], '', null)).toEqual([hemograma, glucemia]);
-    expect(facade.filtrarTiposEstudio([hemograma, glucemia], '', 'Bioquímica')).toEqual([glucemia]);
-    expect(facade.filtrarTiposEstudio([hemograma, glucemia], 'hemo', 'Bioquímica')).toEqual([]);
+  it('busca estudios por nombre [R20]', () => {
+    expect(facade.filtrarTiposEstudio([hemograma, glucemia], '')).toEqual([hemograma, glucemia]);
+    expect(facade.filtrarTiposEstudio([hemograma, glucemia], 'GLUCE')).toEqual([glucemia]);
   });
 
   it('carga los profesionales desde el repositorio', async () => {

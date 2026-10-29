@@ -1,23 +1,19 @@
 import { DatePipe } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { NotificacionPaciente, TipoNotificacion } from './data-access/notificaciones.models';
-import { NotificacionesRepository } from './data-access/notificaciones.repository';
-
-const FILTROS = ['Todas', 'Turnos', 'Informes'] as const;
-type Filtro = (typeof FILTROS)[number];
+import { Notificacion, TipoNotificacion } from '../../../core/models/notificacion';
+import { NotificacionesRepository } from '../../../core/notificaciones/notificaciones';
 
 // Mismos símbolos que las notificaciones del profesional.
 const SIMBOLO: Record<TipoNotificacion, string> = {
-  TURNO_RESERVADO: '▦',
-  TURNO_REPROGRAMADO: '▦',
-  TURNO_CANCELADO: '▦',
-  RECORDATORIO_TURNO: '◷',
-  INFORME_DISPONIBLE: '▤',
+  RESERVA: '▦',
+  REPROGRAMACION: '▦',
+  CANCELACION: '▦',
+  RECORDATORIO: '◷',
 };
 
-/** Avisos de turnos y de informes del paciente [R09, R17]. */
+/** Avisos de turnos del paciente [R09, R17]. */
 @Component({
   imports: [DatePipe, RouterLink],
   selector: 'app-notificaciones',
@@ -28,27 +24,18 @@ export class Notificaciones {
   private readonly repo = inject(NotificacionesRepository);
   private readonly recurso = rxResource({ stream: () => this.repo.listar(), defaultValue: [] });
 
-  readonly filtros = FILTROS;
-  readonly filtro = signal<Filtro>('Todas');
   readonly cargando = this.recurso.isLoading;
   readonly error = this.recurso.error;
 
-  readonly visibles = computed(() => {
-    const todas = this.recurso.hasValue() ? this.recurso.value() : [];
-    const filtro = this.filtro();
-    return todas
-      .filter((n) => filtro === 'Todas' || (filtro === 'Informes') === esInforme(n))
-      .sort((a, b) => b.fechaEnvio.localeCompare(a.fechaEnvio));
-  });
+  readonly visibles = computed(() =>
+    [...(this.recurso.hasValue() ? this.recurso.value() : [])].sort((a, b) => b.fecha.localeCompare(a.fecha)),
+  );
 
-  simbolo(n: NotificacionPaciente): string {
-    return SIMBOLO[n.tipo];
+  simbolo(n: Notificacion): string {
+    return SIMBOLO[n.tipo] ?? '▦';
   }
 
-  destino(n: NotificacionPaciente): unknown[] | null {
-    if (esInforme(n)) return ['/paciente/informes'];
+  destino(n: Notificacion): unknown[] | null {
     return n.turnoId === null ? null : ['/paciente/turnos', n.turnoId];
   }
 }
-
-const esInforme = (n: NotificacionPaciente) => n.tipo === TipoNotificacion.INFORME_DISPONIBLE;

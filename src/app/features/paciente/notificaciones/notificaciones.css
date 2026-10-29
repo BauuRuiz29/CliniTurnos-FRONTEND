@@ -1,29 +1,4 @@
 /* RESPONSIVE */
-.table-tabs {
-  display: flex;
-  gap: 21px;
-  overflow-x: auto;
-  margin-bottom: 18px;
-  border-bottom: 1px solid #e2e9f3;
-}
-.table-tabs button {
-  flex: 0 0 auto;
-  padding: 13px 2px 11px;
-  border: 0;
-  border-bottom: 2px solid transparent;
-  background: transparent;
-  color: #52617d;
-  font-size: 13px;
-  cursor: pointer;
-}
-.table-tabs button.active {
-  border-bottom-color: #0963e8;
-  color: #075de2;
-  font-weight: 600;
-}
-.notification-filters {
-  gap: 18px;
-}
 .notifications-list {
   display: flex;
   flex-direction: column;

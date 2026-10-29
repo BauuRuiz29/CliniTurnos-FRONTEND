@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { Profesional, TipoEstudio } from './catalogo.models';
 import { CatalogoRepository } from './catalogo.repository';
+import { normalizar } from '../../../../shared/utils/texto';
 
 /**
  * Única puerta de entrada de las páginas del catálogo.
@@ -16,8 +17,9 @@ export class CatalogoFacade {
     return rxResource({ stream: () => this.repo.getEspecialidades(), defaultValue: [] });
   }
 
-  profesionales() {
-    return rxResource({ stream: () => this.repo.getProfesionales(), defaultValue: [] });
+  /** `fecha` vacía = todos; si cambia, se vuelve a pedir [R05]. */
+  profesionales(fecha: () => string = () => '') {
+    return rxResource({ params: fecha, stream: ({ params }) => this.repo.getProfesionales(params || undefined), defaultValue: [] });
   }
 
   tiposEstudio() {
@@ -34,16 +36,8 @@ export class CatalogoFacade {
     );
   }
 
-  /** `categoria` null = todas. */
-  filtrarTiposEstudio(estudios: TipoEstudio[], busqueda: string, categoria: string | null): TipoEstudio[] {
+  filtrarTiposEstudio(estudios: TipoEstudio[], busqueda: string): TipoEstudio[] {
     const texto = normalizar(busqueda);
-    return estudios.filter(
-      (e) => (categoria === null || e.categoria === categoria) && normalizar(e.nombre).includes(texto),
-    );
+    return estudios.filter((e) => normalizar(e.nombre).includes(texto));
   }
-}
-
-//para obviar mayus, espacios, tildes, blablabla
-function normalizar(texto: string): string {
-  return texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 }

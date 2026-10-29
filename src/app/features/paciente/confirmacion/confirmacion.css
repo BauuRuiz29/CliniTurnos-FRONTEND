@@ -152,24 +152,6 @@
   font-size: 10px !important;
 }
 
-/* CHECKS DEL CORREO */
-.confirmation-check {
-  min-height: 38px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border-bottom: 1px solid #edf1f6;
-  color: #18a77c;
-  font-size: 14px;
-}
-.confirmation-check:last-child {
-  border-bottom: 0;
-}
-.confirmation-check span {
-  color: #56647d;
-  font-size: 12px;
-}
-
 /* RESPONSIVE */
 @media (max-width: 750px) {
   .confirmation-main-card,

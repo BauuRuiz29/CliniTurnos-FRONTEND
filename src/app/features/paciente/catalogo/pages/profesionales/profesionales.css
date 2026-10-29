@@ -11,13 +11,9 @@
   padding: 11px;
   outline: none;
 }
-.search-bar button {
-  border: 1px solid #dce4ef;
-  background: white;
-  border-radius: 7px;
-  padding: 0 20px;
+.search-bar input[type='date'] {
+  flex: 0 0 auto;
   color: #56647d;
-  cursor: pointer;
 }
 .professionals-grid {
   display: grid;

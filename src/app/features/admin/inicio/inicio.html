@@ -1,0 +1,34 @@
+<header class="page-header">
+  <div><h1>¡Hola, {{ nombre }}!</h1><p class="admin-subtitle">Resumen general del sistema</p></div>
+</header>
+
+@if (cargando()) {
+  <p class="estado-carga">Cargando resumen...</p>
+} @else if (error()) {
+  <p class="estado-carga estado-carga--error" role="alert">No pudimos cargar el resumen. Intentá de nuevo.</p>
+} @else if (resumen(); as r) {
+  <div class="admin-stats">
+    <div class="admin-stat"><span>Profesionales activos</span><strong>{{ r.profesionalesActivos }}</strong></div>
+    <div class="admin-stat"><span>Turnos de hoy</span><strong>{{ r.turnosHoy }}</strong></div>
+    <div class="admin-stat"><span>Pacientes</span><strong>{{ r.pacientes }}</strong></div>
+  </div>
+
+  <div class="admin-charts">
+    @for (grafico of [{ titulo: 'Turnos por estado', datos: r.porEstado }, { titulo: 'Turnos por especialidad', datos: r.porEspecialidad }]; track grafico.titulo) {
+      <section class="admin-chart">
+        <h2>{{ grafico.titulo }}</h2>
+        <ul>
+          @for (c of grafico.datos; track c.etiqueta) {
+            <li>
+              <span>{{ c.etiqueta }}</span>
+              <span class="admin-bar" aria-hidden="true"><span [style.width.%]="porcentaje(c, grafico.datos)"></span></span>
+              <strong>{{ porcentaje(c, grafico.datos) }}% <small>({{ c.cantidad }})</small></strong>
+            </li>
+          } @empty {
+            <li class="no-results">Todavía no hay turnos.</li>
+          }
+        </ul>
+      </section>
+    }
+  </div>
+}

@@ -7,17 +7,11 @@
 
   <div class="confirmation-main-card">
     <h3>{{ page().cardTitle }}</h3>
-    @if (page().checks; as checks) {
-      @for (check of checks; track check) {
-        <div class="confirmation-check">✓ <span>{{ check }}</span></div>
-      }
-    } @else {
-      @for (detail of page().details; track detail.label) {
-        <div class="confirmation-detail-row">
-          <span>{{ detail.label }}</span>
-          <strong [class.confirmation-status-badge]="detail.badge">{{ detail.value }}@if (detail.note) {<small>{{ detail.note }}</small>}</strong>
-        </div>
-      }
+    @for (detail of page().details; track detail.label) {
+      <div class="confirmation-detail-row">
+        <span>{{ detail.label }}</span>
+        <strong [class.confirmation-status-badge]="detail.badge">{{ detail.value }}@if (detail.note) {<small>{{ detail.note }}</small>}</strong>
+      </div>
     }
   </div>
 

@@ -1,11 +1,5 @@
 <header class="page-header"><h1>Notificaciones</h1></header>
 
-<nav class="table-tabs" aria-label="Filtrar notificaciones">
-  @for (f of filtros; track f) {
-    <button type="button" [class.active]="filtro() === f" [attr.aria-pressed]="filtro() === f" (click)="filtro.set(f)">{{ f }}</button>
-  }
-</nav>
-
 <div class="notifications-list">
   @if (cargando()) {
     <p class="estado-carga">Cargando notificaciones...</p>
@@ -13,11 +7,10 @@
     <p class="estado-carga estado-carga--error" role="alert">No pudimos cargar tus notificaciones. Intentá de nuevo.</p>
   } @else {
     @for (n of visibles(); track n.id) {
-      <button type="button" class="notification-row" [class.unread]="!leida(n)" (click)="abrir(n)">
+      <button type="button" class="notification-row" (click)="abrir(n)">
         <span class="notification-symbol" aria-hidden="true">{{ simbolo(n) }}</span>
         <span class="notification-body"><strong>{{ n.asunto }}</strong><small>{{ n.mensaje }}</small></span>
         <span class="notification-time">{{ cuando(n) }}</span>
-        @if (!leida(n)) { <span class="unread-dot" aria-label="No leída"></span> } @else { <span></span> }
       </button>
     } @empty {
       <p class="no-results">No hay notificaciones para mostrar.</p>

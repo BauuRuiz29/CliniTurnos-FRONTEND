@@ -1,0 +1,231 @@
+/* Lo propio del área admin (sin encapsular, siempre bajo .professional-app). La base es la del área profesional. */
+
+.professional-app .admin-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.professional-app .admin-toolbar .search-field {
+  max-width: 460px;
+}
+.professional-app .admin-toolbar .button-primary {
+  margin-left: auto;
+  text-decoration: none;
+}
+
+/* TABLAS */
+.professional-app .admin-table {
+  overflow-x: auto;
+  border: 1px solid #e5ebf3;
+  border-radius: 5px;
+}
+.professional-app .admin-row {
+  display: grid;
+  grid-template-columns: var(--columnas);
+  align-items: center;
+  gap: 12px;
+  min-width: 620px;
+  min-height: 55px;
+  padding: 8px 13px;
+  border-bottom: 1px solid #e8edf4;
+  color: #354562;
+  font-size: 11px;
+}
+.professional-app .admin-row:last-child {
+  border-bottom: 0;
+}
+.professional-app .admin-row--head {
+  min-height: 42px;
+  background: #fbfcfe;
+  color: #52617c;
+}
+.professional-app .admin-row > strong:first-child {
+  color: #192a4b;
+}
+.professional-app .admin-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.professional-app .status--activo {
+  background: #dff7ec;
+  color: #07886a;
+}
+.professional-app .status--inactivo {
+  background: #eef1f5;
+  color: #56647d;
+}
+.professional-app .admin-error {
+  margin: 0 0 14px;
+  color: #b42318;
+}
+
+/* FORMULARIOS */
+.professional-app .admin-form {
+  max-width: 720px;
+  padding: 22px;
+  border: 1px solid #e1e8f1;
+  border-radius: 6px;
+}
+.professional-app .admin-form > p {
+  margin: -8px 0 18px;
+  color: #52617c;
+}
+.professional-app .admin-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 18px;
+}
+.professional-app .admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #263754;
+  font-weight: 600;
+}
+.professional-app .admin-field--ancho {
+  grid-column: 1 / -1;
+}
+.professional-app .admin-field :is(input, select, textarea) {
+  padding: 9px 11px;
+  border: 1px solid #dfe6f0;
+  border-radius: 5px;
+  background: #fff;
+  color: #243653;
+  font-weight: 400;
+}
+.professional-app .admin-field textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+.professional-app .admin-field small {
+  color: #6c7a94;
+  font-weight: 400;
+}
+.professional-app .admin-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.professional-app .admin-checks legend {
+  margin-bottom: 6px;
+  color: #263754;
+  font-weight: 600;
+}
+.professional-app .admin-checks label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.professional-app .admin-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+}
+.professional-app .admin-form-actions a {
+  text-decoration: none;
+}
+
+@media (max-width: 600px) {
+  .professional-app .admin-toolbar {
+    flex-wrap: wrap;
+  }
+  .professional-app .admin-toolbar .button-primary {
+    margin-left: 0;
+  }
+  .professional-app .admin-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+.professional-app .visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* INICIO */
+.professional-app .admin-subtitle {
+  margin: 4px 0 0;
+  color: #52617c;
+}
+.professional-app .admin-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.professional-app .admin-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  border: 1px solid #e1e8f1;
+  border-radius: 6px;
+  color: #52617c;
+}
+.professional-app .admin-stat strong {
+  color: #152345;
+  font-size: 26px;
+}
+.professional-app .admin-charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.professional-app .admin-chart {
+  padding: 16px;
+  border: 1px solid #e1e8f1;
+  border-radius: 6px;
+}
+.professional-app .admin-chart h2 {
+  margin: 0 0 14px;
+  font-size: 14px;
+}
+.professional-app .admin-chart ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.professional-app .admin-chart li {
+  display: grid;
+  grid-template-columns: minmax(90px, 1fr) 2fr 80px;
+  align-items: center;
+  gap: 10px;
+}
+.professional-app .admin-chart li strong {
+  text-align: right;
+}
+.professional-app .admin-chart small {
+  color: #6c7a94;
+  font-weight: 400;
+}
+.professional-app .admin-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: #edf2f9;
+  overflow: hidden;
+}
+.professional-app .admin-bar > span {
+  display: block;
+  height: 100%;
+  background: #0861df;
+}
+
+@media (max-width: 750px) {
+  .professional-app .admin-stats,
+  .professional-app .admin-charts {
+    grid-template-columns: 1fr;
+  }
+}

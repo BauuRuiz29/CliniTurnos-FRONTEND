@@ -27,7 +27,9 @@
           <h3>Información del turno</h3>
           <div class="detail-row"><div class="detail-label"><span>▣</span><strong>Fecha</strong></div><p>{{ fecha() }}</p></div>
           <div class="detail-row"><div class="detail-label"><span>◷</span><strong>Hora</strong></div><p>{{ t.horaInicio }} a {{ t.horaFin }} hs.</p></div>
-          <div class="detail-row" [class.detail-row--last]="!t.especialidad && !t.comentario"><div class="detail-label"><span>♙</span><strong>Profesional</strong></div><p>{{ t.profesional.nombre }}</p></div>
+          @if (!esEstudio()) {
+            <div class="detail-row" [class.detail-row--last]="!t.especialidad && !t.comentario"><div class="detail-label"><span>♙</span><strong>Profesional</strong></div><p>{{ t.profesional.nombre }}</p></div>
+          }
           @if (t.especialidad) {
             <div class="detail-row" [class.detail-row--last]="!t.comentario"><div class="detail-label"><span>♡</span><strong>Especialidad</strong></div><p>{{ t.especialidad }}</p></div>
           }
@@ -44,7 +46,9 @@
           <section class="detail-side-card">
             <h3>Acciones</h3>
             @if (reservado()) {
+              @if (!esEstudio()) {
               <button type="button" class="detail-action detail-action--blue" [disabled]="!modificable()" (click)="reprogramar()"><span class="detail-action__icon">▣</span><span><strong>Reprogramar turno</strong><small>Elegí otra fecha y horario</small></span></button>
+              }
               <button type="button" class="detail-action detail-action--red" [disabled]="!modificable()" (click)="pedirCancelacion()"><span class="detail-action__icon">×</span><span><strong>Cancelar turno</strong><small>Cancelar este turno</small></span></button>
               @if (!modificable()) {
                 <p class="detalle-aviso">Faltan menos de {{ ventanaHoras }} hs. para el turno: ya no se puede cancelar ni reprogramar.</p>

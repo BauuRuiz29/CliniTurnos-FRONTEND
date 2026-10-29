@@ -9,10 +9,13 @@ import {
   ReservarTurnoRepository,
   SlotNoDisponibleError,
   SolicitudReserva,
+  SolicitudReservaEstudio,
+  TipoEstudioReserva,
   TurnoReservado,
 } from './data-access/reservar-turno.repository';
 import { ReservarTurno } from './reservar-turno';
 
+const GLUCEMIA: TipoEstudioReserva = { id: 3, nombre: 'Glucemia', descripcion: 'Glucosa en sangre' };
 const PROFESIONAL: ProfesionalReserva = { id: 1, nombre: 'Juan', apellido: 'García', especialidades: [{ id: 7, nombre: 'Cardiología' }] };
 
 // Mañana: siempre cae dentro de la ventana; el horario se arma para ese día de la semana.
@@ -32,7 +35,7 @@ const disponibilidad = (estado: EstadoTurno): Disponibilidad => ({
 class RepoFalso implements ReservarTurnoRepository {
   respuestas: Disponibilidad[] = [];
   pedidos = 0;
-  reservas: SolicitudReserva[] = [];
+  reservas: (SolicitudReserva | SolicitudReservaEstudio)[] = [];
   conflicto = false;
   obtenerProfesional(id: number): Observable<ProfesionalReserva | null> {
     return of(id === 1 ? PROFESIONAL : null);
@@ -47,19 +50,29 @@ class RepoFalso implements ReservarTurnoRepository {
     if (this.conflicto) return throwError(() => new SlotNoDisponibleError());
     return of({ turnoId: s.turnoId, fecha: FECHA, horaInicio: '08:00', profesional: 'Juan García', especialidad: 'Cardiología' });
   }
+  obtenerTipoEstudio(id: number): Observable<TipoEstudioReserva | null> {
+    return of(id === 3 ? GLUCEMIA : null);
+  }
+  obtenerDisponibilidadEstudios(): Observable<Disponibilidad> {
+    return this.obtenerDisponibilidad();
+  }
+  reservarEstudio(s: SolicitudReservaEstudio): Observable<TurnoReservado> {
+    this.reservas.push(s);
+    return of({ turnoId: s.turnoId, fecha: FECHA, horaInicio: '08:00', profesional: '', especialidad: null });
+  }
 }
 
 describe('ReservarTurno', () => {
   let repo: RepoFalso;
   let navigate: ReturnType<typeof vi.fn>;
 
-  function crear(profesionalId: string) {
+  function crear(profesionalId: string, params: Record<string, string> = { profesionalId }) {
     TestBed.configureTestingModule({
       imports: [ReservarTurno],
       providers: [
         provideRouter([]),
         { provide: ReservarTurnoRepository, useValue: repo },
-        { provide: ActivatedRoute, useValue: { paramMap: of(convertToParamMap({ profesionalId })) } },
+        { provide: ActivatedRoute, useValue: { paramMap: of(convertToParamMap(params)) } },
       ],
     });
     navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true) as never;
@@ -138,5 +151,21 @@ describe('ReservarTurno', () => {
     expect(repo.pedidos).toBe(3);
     expect(c.paso()).toBe(1);
     expect(navigate).not.toHaveBeenCalled();
+  });
+
+  it('estudio: reserva con el tipo elegido y la confirmación muestra el estudio [R20]', () => {
+    const c = crear('', { tipoEstudioId: '3' });
+    expect(c.estudio()).toEqual(GLUCEMIA);
+    elegirPrimerHorario(c);
+    c.confirmar();
+    expect(repo.reservas).toEqual([{ turnoId: 10, tipoEstudioId: 3, comentario: null }]);
+    expect(navigate).toHaveBeenCalledWith(['/paciente/confirmacion/turno-confirmado'], {
+      state: { turno: expect.objectContaining({ turnoId: 10, estudio: 'Glucemia' }) },
+    });
+  });
+
+  it('estudio inexistente: vuelve al laboratorio', () => {
+    crear('', { tipoEstudioId: '99' });
+    expect(navigate).toHaveBeenCalledWith(['/paciente/laboratorio']);
   });
 });
