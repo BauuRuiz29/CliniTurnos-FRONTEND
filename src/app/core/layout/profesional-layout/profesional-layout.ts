@@ -3,7 +3,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { ItemSidebar, Sidebar } from '../../../shared/ui/sidebar/sidebar';
 import { AuthService } from '../../auth/auth.service';
 
-// Secciones según el prototipo "CT 2026 - Profesional PC".
+// modulos sidebar de profesional
 const MENU_PROFESIONAL: ItemSidebar[] = [
   { texto: 'Inicio', ruta: 'inicio', icono: 'inicio.png' },
   { texto: 'Agenda', ruta: 'agenda', icono: 'calendario.png' },
@@ -12,10 +12,7 @@ const MENU_PROFESIONAL: ItemSidebar[] = [
   { texto: 'Notificaciones', ruta: 'notificaciones', icono: 'notificacion.png' },
 ];
 
-/**
- * Shell del área profesional. Sus estilos no están encapsulados: traen la base compartida
- * por todas las páginas del área (botones, tabs, badges), siempre bajo `.professional-app`.
- */
+/* Layout del área profesional con los mismos estilos q los otros, noma cambian los items */
 @Component({
   encapsulation: ViewEncapsulation.None,
   imports: [RouterOutlet, Sidebar],

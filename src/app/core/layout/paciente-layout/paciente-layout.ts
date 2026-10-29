@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ItemSidebar, Sidebar } from '../../../shared/ui/sidebar/sidebar';
 import { AuthService } from '../../auth/auth.service';
@@ -24,6 +24,12 @@ export class PacienteLayout {
   private readonly auth = inject(AuthService);
 
   readonly menu = MENU_PACIENTE;
+  readonly usuario = this.auth.usuario;
+  
+  readonly iniciales = computed(() => {
+    const u = this.usuario();
+    return u ? `${u.nombre.charAt(0)}${u.apellido.charAt(0)}`.toUpperCase() : '';
+  }); //pal avatar 
 
   cerrarSesion(): void {
     this.auth.logout();

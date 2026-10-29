@@ -144,13 +144,44 @@
   font-size: 10px;
   white-space: nowrap;
 }
-.professional-app .status.pending {
+.professional-app .status--reservado {
   background: #e9f1ff;
   color: #075bd9;
 }
-.professional-app .status.confirmed {
+.professional-app .status--en-curso {
+  background: #fff4df;
+  color: #a86a0c;
+}
+.professional-app .status--finalizado {
   background: #dff7ec;
   color: #07886a;
+}
+.professional-app .status--cancelado {
+  background: #fde8e8;
+  color: #b42318;
+}
+.professional-app .status--ausente {
+  background: #eef1f5;
+  color: #56647d;
+}
+
+/* ESTADOS DE CARGA */
+.professional-app .estado-carga {
+  padding: 25px;
+  color: #6c7a94;
+  text-align: center;
+}
+.professional-app .estado-carga--error {
+  color: #b42318;
+}
+.professional-app .field-error {
+  color: #b42318;
+  font-size: 11px;
+  font-weight: 400;
+}
+.professional-app :is(.button-primary, .button-secondary):disabled {
+  opacity: .55;
+  cursor: not-allowed;
 }
 .professional-app .row-arrow {
   color: #19345e;

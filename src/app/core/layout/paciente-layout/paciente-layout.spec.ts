@@ -1,23 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { signal } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { AuthService } from '../../auth/auth.service';
+import { Rol } from '../../models/enums';
 import { PacienteLayout } from './paciente-layout';
 
 describe('PacienteLayout', () => {
-  let component: PacienteLayout;
-  let fixture: ComponentFixture<PacienteLayout>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  it('saluda con el usuario de la sesión', async () => {
+    const usuario = signal({ id: 1, nombre: 'Ana', apellido: 'López', genero: null, roles: [Rol.PACIENTE] });
+    TestBed.configureTestingModule({
       imports: [PacienteLayout],
-      providers: [provideRouter([])],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(PacienteLayout);
-    component = fixture.componentInstance;
+      providers: [provideRouter([]), { provide: AuthService, useValue: { usuario, logout: vi.fn() } }],
+    });
+    const fixture = TestBed.createComponent(PacienteLayout);
     await fixture.whenStable();
-  });
+    const el = fixture.nativeElement as HTMLElement;
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(el.querySelector('h1')?.textContent).toContain('Hola, Ana');
+    expect(el.querySelector('.patient-avatar')?.textContent?.trim()).toBe('AL');
+    expect(el.querySelector('.patient-user strong')?.textContent?.trim()).toBe('Ana López');
   });
 });
