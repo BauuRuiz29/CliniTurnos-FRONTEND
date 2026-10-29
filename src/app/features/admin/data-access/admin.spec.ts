@@ -36,7 +36,7 @@ describe('AdminRepository', () => {
   });
 
   it('el alta manda la matrícula solo si se cargó [R16]', async () => {
-    const base = { nombre: 'Ana', apellido: 'Paz', genero: 'FEMENINO' as const, login: 'apaz', password: 'clave-segura', especialidadIds: [2] };
+    const base = { nombre: 'Ana', apellido: 'Paz', genero: 'FEMENINO' as const, login: 'apaz', password: 'clave-segura', especialidadIds: [2], horarios: [] };
     void firstValueFrom(repo.altaProfesional({ ...base, numeroMatricula: null, tipoMatricula: null }));
     const sin = http.expectOne(`${API}/profesionales/profesionales/alta/`);
     expect(sin.request.body).toEqual({ nombre: 'Ana', apellido: 'Paz', genero: 'FEMENINO', login: 'apaz', password: 'clave-segura', especialidad_ids: [2] });
@@ -46,6 +46,23 @@ describe('AdminRepository', () => {
     const con = http.expectOne(`${API}/profesionales/profesionales/alta/`);
     expect(con.request.body).toMatchObject({ numero_matricula: 'MN 1', tipo_matricula: 'NACIONAL' });
     con.flush({});
+  });
+
+  it('después del alta crea los horarios y genera los turnos [R16, R22]', async () => {
+    const alta = firstValueFrom(repo.altaProfesional({
+      nombre: 'Ana', apellido: 'Paz', genero: 'FEMENINO', login: 'apaz', password: 'clave-segura', especialidadIds: [2],
+      numeroMatricula: null, tipoMatricula: null,
+      horarios: [{ diaSemana: 'LUNES', horaDesde: '08:00', horaHasta: '12:00', duracionTurnosMin: 30 }],
+    }));
+    http.expectOne(`${API}/profesionales/profesionales/alta/`).flush({ id: 7 });
+    const horario = http.expectOne(`${API}/profesionales/horarios/`);
+    expect(horario.request.body).toEqual({ profesional: 7, dia_semana: 'LUNES', hora_desde: '08:00', hora_hasta: '12:00', duracion_turnos_min: 30, activo: true });
+    horario.flush({});
+    const slots = http.expectOne(`${API}/turnos/turnos/generar_slots/`);
+    expect(slots.request.body).toEqual({ profesional_id: 7, dias: 30 });
+    slots.flush({ error: 'x' }, { status: 400, statusText: 'Bad Request' });
+    // El profesional quedó creado: se avisa que falló la disponibilidad en lugar de tirar error.
+    expect(await alta).toBe(false);
   });
 
   it('baja y reactivación usan sus endpoints [R16]', () => {

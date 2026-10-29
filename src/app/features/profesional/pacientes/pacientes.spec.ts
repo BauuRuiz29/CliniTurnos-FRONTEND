@@ -5,7 +5,7 @@ import { PacienteAsignado, PacientesRepository } from './data-access/pacientes.r
 import { Pacientes } from './pacientes';
 
 const paciente = (id: number, nombre: string, apellido: string, dni: string): PacienteAsignado => ({
-  id, nombre, apellido, numIdentificacion: dni, telefono: null, ultimaConsulta: null, ultimoTurnoId: id,
+  id, nombre, apellido, numIdentificacion: dni, telefono: null, ultimaConsulta: null,
 });
 
 describe('Pacientes', () => {

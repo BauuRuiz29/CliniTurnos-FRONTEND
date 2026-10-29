@@ -1,10 +1,12 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, forkJoin, map } from 'rxjs';
+import { Observable, catchError, forkJoin, map, of, switchMap } from 'rxjs';
 import { API_URL } from '../../../core/config/tokens';
+import type { HorarioMedico } from '../../../core/models/disponibilidad';
 import { EstadoTurno, Genero, Rol } from '../../../core/models/enums';
 import { ESTADO_TURNO_TEXTO } from '../../../core/models/turno-estado';
 import { TurnoDto } from '../../../core/models/turno.dto';
+import { VENTANA_DIAS } from '../../../shared/utils/calendario';
 import { hoyIso } from '../../../shared/utils/formularios';
 
 //#region DTOs (solo lo que usa el área admin)
@@ -62,6 +64,7 @@ export interface AltaProfesional {
   especialidadIds: number[];
   numeroMatricula: string | null;
   tipoMatricula: 'NACIONAL' | 'PROVINCIAL' | null;
+  horarios: HorarioMedico[];
 }
 
 export interface Conteo {
@@ -118,9 +121,14 @@ export class AdminRepository {
     );
   }
 
-  altaProfesional(a: AltaProfesional): Observable<void> {
+  /**
+   * Alta del profesional y de su disponibilidad [R16, R22]: crea cada horario y genera los turnos
+   * DISPONIBLE de los próximos VENTANA_DIAS días. Devuelve false si el profesional se creó
+   * pero falló la disponibilidad (reintentar el alta chocaría con el usuario ya creado).
+   */
+  altaProfesional(a: AltaProfesional): Observable<boolean> {
     return this.http
-      .post(`${this.apiUrl}/profesionales/profesionales/alta/`, {
+      .post<{ id: number }>(`${this.apiUrl}/profesionales/profesionales/alta/`, {
         nombre: a.nombre,
         apellido: a.apellido,
         genero: a.genero,
@@ -129,7 +137,26 @@ export class AdminRepository {
         especialidad_ids: a.especialidadIds,
         ...(a.numeroMatricula ? { numero_matricula: a.numeroMatricula, tipo_matricula: a.tipoMatricula } : {}),
       })
-      .pipe(map(() => undefined));
+      .pipe(
+        switchMap(({ id }) => {
+          if (!a.horarios.length) return of(true);
+          const horarios = a.horarios.map((h) =>
+            this.http.post(`${this.apiUrl}/profesionales/horarios/`, {
+              profesional: id,
+              dia_semana: h.diaSemana,
+              hora_desde: h.horaDesde,
+              hora_hasta: h.horaHasta,
+              duracion_turnos_min: h.duracionTurnosMin,
+              activo: true,
+            }),
+          );
+          return forkJoin(horarios).pipe(
+            switchMap(() => this.http.post(`${this.apiUrl}/turnos/turnos/generar_slots/`, { profesional_id: id, dias: VENTANA_DIAS })),
+            map(() => true),
+            catchError(() => of(false)),
+          );
+        }),
+      );
   }
 
   /** Baja lógica: no borra, deja al usuario INACTIVO [R16]. */

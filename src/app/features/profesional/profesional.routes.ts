@@ -47,6 +47,10 @@ export const PROFESIONAL_ROUTES: Routes = [
 				loadComponent: () => import('./pacientes/pacientes').then(m => m.Pacientes),
 			},
 			{
+				path: 'pacientes/:pacienteId',
+				loadComponent: () => import('./pacientes/perfil-paciente/perfil-paciente').then(m => m.PerfilPaciente),
+			},
+			{
 				path: 'notificaciones',
 				loadComponent: () => import('./notificaciones/notificaciones').then(m => m.Notificaciones),
 			},

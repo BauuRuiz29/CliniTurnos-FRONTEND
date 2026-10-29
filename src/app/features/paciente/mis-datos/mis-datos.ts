@@ -3,7 +3,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Genero, TipoDocumento } from '../../../core/models/enums';
 import { GENEROS, PATRON_TELEFONO, hoyIso, noFutura } from '../../../shared/utils/formularios';
-import { DatosPaciente, DatosPacienteEditables, MisDatosRepository, textoSeveridad } from './data-access/mis-datos.repository';
+import { textoSeveridad } from '../../../core/models/historia-clinica';
+import { DatosPaciente, DatosPacienteEditables, MisDatosRepository } from './data-access/mis-datos.repository';
 import { ObrasSocialesRepository } from './data-access/obras-sociales.repository';
 
 type Campo = keyof MisDatos['form']['controls'];

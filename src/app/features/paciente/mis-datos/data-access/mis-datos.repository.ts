@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Genero, TipoDocumento } from '../../../../core/models/enums';
+import type { Alergia, Medicacion } from '../../../../core/models/historia-clinica';
 import { MisDatosHttpRepository } from './mis-datos.repository.http';
 
 // GET /users/me/ (usuario + `paciente` anidado) y las listas de su historia clínica.
@@ -20,28 +21,6 @@ export interface DatosPaciente {
   contactoEmergenciaNumero: string | null;
   alergias: Alergia[];
   medicaciones: Medicacion[]; // solo las activas: las inactivas no se muestran
-}
-
-// Valores conocidos para mostrar; en el back la severidad es texto libre.
-const TEXTO_SEVERIDAD: Record<string, string> = { LEVE: 'Leve', MODERADA: 'Moderada', GRAVE: 'Grave' };
-
-export function textoSeveridad(severidad: string | null): string {
-  if (!severidad) return 'No especificada';
-  return TEXTO_SEVERIDAD[severidad] ?? severidad;
-}
-
-// Tablas `alergias` y `medicaciones_habituales` de la historia clínica. Solo las cargan médicos o admin.
-export interface Alergia {
-  id: number;
-  descripcion: string;
-  severidad: string | null;
-}
-
-export interface Medicacion {
-  id: number;
-  medicamento: string;
-  dosis: string | null;
-  frecuencia: string | null;
 }
 
 // Lo que el paciente puede modificar por PATCH /users/me/. Usuario y documento identifican la cuenta;

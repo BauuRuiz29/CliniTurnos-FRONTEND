@@ -130,8 +130,26 @@
 .professional-app .admin-form-actions a {
   text-decoration: none;
 }
+/* Horarios del alta: una fila por franja */
+.professional-app .admin-horarios {
+  flex-direction: column;
+  align-items: flex-start;
+}
+.professional-app .admin-horario {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  align-items: end;
+  gap: 8px 12px;
+  width: 100%;
+}
+.professional-app .admin-horario .field-error {
+  grid-column: 1 / -1;
+}
 
 @media (max-width: 600px) {
+  .professional-app .admin-horario {
+    grid-template-columns: 1fr 1fr;
+  }
   .professional-app .admin-toolbar {
     flex-wrap: wrap;
   }

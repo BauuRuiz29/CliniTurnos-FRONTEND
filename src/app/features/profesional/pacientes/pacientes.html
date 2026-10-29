@@ -27,10 +27,8 @@
         <span role="cell">{{ paciente.telefono ?? '-' }}</span>
         <span role="cell">{{ ultimaConsulta(paciente) }}</span>
         <span role="cell">
-          <!-- TODO: "Ver perfil" no tiene prototipo; por ahora abre el último turno del paciente. -->
-          <button type="button" class="button-secondary view-button" [disabled]="paciente.ultimoTurnoId === null"
-            [attr.aria-label]="'Ver perfil de ' + paciente.nombre + ' ' + paciente.apellido"
-            [routerLink]="['/profesional/turnos', paciente.ultimoTurnoId]">Ver perfil</button>
+          <a class="button-secondary view-button" [attr.aria-label]="'Ver perfil de ' + paciente.nombre + ' ' + paciente.apellido"
+            [routerLink]="['/profesional/pacientes', paciente.id]">Ver perfil</a>
         </span>
       </div>
     } @empty {

@@ -48,6 +48,36 @@
       <input formControlName="password" type="password" autocomplete="new-password">
       @if (form.controls.password.touched && form.controls.password.invalid) { <small class="field-error">Mínimo 8 caracteres.</small> }
     </label>
+
+    <fieldset class="admin-checks admin-field--ancho admin-horarios" formArrayName="horarios">
+      <legend>Disponibilidad horaria</legend>
+      <small>Con estos horarios se generan sus turnos de los próximos días.</small>
+      @for (h of horarios.controls; track h; let i = $index) {
+        <div class="admin-horario" [formGroupName]="i">
+          <label class="admin-field">Día
+            <select formControlName="diaSemana">
+              @for (d of dias; track d.valor) { <option [value]="d.valor">{{ d.texto }}</option> }
+            </select>
+          </label>
+          <label class="admin-field">Desde
+            <input type="time" formControlName="horaDesde">
+          </label>
+          <label class="admin-field">Hasta
+            <input type="time" formControlName="horaHasta">
+          </label>
+          <label class="admin-field">Duración (min)
+            <input type="number" formControlName="duracionTurnosMin" min="5" step="5">
+          </label>
+          <button type="button" class="button-secondary" [attr.aria-label]="'Quitar horario ' + (i + 1)" (click)="horarios.removeAt(i)">Quitar</button>
+          @if (h.touched && h.invalid) {
+            <small class="field-error">Revisá el horario: "Desde" tiene que ser anterior a "Hasta" y la duración de al menos 5 minutos.</small>
+          }
+        </div>
+      } @empty {
+        <small>Sin horarios: no va a tener turnos para reservar.</small>
+      }
+      <button type="button" class="button-secondary" (click)="agregarHorario()">+ Agregar horario</button>
+    </fieldset>
   </div>
 
   @if (error(); as mensaje) {
@@ -56,6 +86,6 @@
 
   <div class="admin-form-actions">
     <a class="button-secondary" routerLink="/administrador/profesionales">Cancelar</a>
-    <button type="submit" class="button-primary" [disabled]="guardando()">{{ guardando() ? 'Guardando...' : 'Guardar' }}</button>
+    <button type="submit" class="button-primary" [disabled]="guardando() || form.disabled">{{ guardando() ? 'Guardando...' : 'Guardar' }}</button>
   </div>
 </form>
