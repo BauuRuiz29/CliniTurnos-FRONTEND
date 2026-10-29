@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, convertToParamMap, provideRouter } from '@angular/router';
 import { Observable, of, throwError } from 'rxjs';
 import { EstadoTurno } from '../../../core/models/enums';
-import { DIAS_SEMANA, isoLocal, sumarDias } from './calendario';
+import { DIAS_SEMANA, isoLocal, sumarDias } from '../../../shared/utils/calendario';
 import {
   Disponibilidad,
   ProfesionalReserva,
@@ -13,7 +13,7 @@ import {
 } from './data-access/reservar-turno.repository';
 import { ReservarTurno } from './reservar-turno';
 
-const PROFESIONAL: ProfesionalReserva = { id: 1, titulo: 'Dr.', nombre: 'Juan', apellido: 'García', especialidad: { id: 7, nombre: 'Cardiología' }, lugar: { nombre: 'Clínica Centro', direccion: 'Av. Siempre Viva 123' } };
+const PROFESIONAL: ProfesionalReserva = { id: 1, nombre: 'Juan', apellido: 'García', especialidades: [{ id: 7, nombre: 'Cardiología' }] };
 
 // Mañana: siempre cae dentro de la ventana; el horario se arma para ese día de la semana.
 const manana = sumarDias(new Date(), 1);
@@ -45,7 +45,7 @@ class RepoFalso implements ReservarTurnoRepository {
   reservar(s: SolicitudReserva): Observable<TurnoReservado> {
     this.reservas.push(s);
     if (this.conflicto) return throwError(() => new SlotNoDisponibleError());
-    return of({ turnoId: s.turnoId, fecha: FECHA, horaInicio: '08:00', profesional: 'Dr. Juan García', especialidad: 'Cardiología', lugar: PROFESIONAL.lugar });
+    return of({ turnoId: s.turnoId, fecha: FECHA, horaInicio: '08:00', profesional: 'Juan García', especialidad: 'Cardiología' });
   }
 }
 
@@ -102,9 +102,9 @@ describe('ReservarTurno', () => {
     c.confirmar();
 
     expect(repo.pedidos).toBe(2); // al entrar y justo antes de confirmar [Rnf 08]
-    expect(repo.reservas).toEqual([{ turnoId: 10, especialidadId: 7, comentario: 'Control anual', reprogramaTurnoId: null }]);
+    expect(repo.reservas).toEqual([{ turnoId: 10, comentario: 'Control anual', reprogramaTurnoId: null }]);
     expect(navigate).toHaveBeenCalledWith(['/paciente/confirmacion/turno-confirmado'], {
-      state: { turno: expect.objectContaining({ turnoId: 10, profesional: 'Dr. Juan García' }) },
+      state: { turno: expect.objectContaining({ turnoId: 10, profesional: 'Juan García' }) },
     });
   });
 

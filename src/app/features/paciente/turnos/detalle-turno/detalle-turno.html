@@ -15,7 +15,6 @@
             <dl class="detalle-resumen">
               <div><dt>Fecha</dt><dd>{{ fecha() }}</dd></div>
               <div><dt>Hora</dt><dd>{{ t.horaInicio }} hs.</dd></div>
-              <div><dt>Lugar</dt><dd>{{ t.lugar.nombre }}</dd></div>
               @if (t.comentario) {
                 <div><dt>Motivo</dt><dd>{{ t.comentario }}</dd></div>
               }
@@ -28,9 +27,10 @@
           <h3>Información del turno</h3>
           <div class="detail-row"><div class="detail-label"><span>▣</span><strong>Fecha</strong></div><p>{{ fecha() }}</p></div>
           <div class="detail-row"><div class="detail-label"><span>◷</span><strong>Hora</strong></div><p>{{ t.horaInicio }} a {{ t.horaFin }} hs.</p></div>
-          <div class="detail-row"><div class="detail-label"><span>♙</span><strong>Profesional</strong></div><p>{{ t.profesional.nombre }}</p></div>
-          <div class="detail-row"><div class="detail-label"><span>♡</span><strong>Especialidad</strong></div><p>{{ t.especialidad }}</p></div>
-          <div class="detail-row" [class.detail-row--last]="!t.comentario"><div class="detail-label"><span>⌖</span><strong>Lugar</strong></div><p><strong>{{ t.lugar.nombre }}</strong><small>{{ t.lugar.direccion }}</small></p></div>
+          <div class="detail-row" [class.detail-row--last]="!t.especialidad && !t.comentario"><div class="detail-label"><span>♙</span><strong>Profesional</strong></div><p>{{ t.profesional.nombre }}</p></div>
+          @if (t.especialidad) {
+            <div class="detail-row" [class.detail-row--last]="!t.comentario"><div class="detail-label"><span>♡</span><strong>Especialidad</strong></div><p>{{ t.especialidad }}</p></div>
+          }
           @if (t.comentario) {
             <div class="detail-row detail-row--last"><div class="detail-label"><span>▤</span><strong>Motivo de consulta</strong></div><p>{{ t.comentario }}</p></div>
           }

@@ -23,7 +23,7 @@
 			<a class="appointment appointment--clickable" [routerLink]="['/paciente/turnos', t.id]">
 				<div class="appointment__date"><strong>{{ dia(t) }}</strong><span>{{ mes(t) }}</span></div>
 				<div><strong>{{ t.horaInicio }} hs.</strong><span>{{ t.profesional.nombre }}</span></div>
-				<div><span>{{ t.especialidad }}</span><small>{{ t.lugar.nombre }}</small></div>
+				<div><span>{{ t.especialidad }}</span></div>
 				<em class="estado-turno" [attr.data-estado]="t.estado">{{ estado(t) }}</em><span class="appointment__arrow">›</span>
 			</a>
 		} @empty {

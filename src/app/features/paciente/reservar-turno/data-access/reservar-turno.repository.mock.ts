@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, delay, of, throwError } from 'rxjs';
 import { EstadoTurno, TipoTurno } from '../../../../core/models/enums';
-import { DIAS_SEMANA, VENTANA_DIAS, isoLocal, sumarDias } from '../calendario';
+import { DIAS_SEMANA, VENTANA_DIAS, isoLocal, sumarDias } from '../../../../shared/utils/calendario';
 import type {
   Disponibilidad,
   FechaBloqueada,
@@ -15,16 +15,14 @@ import type {
 import { SlotNoDisponibleError } from './reservar-turno.repository';
 
 //#region DATOS FORZADOS
-// TODO: reemplazar por el back. Mismos ids que el catálogo para que los links funcionen.
+// Para trabajar sin back. Mismos ids que el catálogo para que los links funcionen.
 const DEMORA_MS = 200;
 
-const CENTRO = { nombre: 'Clínica Centro', direccion: 'Av. Siempre Viva 123, CABA' };
-const NORTE = { nombre: 'Clínica Norte', direccion: 'Av. Córdoba 456, CABA' };
 
 const PROFESIONALES: ProfesionalReserva[] = [
-  { id: 1, titulo: 'Dr.', nombre: 'Juan', apellido: 'García', especialidad: { id: 1, nombre: 'Cardiología' }, lugar: CENTRO },
-  { id: 2, titulo: 'Dra.', nombre: 'María', apellido: 'López', especialidad: { id: 2, nombre: 'Dermatología' }, lugar: NORTE },
-  { id: 3, titulo: 'Dr.', nombre: 'Pablo', apellido: 'Sánchez', especialidad: { id: 5, nombre: 'Traumatología' }, lugar: CENTRO },
+  { id: 1, nombre: 'Juan', apellido: 'García', especialidades: [{ id: 1, nombre: 'Cardiología' }] },
+  { id: 2, nombre: 'María', apellido: 'López', especialidades: [{ id: 2, nombre: 'Dermatología' }] },
+  { id: 3, nombre: 'Pablo', apellido: 'Sánchez', especialidades: [{ id: 5, nombre: 'Traumatología' }] },
 ];
 
 const HORARIOS: Record<number, HorarioMedico[]> = {
@@ -92,21 +90,20 @@ export class ReservarTurnoMockRepository implements ReservarTurnoRepository {
       if (fila.estado !== EstadoTurno.DISPONIBLE) {
         return throwError(() => new SlotNoDisponibleError()).pipe(delay(DEMORA_MS));
       }
+      const p = PROFESIONALES.find((x) => x.id === profesionalId)!;
       Object.assign(fila, {
         estado: EstadoTurno.RESERVADO,
         pacienteId: PACIENTE_SESION_ID,
-        especialidadId: solicitud.especialidadId,
+        especialidadId: p.especialidades[0].id,
         tipoTurno: TipoTurno.CONSULTA,
         comentario: solicitud.comentario,
       });
-      const p = PROFESIONALES.find((x) => x.id === profesionalId)!;
       return of({
         turnoId: fila.turnoId,
         fecha: fila.fecha,
         horaInicio: fila.horaInicio,
-        profesional: `${p.titulo} ${p.nombre} ${p.apellido}`,
-        especialidad: p.especialidad.nombre,
-        lugar: p.lugar,
+        profesional: `${p.nombre} ${p.apellido}`,
+        especialidad: p.especialidades[0].nombre,
       }).pipe(delay(DEMORA_MS));
     }
     return throwError(() => new SlotNoDisponibleError()).pipe(delay(DEMORA_MS));

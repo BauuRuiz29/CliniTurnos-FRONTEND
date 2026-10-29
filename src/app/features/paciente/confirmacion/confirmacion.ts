@@ -2,16 +2,14 @@ import { Component, Injector, computed, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
-import { LugarAtencion } from '../../../core/models/lugar-atencion';
 import { fechaLarga } from '../../../shared/utils/fechas';
 
 // Lo que mandan reservar-turno y el detalle del turno por navigation state. Sin datos clínicos.
 interface TurnoResumen {
   profesional: string;
-  especialidad: string;
+  especialidad: string | null;
   fecha: string; // yyyy-MM-dd
   horaInicio: string; // HH:mm
-  lugar: LugarAtencion;
 }
 
 const PAGINAS_DE_TURNO = ['turno-confirmado', 'turno-reprogramado', 'turno-cancelado'];
@@ -56,9 +54,9 @@ export class Confirmacion {
   private readonly turno: TurnoResumen | undefined = (this.router.currentNavigation()?.extras.state ?? history.state)?.['turno'];
   private readonly detallesTurno: ConfirmationDetail[] = this.turno
     ? [
-        { label: 'Especialidad', value: this.turno.especialidad }, { label: 'Profesional', value: this.turno.profesional },
+        ...(this.turno.especialidad ? [{ label: 'Especialidad', value: this.turno.especialidad }] : []),
+        { label: 'Profesional', value: this.turno.profesional },
         { label: 'Fecha', value: fechaLarga(this.turno.fecha) }, { label: 'Hora', value: `${this.turno.horaInicio} hs.` },
-        { label: 'Lugar', value: this.turno.lugar.nombre, note: this.turno.lugar.direccion },
       ]
     : [];
 

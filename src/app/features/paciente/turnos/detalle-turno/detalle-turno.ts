@@ -102,5 +102,5 @@ export class DetalleTurno {
 
 // Forma que espera la pantalla de confirmación.
 function resumen(t: TurnoPaciente) {
-  return { profesional: t.profesional.nombre, especialidad: t.especialidad, fecha: t.fecha, horaInicio: t.horaInicio, lugar: t.lugar };
+  return { profesional: t.profesional.nombre, especialidad: t.especialidad, fecha: t.fecha, horaInicio: t.horaInicio };
 }

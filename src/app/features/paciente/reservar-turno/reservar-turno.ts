@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
-import { DiaCalendario, HorarioSlot, VENTANA_DIAS, armarMes, horariosDelDia, sumarDias, tituloMes } from './calendario';
+import { DiaCalendario, HorarioSlot, VENTANA_DIAS, armarMes, horariosDelDia, sumarDias, tituloMes } from '../../../shared/utils/calendario';
 import { fechaLarga } from '../../../shared/utils/fechas';
 import {
   Disponibilidad,
@@ -50,6 +50,7 @@ export class ReservarTurno {
     const fecha = this.fecha();
     return fecha ? horariosDelDia(fecha, this.ahora, this.disponibilidad()) : [];
   });
+  readonly especialidades = computed(() => (this.profesional()?.especialidades ?? []).map((e) => e.nombre).join(' · '));
   readonly fechaElegida = computed(() => {
     const fecha = this.fecha();
     return fecha ? fechaLarga(fecha) : '';
@@ -107,7 +108,6 @@ export class ReservarTurno {
           }
           return this.repo.reservar({
             turnoId: slot.turnoId,
-            especialidadId: profesional.especialidad.id,
             comentario: this.comentario.value.trim() || null,
             reprogramaTurnoId: this.reprogramaTurnoId,
           });
